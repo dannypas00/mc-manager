@@ -241,9 +241,9 @@ export default defineComponent({
   computed: {
     user () {
       return {
-        name: this.$props.auth?.user.name,
-        email: this.$props.auth?.user.email,
-        imageUrl: this.$props.auth?.user.icon,
+        name: this.$attrs.auth?.user.name,
+        email: this.$attrs.auth?.user.email,
+        imageUrl: this.$attrs.auth?.user.icon,
       };
     },
   },

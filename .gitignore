@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+/public/profile-images
 /storage/*.key
 /vendor
 .env
@@ -19,3 +20,4 @@ yarn-error.log
 /.vscode
 .phpstorm.meta.php
 _ide_helper.php
+.bash_history
