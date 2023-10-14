@@ -181,15 +181,15 @@
     </header>
 
     <main>
-      <div class="mx-auto py-6 px-2 sm:px-6 lg:px-8 text-slate-900">
-        <slot ref="content"/>
+      <div class="mx-auto py-4 px-2 sm:px-6 sm:py-6 lg:px-8 text-slate-900">
+        <slot/>
       </div>
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import {
   Disclosure,
   DisclosureButton,
