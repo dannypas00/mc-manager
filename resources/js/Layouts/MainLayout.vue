@@ -5,7 +5,7 @@
       as="nav"
       class="bg-emerald-800"
     >
-      <div class="mx-auto px-6">
+      <div class="mx-auto px-4 md:px-6">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
             <div class="flex-shrink-0">
@@ -50,7 +50,7 @@
               <Menu as="div" class="relative ml-3">
                 <div>
                   <MenuButton
-                    class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                    class="relative flex max-w-xs items-center rounded-full bg-emerald-950 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-800"
                   >
                     <span class="absolute -inset-1.5"/>
                     <span v-t="'layout.navigation.user.view'" class="sr-only"/>
@@ -80,8 +80,8 @@
                       <a
                         :href="item.href"
                         :class="[
-                          active ? 'bg-gray-100' : '',
-                          'block px-4 py-2 text-sm text-gray-700',
+                          active ? 'bg-emerald-100' : '',
+                          'block px-4 py-2 text-sm text-emerald-500',
                         ]"
                       >
                         {{ item.name }}
@@ -92,10 +92,10 @@
               </Menu>
             </div>
           </div>
-          <div class="-mr-2 flex md:hidden">
+          <div class="flex md:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton
-              class="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              class="relative inline-flex items-center justify-center rounded-md bg-emerald-950 p-2 text-emerald-500 focus:text-white focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 focus:ring-offset-emerald-600"
             >
               <span class="absolute -inset-0.5"/>
               <span v-t="'layout.navigation.menu.open'" class="sr-only"/>
@@ -123,8 +123,8 @@
             :href="item.href"
             :class="[
               item.current
-                ? 'bg-gray-900 text-white'
-                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                ? 'bg-emerald-950 text-white'
+                : 'text-emerald-100 hover:bg-emerald-700 hover:text-white',
               'block rounded-md px-3 py-2 text-base font-medium',
             ]"
             :aria-current="item.current ? 'page' : undefined"
@@ -145,13 +145,13 @@
               <div class="text-base font-medium text-white">
                 {{ user.name }}
               </div>
-              <div class="text-sm font-medium text-gray-400">
+              <div class="text-sm font-medium text-emerald-200">
                 {{ user.email }}
               </div>
             </div>
             <button
               type="button"
-              class="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              class="relative ml-auto flex-shrink-0 rounded-full bg-emerald-950 p-1 text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-900"
             >
               <span class="absolute -inset-1.5"/>
               <span
@@ -167,7 +167,7 @@
               :key="item.name"
               as="a"
               :href="item.href"
-              class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
+              class="block rounded-md px-3 py-2 text-base font-medium text-emerald-100 hover:bg-gray-700 hover:text-white"
             >
               {{ item.name }}
             </DisclosureButton>
@@ -181,7 +181,7 @@
     </header>
 
     <main>
-      <div class="mx-auto py-6 sm:px-6 lg:px-8 text-slate-900">
+      <div class="mx-auto py-6 px-2 sm:px-6 lg:px-8 text-slate-900">
         <slot ref="content"/>
       </div>
     </main>
