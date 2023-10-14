@@ -10,7 +10,7 @@
     </div>
 
     <div class="grow h-fit">
-      <h4 class="text-lg font-bold">Lorem ipsum</h4>
+      <h4 class="text-lg font-bold">{{ server.name }}</h4>
       <p class="mt-1 line-clamp-2 sm:line-clamp-3 h-fit">
         {{ server.description }}
       </p>

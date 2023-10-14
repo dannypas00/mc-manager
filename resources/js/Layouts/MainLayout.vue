@@ -221,11 +221,8 @@ export default defineComponent({
       ApplicationLogo,
 
       navigation: [
-        { name: 'Dashboard', href: '#', current: true },
-        { name: 'Team', href: '#', current: false },
-        { name: 'Projects', href: '#', current: false },
-        { name: 'Calendar', href: '#', current: false },
-        { name: 'Reports', href: '#', current: false },
+        { name: this.$t('pages.dashboard.menu_title'), href: route('home'), current: true },
+        { name: this.$t('pages.servers.menu_title'), href: '#', current: false },
       ],
 
       userNavigation: [

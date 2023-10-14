@@ -1,5 +1,6 @@
 {
-    "test": {
-        "test2": "Nieuwe test"
-    }
+  "menu_title": "Servers",
+  "test": {
+    "test2": "Nieuwe test"
+  }
 }
