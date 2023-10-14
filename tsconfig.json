@@ -17,11 +17,16 @@
             "dom"
         ],
         "types": [
-            "vite/client",
+            "vite/client"
         ],
+        "paths": {
+            "ziggy-js": [
+                "./vendor/tightenco/ziggy"
+            ]
+        }
     },
     "include": [
         "resources/js/**/*",
-        "resources/js/shims-vue.d.ts",
+        "resources/js/shims-vue.d.ts"
     ]
 }

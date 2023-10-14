@@ -11,6 +11,7 @@
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
             <div class="mt-2">
               <input v-model="email" id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+              <span class="text-red-500 text-sm" v-if="$page.props.errors.email">{{ $page.props.errors.email }}</span>
             </div>
           </div>
 
@@ -28,7 +29,7 @@
             </div>
 
             <div class="text-sm leading-6">
-              <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500 text">Forgot password?</a>
+              <a class="font-semibold text-indigo-600 hover:text-indigo-500 text" @click="forgotPassword">Forgot password?</a>
             </div>
           </div>
 
@@ -45,7 +46,6 @@
 import { defineComponent } from 'vue';
 import AuthLayout from '../../Layouts/AuthLayout.vue';
 import { router } from '@inertiajs/vue3';
-import {  }
 
 export default defineComponent({
   layout: AuthLayout,
@@ -60,12 +60,17 @@ export default defineComponent({
 
   methods: {
     login () {
-      router.post(route('api.auth.login'), {
+      router.post(route('auth.login'), {
         email: this.email,
         password: this.password,
-        remember_me: this.rememberMe
+        remember: this.rememberMe
       })
     },
+
+    forgotPassword () {
+      // TODO
+      console.log('To be implemented');
+    }
   }
 });
 </script>

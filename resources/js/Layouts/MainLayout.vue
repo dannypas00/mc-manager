@@ -231,7 +231,7 @@ export default defineComponent({
       userNavigation: [
         { name: 'Your Profile', href: '#' },
         { name: 'Settings', href: '#' },
-        { name: 'Sign out', href: '#' },
+        { name: 'Sign out', href: route('auth.logout') },
       ],
 
       appName: import.meta.env.VITE_APP_NAME,
