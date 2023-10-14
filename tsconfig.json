@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es2020",
+        "moduleResolution": "node",
+        "baseUrl": "./resources/js",
+        "strict": true,
+        // Enable strict type-checking options
+        "skipLibCheck": true,
+        // Skip type checking of declaration files
+        "noImplicitAny": false,
+        // Bypass raising errors on `any` type
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "lib": [
+            "ES2021",
+            "dom"
+        ],
+        "types": [
+            "vite/client",
+        ],
+    },
+    "include": [
+        "resources/js/**/*",
+        "resources/js/shims-vue.d.ts",
+    ]
+}
