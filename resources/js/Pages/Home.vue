@@ -21,6 +21,7 @@ export default defineComponent({
     return {
       servers: [
         {
+          id: 1,
           icon: 'dev-images/plains-icon.png',
           maxPlayers: 10,
           currentPlayers: 5,
@@ -28,6 +29,7 @@ export default defineComponent({
           description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quia.',
         },
         {
+          id: 2,
           icon: 'dev-images/cavern-icon.png',
           maxPlayers: 30,
           currentPlayers: 7,
@@ -35,6 +37,7 @@ export default defineComponent({
           description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quia.',
         },
         {
+          id: 3,
           icon: 'dev-images/desert-icon.png',
           maxPlayers: 20,
           currentPlayers: 11,

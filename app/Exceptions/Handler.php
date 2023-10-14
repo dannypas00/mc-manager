@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Auth;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -17,6 +19,17 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    public function render($request, Throwable $e)
+    {
+        if (!Auth::check()) {
+            return $request->expectsJson()
+                ? response()->setStatusCode(Response::HTTP_FORBIDDEN)->json()
+                : redirect(route('auth.login'));
+        }
+
+        return parent::render($request, $e);
+    }
 
     /**
      * Register the exception handling callbacks for the application.

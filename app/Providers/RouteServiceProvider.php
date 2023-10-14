@@ -14,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        RateLimiter::for('api', function (Request $request) {
+        RateLimiter::for('api', static function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
@@ -28,11 +28,11 @@ class RouteServiceProvider extends ServiceProvider
     protected function matchMiddleware(string $directory): string|null
     {
         if (Str::startsWith($directory, 'api')) {
-            return 'api';
+            return 'authapi';
         }
 
         if (Str::startsWith($directory, 'web')) {
-            return 'web';
+            return 'authweb';
         }
 
         return null;

@@ -1,3 +1,3 @@
 <?php
 
-Route::inertia('/', 'Home')->middleware('auth')->name('home');
+Route::inertia('/', 'Home')->name('home');
