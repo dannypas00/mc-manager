@@ -8,6 +8,7 @@
         "prettier": "prettier . '!./.docker' --write"
     },
     "dependencies": {
+        "@babel/runtime": "^7.23.2",
         "@headlessui/vue": "^1.7.13",
         "@heroicons/vue": "^2.0.18",
         "@inertiajs/progress": "^0.2.7",
@@ -21,6 +22,7 @@
         "eslint-plugin-import": "^2.27.5",
         "laravel-vite-plugin": "^0.7.5",
         "lodash": "^4.17.21",
+        "pinia": "^2.1.7",
         "portal-vue": "^3.0.0-beta.0",
         "vite": "^4.0.0",
         "vue": "^3.3.4",

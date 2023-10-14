@@ -1,5 +1,5 @@
 <template>
-  <a class="flex gap-2 bg-emerald-100 rounded-lg p-3 w-full text-emerald-950 cursor-pointer" :href="$route('servers.show', { id: server.id })">
+  <a class="flex gap-2 bg-emerald-100 rounded-lg p-3 w-full text-emerald-950 cursor-pointer" href="">
     <div class="shrink-0">
       <img
         class="w-full border border-gray-300 bg-white text-gray-300 w-20 h-20 sm:w-24 sm:h-24 rounded-sm"

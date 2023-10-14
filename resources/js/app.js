@@ -8,6 +8,7 @@ import PortalVue from 'portal-vue';
 import MainLayout from './Layouts/MainLayout.vue';
 import i18n from './i18n.ts';
 import route from 'ziggy-js/src/js/index.js';
+import { createPinia } from 'pinia';
 
 InertiaProgress.init({
   delay: 250,
@@ -31,7 +32,8 @@ createInertiaApp({
     const vue = createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(i18n)
-      .use(PortalVue);
+      .use(PortalVue)
+      .use(createPinia());
 
     vue.config.globalProperties.$route = route;
 

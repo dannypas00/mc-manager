@@ -27,8 +27,8 @@ class Server extends Model
     public function rconPassword(): Attribute
     {
         return Attribute::make(
-            get: static fn ($value) => Crypt::decrypt($value),
-            set: static fn ($value) => Crypt::encrypt($value),
+            get: static fn (string $value): string => Crypt::decrypt($value),
+            set: static fn (string $value): string => Crypt::encrypt($value),
         );
     }
 

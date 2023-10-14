@@ -10,6 +10,7 @@
 import { defineComponent } from 'vue';
 import PageTitle from '../Components/Layout/PageTitle.vue';
 import ServerListing from '../Components/Server/ServerListing.vue';
+import { useUserStore } from '../Stores/UserStore';
 
 export default defineComponent({
   components: {
@@ -45,7 +46,13 @@ export default defineComponent({
           description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam, quia.',
         },
       ],
+
+      userStore: useUserStore(),
     };
+  },
+
+  async mounted () {
+
   },
 });
 </script>

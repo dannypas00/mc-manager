@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -50,7 +49,7 @@ class User extends Authenticatable
     public function icon(): Attribute
     {
         return Attribute::make(
-            get: static fn (string $value) => Storage::disk('profile-images')->url($value)
+            get: static fn (string $value): string => Storage::disk('profile-images')->url($value)
         );
     }
 

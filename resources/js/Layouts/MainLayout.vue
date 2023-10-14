@@ -56,7 +56,7 @@
                     <span v-t="'layout.navigation.user.view'" class="sr-only"/>
                     <img
                       class="h-8 w-8 rounded-full"
-                      :src="user.imageUrl"
+                      :src="userStore.user?.icon"
                       alt=""
                     >
                   </MenuButton>
@@ -137,16 +137,16 @@
             <div class="flex-shrink-0">
               <img
                 class="h-10 w-10 rounded-full"
-                :src="user.imageUrl"
+                :src="this.userStore.user?.icon"
                 alt=""
               >
             </div>
             <div class="ml-3">
               <div class="text-base font-medium text-white">
-                {{ user.name }}
+                {{ this.userStore.user?.name }}
               </div>
               <div class="text-sm font-medium text-emerald-200">
-                {{ user.email }}
+                {{ this.userStore.user?.email }}
               </div>
             </div>
             <button
@@ -201,6 +201,7 @@ import {
 } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import ApplicationLogo from '../../images/icons/MCM-logo.webp';
+import { useUserStore } from '../Stores/UserStore';
 
 export default defineComponent({
   components: {
@@ -232,17 +233,13 @@ export default defineComponent({
       ],
 
       appName: import.meta.env.VITE_APP_NAME,
+
+      userStore: useUserStore(),
     };
   },
 
-  computed: {
-    user () {
-      return {
-        name: this.$attrs.auth?.user.name,
-        email: this.$attrs.auth?.user.email,
-        imageUrl: this.$attrs.auth?.user.icon,
-      };
-    },
-  },
+  beforeMount () {
+    useUserStore().setCurrentUser(this.$attrs.auth?.user.id);
+  }
 });
 </script>
