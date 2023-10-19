@@ -1,41 +1,33 @@
 <template>
-  <PageTitle :title="$t('pages.servers.show.title', { name: server?.name ?? '' })"/>
+  <PageTitle :title="$t('pages.servers.show.title', { name: store.model.name })"/>
+
+  <ServerInformation :id="this.id"/>
 
   <Suspense>
     <template #fallback>
-
+      <LoadingState/>
     </template>
   </Suspense>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { ServerShowRequest } from '../../Communications/McManager/Servers/ServerShowRequest';
+import { defineAsyncComponent, defineComponent } from 'vue';
 import PageTitle from '../../Components/Layout/PageTitle.vue';
-import Server = App.Models.Server;
+import LoadingState from '../../Components/Layout/LoadingState.vue';
+import { useServerShowStore } from '../../Stores/Servers/ServerShowStore';
 
 export default defineComponent({
   components: {
+    LoadingState,
     PageTitle,
+    ServerInformation: defineAsyncComponent(() => import('./ServerInformation.vue')),
   },
 
   data () {
     return {
       id: this.$attrs.route_parameters?.id as number,
-      server: {} as Server,
-      showRequest: new ServerShowRequest(),
+      store: useServerShowStore(),
     };
-  },
-
-  methods: {},
-
-  computed: {},
-
-  async mounted () {
-    this.server = (await this.showRequest
-      .setId(this.id)
-      .getResponse())
-      .data;
   },
 });
 </script>
