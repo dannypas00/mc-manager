@@ -1,0 +1,36 @@
+version: '3'
+services:
+  mcm-db:
+    container_name: mcm-db
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - .docker/local/.mysql/data:/var/lib/mysql/
+
+  mcm-redis:
+    container_name: mcm-redis
+    image: redis:latest
+
+  mcm-php:
+    container_name: mcm-php
+    image: dannypas00/laravel-fpm:8.2
+    user: 1000:1000
+    depends_on:
+      - mcm-db
+      - mcm-redis
+    volumes:
+      - ./:/var/www
+
+  mcm-nginx:
+    container_name: mcm-nginx
+    image: nginx:latest
+    depends_on:
+      - mcm-php
+    ports:
+      - "80:80"
+    volumes:
+      - .docker/local/nginx-includes:/etc/nginx/conf.d
+      - ./:/var/www
