@@ -3,8 +3,8 @@ import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { ValidationError } from './ValidationError';
 
 export abstract class Request<T, D = Record<string, any>> {
-  private data?: D = undefined;
-  private validationErrors: ValidationError = {};
+  protected data: D = {} as D;
+  protected validationErrors: ValidationError = {};
 
   private setValidationErrors (response: AxiosResponse<T>) {
     // TODO: Implement error store
