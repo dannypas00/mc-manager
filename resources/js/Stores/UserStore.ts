@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import User = App.Models.User;
-import { UserResource } from '../Communications/resources/UserResource';
 
 export const useUserStore = defineStore('User', {
   state: () => ({
@@ -9,7 +8,7 @@ export const useUserStore = defineStore('User', {
 
   actions: {
     async setCurrentUser (id: number) {
-      this.user = await UserResource.$find(id);
+      // TODO: Implement
     },
   },
 });

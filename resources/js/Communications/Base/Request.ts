@@ -1,11 +1,14 @@
 import routeFn from 'ziggy-js';
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-
-export type ValidationError = Record<string | number, ValidationError | string>;
+import { ValidationError } from './ValidationError';
 
 export abstract class Request<T, D = Record<string, any>> {
-  private data: D;
+  private data?: D = undefined;
   private validationErrors: ValidationError = {};
+
+  private setValidationErrors (response: AxiosResponse<T>) {
+    // TODO: Implement error store
+  }
 
   protected abstract getEndPoint (): routeFn;
 
@@ -26,11 +29,9 @@ export abstract class Request<T, D = Record<string, any>> {
             break;
         }
 
+        // TODO: Implement other default responses
+
         return response;
       });
-  }
-
-  private setValidationErrors(response: AxiosResponse<T>) {
-
   }
 }
