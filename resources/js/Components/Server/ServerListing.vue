@@ -17,25 +17,19 @@
     </div>
 
     <div class="text-end justify-self-end shrink-0 pe-2">
-      <p>{{ server.currentPlayers }} <span class="font-semibold">/ {{ server.maxPlayers }}</span></p>
+      <p>{{ server.current_players }} <span class="font-semibold">/ {{ server.maximum_players }}</span></p>
     </div>
   </a>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import Server = App.Models.Server;
 
 export default defineComponent({
   props: {
     server: {
-      type: Object as PropType<{
-        id: number,
-        icon: string,
-        maxPlayers: number,
-        currentPlayers: number,
-        name: string,
-        description: string,
-      }>,
+      type: Object as PropType<Server>,
       required: true,
     },
   },

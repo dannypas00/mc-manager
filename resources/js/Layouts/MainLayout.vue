@@ -190,15 +190,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from '@headlessui/vue';
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import ApplicationLogo from '../../images/icons/MCM-logo.webp';
 import { useUserStore } from '../Stores/UserStore';
@@ -238,8 +230,8 @@ export default defineComponent({
     };
   },
 
-  beforeMount () {
-    useUserStore().setCurrentUser(this.$attrs.auth?.user.id);
-  }
+  async beforeMount () {
+    await useUserStore().setCurrentUser(this.$attrs.auth?.user.id);
+  },
 });
 </script>

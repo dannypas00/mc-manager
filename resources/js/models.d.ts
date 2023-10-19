@@ -16,6 +16,8 @@ declare namespace App.Models {
     rcon_password: string
     created_at: Date|null
     updated_at: Date|null
+    current_players: number
+    maximum_players: number
     // relations
     users: Users
   }

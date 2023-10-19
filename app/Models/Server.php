@@ -22,6 +22,8 @@ class Server extends Model
         'rcon_port',
         'enabled',
         'rcon_password',
+        'current_players',
+        'maximum_players',
     ];
 
     public function rconPassword(): Attribute

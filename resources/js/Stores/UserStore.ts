@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
+import { UserShowRequest } from '../Communications/McManager/Users/UserShowRequest';
 import User = App.Models.User;
-import { UserShowRequest } from '../Communications/McManager/UserShowRequest';
 
 export const useUserStore = defineStore('User', {
   state: () => ({
@@ -10,7 +10,11 @@ export const useUserStore = defineStore('User', {
 
   actions: {
     async setCurrentUser (id: number) {
-      const response = await this.request.getResponse();
+      const response = await this.request
+        .addInclude('servers')
+        .setId(id)
+        .getResponse();
+
       this.user = response.data;
     },
   },

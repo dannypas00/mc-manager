@@ -22,7 +22,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if (!Auth::check()) {
+        if (!Auth::check() && !app()->hasDebugModeEnabled()) {
             return $request->expectsJson()
                 ? response()->setStatusCode(Response::HTTP_FORBIDDEN)->json()
                 : redirect(route('auth.login'));

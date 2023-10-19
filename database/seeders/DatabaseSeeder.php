@@ -4,12 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Server;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * @throws Exception
      */
     public function run(): void
     {
@@ -17,14 +19,21 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-         User::factory(10)->create();
+        User::factory(10)->create();
 
-         User::factory()->create([
-             'name' => 'Test User',
-             'email' => 'test@test.com',
-             'password' => 'test1234'
-         ]);
+        User::factory()->create([
+            'name'     => 'Test User',
+            'email'    => 'test@test.com',
+            'password' => 'test1234'
+        ]);
 
-         Server::factory()->recycle(User::all())->count(50)->has(User::factory())->create();
+        User::all()->each(static function (User $user) {
+            $user->servers()->sync(
+                Server::factory()
+                    ->count(random_int(2, 7))
+                    ->create()
+                    ->pluck('id')
+            );
+        });
     }
 }
