@@ -161,14 +161,7 @@ export default defineComponent({
   data () {
     return {
       store: useServerShowStore(),
-      mobileMenuOpen: false,
       automaticTimezoneEnabled: true,
-      navigation: [
-        { name: 'Home', href: '#' },
-        { name: 'Invoices', href: '#' },
-        { name: 'Clients', href: '#' },
-        { name: 'Expenses', href: '#' },
-      ],
       secondaryNavigation: [
         { name: 'General', href: '#', icon: UserCircleIcon, current: true },
         { name: 'Security', href: '#', icon: FingerPrintIcon, current: false },
