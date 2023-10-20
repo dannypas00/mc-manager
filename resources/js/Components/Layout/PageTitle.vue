@@ -17,8 +17,15 @@ const props = defineProps({
     required: true,
   },
 
+  // Defaults to title
+  header: {
+    type: String,
+    required: false,
+    default: null,
+  },
+
   // TODO: Add breadcrumbs
 });
 
-document.title = props.title + ' - ' + import.meta.env.VITE_APP_NAME;
+document.title = (props.header ?? props.title) + ' - ' + import.meta.env.VITE_APP_NAME;
 </script>
