@@ -1,9 +1,18 @@
 {
-    "menu_title": "Servers",
-    "show": {
-        "title": "Server - {name}"
+  "menu_title": "Servers",
+  "show": {
+    "console": {
+      "nav_title": "Konsool"
     },
-    "test": {
-        "test2": "Nieuwe test"
-    }
+    "files": {
+      "nav_title": "Bestanden"
+    },
+    "settings": {
+      "nav_title": "Instellingen"
+    },
+    "title": "Server - {name}"
+  },
+  "test": {
+    "test2": "Nieuwe test"
+  }
 }
