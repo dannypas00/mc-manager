@@ -34,3 +34,20 @@ services:
     volumes:
       - ./nginx-includes:/etc/nginx/conf.d
       - ../../:/var/www
+
+  mcm-minecraft:
+    container_name: mcm-minecraft
+    image: openjdk:22-slim
+    ports:
+      - "25565:25565"
+    env_file:
+      - ../../.env
+    volumes:
+      - ./minecraft:/minecraft
+    command:
+      - java
+      - -Xmx512M
+      - -Xms512M
+      - -jar
+      - /minecraft/server.jar
+      - nogui
