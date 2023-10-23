@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Rcon\Rcon;
 use Crypt;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,5 +38,12 @@ class Server extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function rcon(): Rcon
+    {
+        $rcon = new Rcon($this->local_ip, $this->rcon_port, $this->rcon_password, 30);
+        $rcon->connect();
+        return $rcon;
     }
 }

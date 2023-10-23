@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace App\Rcon;
+
 /**
  * See https://developer.valvesoftware.com/wiki/Source_RCON_Protocol for
  * more information about Source RCON Packets
@@ -10,12 +12,7 @@ declare(strict_types=1);
  */
 class Rcon
 {
-    private $host;
-    private $port;
-    private $password;
-    private $timeout;
-
-    private $socket;
+    private mixed $socket;
 
     private $authorized;
     private $last_response;
@@ -28,12 +25,17 @@ class Rcon
     const SERVERDATA_EXECCOMMAND = 2;
     const SERVERDATA_RESPONSE_VALUE = 0;
 
-    public function __construct($host, $port, $password, $timeout)
+    public function __construct(
+        private readonly string $host,
+        private readonly int $port,
+        private readonly string $password,
+        private readonly int $timeout
+    ) {
+    }
+
+    public function __destruct()
     {
-        $this->host = $host;
-        $this->port = $port;
-        $this->password = $password;
-        $this->timeout = $timeout;
+        $this->disconnect();
     }
 
     public function get_response()
@@ -82,15 +84,16 @@ class Rcon
         }
 
         // send command packet.
-        $this->write_packet(Rcon::PACKET_COMMAND, Rcon::SERVERDATA_EXECCOMMAND, $command);
+        $this->write_packet(self::PACKET_COMMAND, self::SERVERDATA_EXECCOMMAND, $command);
 
         // get response.
-        $response_packet = $this->read_packet();
-        if ($response_packet['id'] == Rcon::PACKET_COMMAND) {
-            if ($response_packet['type'] == Rcon::SERVERDATA_RESPONSE_VALUE) {
-                $this->last_response = $response_packet['body'];
-                return $response_packet['body'];
-            }
+        $responsePacket = $this->read_packet();
+        if (
+            $responsePacket['id'] === self::PACKET_COMMAND
+            && $responsePacket['type'] === self::SERVERDATA_RESPONSE_VALUE
+        ) {
+            $this->last_response = $responsePacket['body'];
+            return $responsePacket['body'];
         }
 
         return false;
@@ -98,11 +101,11 @@ class Rcon
 
     private function authorize()
     {
-        $this->write_packet(Rcon::PACKET_AUTHORIZE, Rcon::SERVERDATA_AUTH, $this->password);
+        $this->write_packet(self::PACKET_AUTHORIZE, self::SERVERDATA_AUTH, $this->password);
         $response_packet = $this->read_packet();
 
-        if ($response_packet['type'] == Rcon::SERVERDATA_AUTH_RESPONSE) {
-            if ($response_packet['id'] == Rcon::PACKET_AUTHORIZE) {
+        if ($response_packet['type'] == self::SERVERDATA_AUTH_RESPONSE) {
+            if ($response_packet['id'] == self::PACKET_AUTHORIZE) {
                 $this->authorized = true;
                 return true;
             }
