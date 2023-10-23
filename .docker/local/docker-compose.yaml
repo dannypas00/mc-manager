@@ -40,14 +40,14 @@ services:
     image: openjdk:22-slim
     ports:
       - "25565:25565"
-    env_file:
-      - ../../.env
+    user: $UID:$GID
     volumes:
       - ./minecraft:/minecraft
+    working_dir: /minecraft
     command:
       - java
       - -Xmx512M
       - -Xms512M
       - -jar
-      - /minecraft/server.jar
+      - server.jar
       - nogui
