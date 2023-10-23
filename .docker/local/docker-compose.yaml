@@ -40,7 +40,7 @@ services:
     image: openjdk:22-slim
     ports:
       - "25565:25565"
-    user: $UID:$GID
+    user: 1000:1000
     volumes:
       - ./minecraft:/minecraft
     working_dir: /minecraft
