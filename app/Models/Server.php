@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ServerStatus;
 use App\Rcon\Rcon;
 use Crypt;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -48,11 +49,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Server whereUpdatedAt($value)
  * @property string|null $player_list Comma-separated list of users
  * @method static \Illuminate\Database\Eloquent\Builder|Server wherePlayerList($value)
+ * @property ServerStatus $status
+ * @method static \Illuminate\Database\Eloquent\Builder|Server whereStatus($value)
  * @mixin \Eloquent
  */
 class Server extends Model
 {
     use HasFactory;
+
+    private ?Rcon $rcon = null;
 
     protected $fillable = [
         'name',
@@ -66,6 +71,12 @@ class Server extends Model
         'rcon_password',
         'current_players',
         'maximum_players',
+        'player_list',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => ServerStatus::class,
     ];
 
     public function rconPassword(): Attribute
@@ -81,10 +92,15 @@ class Server extends Model
         return $this->belongsToMany(User::class);
     }
 
-    public function rcon(): Rcon
+    public function rcon(): Rcon|false
     {
-        $rcon = new Rcon($this->local_ip, $this->rcon_port, $this->rcon_password, 30);
-        $rcon->connect();
-        return $rcon;
+        if (!$this->rcon) {
+            $this->rcon = new Rcon($this->local_ip, $this->rcon_port, $this->rcon_password, 30);
+            if (!$this->rcon->connect()) {
+                return false;
+            }
+        }
+
+        return $this->rcon;
     }
 }

@@ -26,16 +26,29 @@ services:
 
   mcm-horizon:
     container_name: mcm-horizon
-    image: dannypas00/laravel-fpm:8.2-supervisor
+    image: dannypas00/laravel-fpm:8.2
     depends_on:
       - mcm-db
       - mcm-redis
     command:
-      - supervisord
-      - -n
+      - php
+      - artisan
+      - horizon
     volumes:
       - ./:/var/www
-      - .docker/local/horizon-supervisor.conf:/etc/supervisor/conf.d/horizon.conf
+
+  mcm-schedule:
+    container_name: mcm-schedule
+    image: dannypas00/laravel-fpm:8.2
+    depends_on:
+      - mcm-db
+      - mcm-redis
+    command:
+      - php
+      - artisan
+      - schedule:work
+    volumes:
+      - ./:/var/www
 
   mcm-nginx:
     container_name: mcm-nginx
