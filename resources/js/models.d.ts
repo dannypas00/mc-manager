@@ -6,8 +6,12 @@ declare namespace App.Models {
     // columns
     id: number
     enabled: boolean
+    status: ServerStatus
     port: number
     rcon_port: number
+    current_players: number
+    maximum_players: number
+    player_list: string|null
     name: string
     description: string|null
     icon: string
@@ -16,8 +20,6 @@ declare namespace App.Models {
     rcon_password: string
     created_at: Date|null
     updated_at: Date|null
-    current_players: number
-    maximum_players: number
     // relations
     users: Users
   }
@@ -40,4 +42,15 @@ declare namespace App.Models {
     notifications: DatabaseNotifications
   }
   export type Users = User[]
+
+  const ServerStatus = {
+    Unknown: 'unknown',
+    Error: 'error',
+    Down: 'down',
+    Starting: 'starting',
+    Up: 'up',
+    Stopping: 'stopping',
+  } as const;
+
+  export type ServerStatus = typeof ServerStatus[keyof typeof ServerStatus]
 }

@@ -44,7 +44,7 @@ export default defineComponent({
         case 'up':
           return 'bg-emerald-100 text-emerald-950';
         case 'down':
-          return 'bg-gray-200 text-slate-950';
+          return 'bg-gray-200 text-slate-900';
         default:
           return 'bg-red-100 text-red-950';
       }
