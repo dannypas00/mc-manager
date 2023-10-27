@@ -6,25 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('servers', static function (Blueprint $table) {
-            $table->integer('current_players')->default(0)->after('rcon_port');
-            $table->integer('maximum_players')->default(0)->after('current_players');
+            $table->string('player_list')->nullable()->comment('Comma-separated list of users')->after('maximum_players');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('servers', static function (Blueprint $table) {
-            $table->dropColumn('current_players');
-            $table->dropColumn('maximum_players');
+            $table->dropColumn('player_list');
         });
     }
 };
