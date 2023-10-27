@@ -17,6 +17,14 @@ class PollServerJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private const DOWN_STATUSES = [
+        ServerStatus::Down,
+        ServerStatus::Unknown,
+        ServerStatus::Error,
+        ServerStatus::Stopping,
+        ServerStatus::Starting
+    ];
+
     public function __construct(private readonly int $id)
     {
     }
@@ -39,6 +47,11 @@ class PollServerJob implements ShouldQueue
     private function updateServer(Server $server): void
     {
         $server->status = $this->getServerStatus($server);
+        if (in_array($server->status, self::DOWN_STATUSES, true)) {
+            $server->current_players = 0;
+            $server->player_list = null;
+            return;
+        }
         [$server->current_players, $server->maximum_players, $server->player_list] = $this->getUserCount($server);
     }
 
