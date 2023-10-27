@@ -24,6 +24,19 @@ services:
     volumes:
       - ./:/var/www
 
+  mcm-horizon:
+    container_name: mcm-horizon
+    image: dannypas00/laravel-fpm:8.2-supervisor
+    depends_on:
+      - mcm-db
+      - mcm-redis
+    command:
+      - supervisord
+      - -n
+    volumes:
+      - ./:/var/www
+      - .docker/local/horizon-supervisor.conf:/etc/supervisor/conf.d/horizon.conf
+
   mcm-nginx:
     container_name: mcm-nginx
     image: nginx:latest
