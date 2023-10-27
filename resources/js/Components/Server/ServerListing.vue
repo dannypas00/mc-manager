@@ -1,5 +1,9 @@
 <template>
-  <a class="flex gap-2 bg-emerald-100 rounded-lg p-3 w-full text-emerald-950 cursor-pointer" href="">
+  <a
+    class="flex gap-2 rounded-lg p-3 w-full cursor-pointer"
+    href=""
+    :class="serverClass"
+  >
     <div class="shrink-0">
       <img
         class="w-full border border-gray-300 bg-white text-gray-300 w-20 h-20 sm:w-24 sm:h-24 rounded-sm"
@@ -31,6 +35,19 @@ export default defineComponent({
     server: {
       type: Object as PropType<Server>,
       required: true,
+    },
+  },
+
+  computed: {
+    serverClass () {
+      switch (this.server.status) {
+        case 'up':
+          return 'bg-emerald-100 text-emerald-950';
+        case 'down':
+          return 'bg-gray-200 text-slate-950';
+        default:
+          return 'bg-red-100 text-red-950';
+      }
     },
   },
 });
