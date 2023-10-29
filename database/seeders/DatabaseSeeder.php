@@ -40,6 +40,13 @@ class DatabaseSeeder extends Seeder
             'rcon_password'   => 'test1234',
             'current_players' => 0,
             'maximum_players' => 20,
+            'enable_ftp'      => true,
+            'is_sftp'         => false,
+            'use_ssh_auth'    => false,
+            'ftp_port'        => 21,
+            'ftp_host'        => 'mcm-ftp',
+            'ftp_username'    => 'mcm-test',
+            'ftp_password'    => 'mcm-test',
         ]);
 
         if (env('SEED_RANDOM_SERVERS', false)) {

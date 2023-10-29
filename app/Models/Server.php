@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
+use Storage;
 
 /**
  * App\Models\Server
@@ -77,6 +79,7 @@ class Server extends Model
     use HasFactory;
 
     private ?Rcon $rcon = null;
+    private FilesystemAdapter|null $fileStorageDisk = null;
 
     protected $fillable = [
         'name',
@@ -119,16 +122,16 @@ class Server extends Model
     public function ftpUsername(): Attribute
     {
         return Attribute::make(
-            get: static fn (string $value): string => Crypt::decrypt($value),
-            set: static fn (string $value): string => Crypt::encrypt($value),
+            get: static fn (?string $value): ?string => $value ? Crypt::decrypt($value) : null,
+            set: static fn (?string $value): ?string => $value ? Crypt::encrypt($value) : null,
         );
     }
 
     public function ftpPassword(): Attribute
     {
         return Attribute::make(
-            get: static fn (string $value): string => Crypt::decrypt($value),
-            set: static fn (string $value): string => Crypt::encrypt($value),
+            get: static fn (?string $value): ?string => $value ? Crypt::decrypt($value) : null,
+            set: static fn (?string $value): ?string => $value ? Crypt::encrypt($value) : null,
         );
     }
 
@@ -147,5 +150,25 @@ class Server extends Model
         }
 
         return $this->rcon;
+    }
+
+    public function ftp(): FilesystemAdapter
+    {
+        if (!$this->fileStorageDisk) {
+            $config = [
+                'driver' => $this->is_sftp ? 'sftp' : 'ftp',
+                'host'   => $this->ftp_host,
+                'port'   => $this->ftp_port,
+
+                ($this->use_ssh_auth ? 'privateKey' : 'username') => $this->ftp_username,
+                ($this->use_ssh_auth ? 'passphrase' : 'password') => $this->ftp_password,
+            ];
+
+            $this->fileStorageDisk = $this->is_sftp
+                ? Storage::createSftpDriver($config)
+                : Storage::createFtpDriver($config);
+        }
+
+        return $this->fileStorageDisk;
     }
 }

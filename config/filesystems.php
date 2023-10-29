@@ -64,6 +64,29 @@ return [
             'throw'                   => false,
         ],
 
+        'ftp' => [
+            'driver'   => 'ftp',
+            // 'host'     => env('FTP_HOST'),
+            // 'username' => env('FTP_USERNAME'),
+            // 'password' => env('FTP_PASSWORD'),
+        ],
+
+        'sftp' => [
+            'driver'               => 'sftp',
+            // 'host'                 => env('SFTP_HOST'),
+
+            // Settings for basic authentication...
+            // 'username'             => env('SFTP_USERNAME'),
+            // 'password'             => env('SFTP_PASSWORD'),
+
+            // Settings for SSH key based authentication with encryption password...
+            // 'privateKey'           => env('SFTP_PRIVATE_KEY'),
+            // 'passphrase'           => env('SFTP_PASSPHRASE'),
+
+            // Settings for file / directory permissions...
+            'visibility'           => 'private', // `private` = 0600, `public` = 0644
+            'directory_visibility' => 'private', // `private` = 0700, `public` = 0755
+        ]
     ],
 
     /*
@@ -78,7 +101,7 @@ return [
     */
 
     'links' => [
-        public_path('storage') => storage_path('app/public'),
+        public_path('storage')        => storage_path('app/public'),
         public_path('profile-images') => storage_path('app/profile-images'),
     ],
 ];

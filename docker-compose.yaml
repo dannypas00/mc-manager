@@ -78,3 +78,24 @@ services:
       - -jar
       - server.jar
       - nogui
+
+  mcm-ftp:
+    container_name: mcm-ftp
+    image: delfer/alpine-ftp-server:latest
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    environment:
+      - "USERS=mcm-test|mcm-test|/minecraft|1000"
+    volumes:
+      - .docker/local/minecraft:/minecraft
+
+  mcm-sftp:
+    container_name: mcm-sftp
+    image: atmoz/sftp:alpine
+    ports:
+      - "22:22"
+    environment:
+      - "SFTP_USERS=mcm-test|mcm-test|/minecraft"
+    volumes:
+      - .docker/local/minecraft:/minecraft
