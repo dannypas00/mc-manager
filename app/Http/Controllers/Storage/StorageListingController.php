@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Storage;
 
+use App\Http\Requests\Storage\StorageListingRequest;
 use App\Models\Server;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,10 +15,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StorageListingController
 {
-    public function __invoke(int $serverId, string $storagePath = '/'): JsonResponse
+    public function __invoke(int $serverId, StorageListingRequest $request): JsonResponse
     {
         $server = $this->getServer($serverId);
-        return new JsonResponse($this->getDirectories($server, $storagePath));
+        return new JsonResponse($this->getDirectories($server, $request->get('path') ?? ''));
     }
 
     /**

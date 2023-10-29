@@ -11,5 +11,5 @@ Route::prefix('{id}')->group(static function () {
 });
 
 Route::prefix('{id}/storage')->as('storage.')->group(static function () {
-    Route::get('listing/{path?}', StorageListingController::class)->name('listing');
+    Route::get('listing', StorageListingController::class)->name('listing');
 });

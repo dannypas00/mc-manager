@@ -3,10 +3,9 @@ import { Method } from 'axios';
 
 export class StorageListingRequest extends Request<any> {
   private serverId = -1;
-  private path = '/';
 
   protected getEndPoint () {
-    return route('api.servers.storage.listing', { id: this.serverId, path: this.path });
+    return route('api.servers.storage.listing', { id: this.serverId });
   }
 
   protected getMethod (): Method {
@@ -19,7 +18,7 @@ export class StorageListingRequest extends Request<any> {
   }
 
   public setPath (path: string): this {
-    this.path = path;
+    this.data.path = path;
     return this;
   }
 }
