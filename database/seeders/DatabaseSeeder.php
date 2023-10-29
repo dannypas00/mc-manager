@@ -19,8 +19,6 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        User::factory(10)->create();
-
         /**
          * @var User $testUser
          */
@@ -44,13 +42,17 @@ class DatabaseSeeder extends Seeder
             'maximum_players' => 20,
         ]);
 
-        User::all()->each(static function (User $user) {
-            $user->servers()->syncWithoutDetaching(
-                Server::factory()
-                    ->count(random_int(2, 7))
-                    ->create()
-                    ->pluck('id')
-            );
-        });
+        if (env('SEED_RANDOM_SERVERS', false)) {
+            User::factory(10)
+                ->create()
+                ->each(static function (User $user) {
+                    $user->servers()->syncWithoutDetaching(
+                        Server::factory()
+                            ->count(random_int(2, 7))
+                            ->create()
+                            ->pluck('id')
+                    );
+                });
+        }
     }
 }
