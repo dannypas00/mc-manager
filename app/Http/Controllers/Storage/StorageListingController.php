@@ -18,6 +18,7 @@ class StorageListingController
     public function __invoke(int $serverId, StorageListingRequest $request): JsonResponse
     {
         $server = $this->getServer($serverId);
+        // TODO: Use realpath() to tell frontend the actual directory
         return new JsonResponse($this->getDirectories($server, $request->get('path') ?? ''));
     }
 
