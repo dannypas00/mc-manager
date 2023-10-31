@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Servers\ServerIndexController;
 use App\Http\Controllers\Servers\ServerShowController;
+use App\Http\Controllers\Storage\StorageContentController;
 use App\Http\Controllers\Storage\StorageListingController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,4 +13,5 @@ Route::prefix('{id}')->group(static function () {
 
 Route::prefix('{id}/storage')->as('storage.')->group(static function () {
     Route::get('listing', StorageListingController::class)->name('listing');
+    Route::get('content', StorageContentController::class)->name('content');
 });

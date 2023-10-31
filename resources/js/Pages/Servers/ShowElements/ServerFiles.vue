@@ -1,22 +1,37 @@
 <template>
+  <template v-if="openedFile !== null">
+    <Suspense>
+      <ServerFileEditor :file="openFile"/>
+
+      <template #fallback>
+        Loading editor...
+      </template>
+    </Suspense>
+  </template>
+
   <ServerFileList
+    v-else
     v-model:selected-files="selectedFiles"
     :entries="data"
     :is-root="['', '/'].includes(path)"
     @go-to-dir="goToDir"
     @go-up="goUp"
+    @open-file="openFile"
   />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineAsyncComponent, defineComponent } from 'vue';
 import { StorageListingRequest } from '../../../Communications/McManager/Storage/StorageListingRequest';
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import ServerFileList from '../Files/ServerFileList.vue';
-import _ from 'lodash';
+import { FileEntry } from '../../../Types/FileEntry';
 
 export default defineComponent({
-  components: { ServerFileList },
+  components: {
+    ServerFileEditor: defineAsyncComponent(() => import('../Files/ServerFileEditor.vue')),
+    ServerFileList,
+  },
 
   data () {
     return {
@@ -25,6 +40,7 @@ export default defineComponent({
       data: [],
       selectedFiles: [],
       path: '',
+      openedFile: null as null | FileEntry,
     };
   },
 
@@ -44,6 +60,11 @@ export default defineComponent({
           this.data = [];
           this.data = response.data;
         });
+    },
+
+    openFile (file: FileEntry) {
+      console.log(file);
+      this.openedFile = file;
     },
   },
 

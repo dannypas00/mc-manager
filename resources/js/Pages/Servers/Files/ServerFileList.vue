@@ -125,17 +125,15 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import _ from 'lodash';
-
-export interface FileEntry {
-  type: 'dir' | 'file',
-  path: string,
-  visibility: 'public' | 'private',
-  last_modifier: null | Date,
-  extra_metadata: Array<unknown>
-}
+import { FileEntry } from '../../../Types/StorageFileEntry';
 
 export default defineComponent({
-  emits: ['update:selected-files', 'go-to-dir', 'go-up'],
+  emits: [
+    'update:selected-files',
+    'go-to-dir',
+    'go-up',
+    'open-file',
+  ],
 
   components: {},
 
@@ -153,7 +151,7 @@ export default defineComponent({
     isRoot: {
       type: Boolean,
       required: true,
-    }
+    },
   },
 
   data () {
@@ -166,6 +164,8 @@ export default defineComponent({
         this.$emit('go-to-dir', entry.path);
         return;
       }
+
+      this.$emit('open-file', entry);
     },
   },
 
