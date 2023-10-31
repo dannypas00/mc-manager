@@ -1,5 +1,5 @@
 <template>
-  <CodeEditor v-if="fileData !== null" v-model="fileData"/>
+  <CodeEditor v-if="fileData !== null" v-model="fileData" class="w-full h-full"/>
 </template>
 
 <script lang="ts">
