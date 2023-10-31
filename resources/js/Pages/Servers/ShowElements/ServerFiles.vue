@@ -30,7 +30,8 @@ export default defineComponent({
 
   methods: {
     goUp () {
-      this.goToDir(this.path.replace(/\/?.*$/, ''));
+      console.log(this.path);
+      this.goToDir(this.path.replace(/\/?[^\/]*$/, ''));
     },
 
     goToDir (path: string) {

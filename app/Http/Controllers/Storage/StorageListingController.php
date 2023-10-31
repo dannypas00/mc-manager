@@ -46,6 +46,7 @@ class StorageListingController
     private function getDirectories(Server $server, string $storagePath): array
     {
         try {
+            $server->ftp()->path('world/..');
             return $server->ftp()->listContents($storagePath)->map(static fn (StorageAttributes $entry) => $entry->jsonSerialize())->toArray();
         } catch (FilesystemException $e) {
             Log::error(
