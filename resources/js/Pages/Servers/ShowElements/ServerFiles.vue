@@ -13,11 +13,16 @@
           <template v-for="(directory, index) in splitPath">
             /
             <a
+              v-if="!openedFile"
               class="cursor-pointer hover:underline active:text-indigo-400"
               @click="path = take(splitPath, index + 1).join('/')"
             >
               {{ directory }}
             </a>
+
+            <span v-else>
+              {{ directory }}
+            </span>
           </template>
         </h1>
       </div>
