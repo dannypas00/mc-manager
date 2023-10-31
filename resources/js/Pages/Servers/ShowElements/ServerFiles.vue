@@ -3,6 +3,7 @@
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-base font-semibold leading-6 text-gray-900">
+          <!-- TODO: Clickable breadcrumbs, starting at ~ or /home or something like that -->
           {{ openedFile?.path ?? (path + '/') }}
         </h1>
       </div>
