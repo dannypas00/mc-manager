@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Server;
-use Inertia\Inertia;
-
-Route::get('{id}', static fn (int $id) => Inertia::render(
-    'Servers/ServerShowPage',
-    ['server' => Server::findOrFail($id)]
-))->name('show');
+Route::prefix('{id}')->group(static function () {
+    Route::inertia('', 'Servers/Console/ServerConsole')->name('show');
+    Route::inertia('console', 'Servers/Console/ServerConsole')->name('console');
+    Route::inertia('files', 'Servers/Files/ServerFiles')->name('files');
+    Route::inertia('settings', 'Servers/Settings/ServerSettings')->name('settings');
+})->whereNumber('id');

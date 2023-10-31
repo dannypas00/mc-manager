@@ -113,12 +113,15 @@ import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import ServerFileList from '../Files/ServerFileList.vue';
 import { FileEntry } from '../../../Types/FileEntry';
 import { take } from 'lodash';
+import ServerShowTemplate from '../ServerShowTemplate.vue';
 
 export default defineComponent({
   components: {
     ServerFileEditor: defineAsyncComponent(() => import('../Files/ServerFileEditor.vue')),
     ServerFileList,
   },
+
+  template: ServerShowTemplate,
 
   data () {
     return {

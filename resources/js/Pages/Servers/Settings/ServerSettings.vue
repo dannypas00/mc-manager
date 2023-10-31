@@ -116,9 +116,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
+import ServerShowTemplate from '../ServerShowTemplate.vue';
 
 export default defineComponent({
   components: { SwitchGroup, SwitchLabel, Switch },
+
+  template: ServerShowTemplate,
 
   data () {
     return {
