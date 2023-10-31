@@ -1,7 +1,7 @@
 <template>
   <template v-if="openedFile !== null">
     <Suspense>
-      <ServerFileEditor :file="openFile"/>
+      <ServerFileEditor :file="openedFile"/>
 
       <template #fallback>
         Loading editor...
@@ -46,7 +46,6 @@ export default defineComponent({
 
   methods: {
     goUp () {
-      console.log(this.path);
       this.goToDir(this.path.replace(/\/?[^\/]*$/, ''));
     },
 
@@ -63,7 +62,6 @@ export default defineComponent({
     },
 
     openFile (file: FileEntry) {
-      console.log(file);
       this.openedFile = file;
     },
   },

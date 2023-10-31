@@ -32,6 +32,7 @@ export default defineComponent({
   computed: {},
 
   async mounted () {
+    console.log(this.file);
     // Do file request
     await this.request.setServerId(this.store.model.id)
       .setPath(this.file.path)
