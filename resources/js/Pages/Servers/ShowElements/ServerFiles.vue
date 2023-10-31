@@ -8,10 +8,19 @@
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <button
+          v-if="!openedFile"
           type="button"
           class="block rounded-md bg-indigo-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           {{ $t('pages.servers.show.files.new_file') }}
+        </button>
+
+        <button
+          v-else
+          type="button"
+          class="block rounded-md bg-green-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          {{ $t('pages.servers.show.files.save') }}
         </button>
       </div>
     </div>
@@ -69,7 +78,6 @@
                 @open-file="openFile"
               />
             </template>
-
           </div>
         </div>
       </div>

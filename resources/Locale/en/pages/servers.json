@@ -6,7 +6,8 @@
         },
         "files": {
             "nav_title": "Files",
-            "new_file": "New file"
+            "new_file": "New file",
+            "save": "Save"
         },
         "settings": {
             "nav_title": "Settings"

@@ -6,7 +6,8 @@
         },
         "files": {
             "nav_title": "Bestanden",
-            "new_file": "Nieuw bestand"
+            "new_file": "Nieuw bestand",
+            "save": "Sla op"
         },
         "settings": {
             "nav_title": "Instellingen"
