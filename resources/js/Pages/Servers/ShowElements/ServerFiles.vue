@@ -3,8 +3,22 @@
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-base font-semibold leading-6 text-gray-900">
-          <!-- TODO: Clickable breadcrumbs, starting at ~ or /home or something like that -->
-          {{ openedFile?.path ?? (path + '/') }}
+          <a
+            class="cursor-pointer hover:underline active:text-indigo-400"
+            @click="path = ''"
+          >
+            / minecraft
+          </a>
+
+          <template v-for="(directory, index) in splitPath">
+            /
+            <a
+              class="cursor-pointer hover:underline active:text-indigo-400"
+              @click="path = take(splitPath, index + 1).join('/')"
+            >
+              {{ directory }}
+            </a>
+          </template>
         </h1>
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -29,7 +43,6 @@
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="relative">
-            <hr class="divide-y">
 
             <template v-if="openedFile !== null">
               <Suspense>
@@ -70,11 +83,13 @@
                 @change="selectedFiles = $event.target.checked ? data : []"
               >
 
+              <hr class="divide-y">
+
               <ServerFileList
                 v-model:selected-files="selectedFiles"
                 :entries="data"
                 :is-root="['', '/'].includes(path)"
-                @go-to-dir="goToDir"
+                @go-to-dir="path = $event"
                 @go-up="goUp"
                 @open-file="openFile"
               />
@@ -92,6 +107,7 @@ import { StorageListingRequest } from '../../../Communications/McManager/Storage
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import ServerFileList from '../Files/ServerFileList.vue';
 import { FileEntry } from '../../../Types/FileEntry';
+import { take } from 'lodash';
 
 export default defineComponent({
   components: {
@@ -111,14 +127,15 @@ export default defineComponent({
   },
 
   methods: {
+    take,
+
     goUp () {
-      this.goToDir(this.path.replace(/\/?[^\/]*$/, ''));
+      this.path = this.path.replace(/\/?[^\/]*$/, '');
     },
 
-    goToDir (path: string) {
-      this.path = path;
+    getDir () {
       this.storageListingRequest
-        .setPath(path)
+        .setPath(this.path)
         .setServerId(this.serverStore.model.id)
         .getResponse()
         .then(response => {
@@ -136,10 +153,22 @@ export default defineComponent({
     indeterminate () {
       return this.selectedFiles.length > 0 && this.selectedFiles.length < this.data.length;
     },
+
+    splitPath () {
+      return (this.openedFile?.path ?? this.path).split('/').filter(path => path !== '') ?? [];
+    },
+  },
+
+  watch: {
+    path (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.getDir();
+      }
+    },
   },
 
   mounted () {
-    this.goToDir('');
+    this.getDir();
   },
 });
 </script>

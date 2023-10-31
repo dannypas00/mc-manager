@@ -19,18 +19,18 @@
       <tr
         v-for="entry in sortedEntries"
         :key="entry.path"
-        :class="[selected.includes(entry.path) && 'bg-gray-50']"
+        :class="[selected.includes(entry) && 'bg-gray-50']"
       >
         <td class="relative px-7 sm:w-12 sm:px-6">
           <div
-            v-if="selected.includes(entry.path)"
+            v-if="selected.includes(entry)"
             class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"
           />
           <input
             v-model="selected"
             type="checkbox"
             class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-            :value="entry.path"
+            :value="entry"
           >
         </td>
         <td
