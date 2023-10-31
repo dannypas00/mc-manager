@@ -1,18 +1,19 @@
 {
-  "menu_title": "Servers",
-  "show": {
-    "console": {
-      "nav_title": "Konsool"
+    "menu_title": "Servers",
+    "show": {
+        "console": {
+            "nav_title": "Konsool"
+        },
+        "files": {
+            "nav_title": "Bestanden",
+            "new_file": "Nieuw bestand"
+        },
+        "settings": {
+            "nav_title": "Instellingen"
+        },
+        "title": "Server - {name}"
     },
-    "files": {
-      "nav_title": "Bestanden"
-    },
-    "settings": {
-      "nav_title": "Instellingen"
-    },
-    "title": "Server - {name}"
-  },
-  "test": {
-    "test2": "Nieuwe test"
-  }
+    "test": {
+        "test2": "Nieuwe test"
+    }
 }

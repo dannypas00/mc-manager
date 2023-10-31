@@ -1,18 +1,19 @@
 {
-  "menu_title": "Servers",
-  "show": {
-    "console": {
-      "nav_title": "Console"
+    "menu_title": "Servers",
+    "show": {
+        "console": {
+            "nav_title": "Console"
+        },
+        "files": {
+            "nav_title": "Files",
+            "new_file": "New file"
+        },
+        "settings": {
+            "nav_title": "Settings"
+        },
+        "title": "Server - {name}"
     },
-    "files": {
-      "nav_title": "Files"
-    },
-    "settings": {
-      "nav_title": "Settings"
-    },
-    "title": "Server - {name}"
-  },
-  "test": {
-    "test2": "New test"
-  }
+    "test": {
+        "test2": "New test"
+    }
 }
