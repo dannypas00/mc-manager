@@ -110,18 +110,18 @@
 import { defineAsyncComponent, defineComponent } from 'vue';
 import { StorageListingRequest } from '../../../Communications/McManager/Storage/StorageListingRequest';
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
-import ServerFileList from '../Files/ServerFileList.vue';
+import ServerFileList from './Components/ServerFileList.vue';
 import { FileEntry } from '../../../Types/FileEntry';
 import { take } from 'lodash';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
 
 export default defineComponent({
   components: {
-    ServerFileEditor: defineAsyncComponent(() => import('../Files/ServerFileEditor.vue')),
+    ServerFileEditor: defineAsyncComponent(() => import('./Components/ServerFileEditor.vue')),
     ServerFileList,
   },
 
-  template: ServerShowTemplate,
+  layout: ServerShowTemplate,
 
   data () {
     return {

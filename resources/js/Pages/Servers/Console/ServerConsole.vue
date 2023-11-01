@@ -6,7 +6,7 @@ import { defineComponent } from 'vue';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
 
 export default defineComponent({
-  template: ServerShowTemplate,
+  layout: ServerShowTemplate,
 
   data () {
     return {};

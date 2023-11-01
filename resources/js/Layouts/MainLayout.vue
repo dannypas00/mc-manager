@@ -209,6 +209,8 @@ export default defineComponent({
     XMarkIcon,
   },
 
+  inheritAttrs: true,
+
   data () {
     return {
       ApplicationLogo,

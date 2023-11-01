@@ -11,6 +11,7 @@
                 :class="$route().current().startsWith(item.route) ? 'bg-gray-50 text-emerald-500' : 'text-gray-700 hover:text-emerald-500 hover:bg-gray-50'"
                 class="group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold"
                 role="button"
+                :href="item.route"
               >
                 <Component
                   :is="item.icon"
@@ -25,7 +26,7 @@
       </aside>
 
       <main class="px-4 pb-16 sm:px-6 lg:flex-auto lg:px-0 lg:pb-20">
-        <slot/>
+        <slot v-if="store.model.id"/>
       </main>
     </div>
   </MainLayout>
@@ -41,31 +42,41 @@ import MainLayout from '../../Layouts/MainLayout.vue';
 export default defineComponent({
   components: { MainLayout, PageTitle },
 
+  layout: MainLayout,
+
+  inheritAttrs: true,
+
   data () {
     return {
+      id: this.$attrs.route_parameters.id,
       store: useServerShowStore(),
-      nav: [
+    };
+  },
+
+  computed: {
+    nav () {
+      return [
         {
           name: this.$t('pages.servers.show.console.nav_title'),
           icon: UserCircleIcon,
-          route: '',
+          route: route('servers.console', { id: this.id }),
         },
         {
           name: this.$t('pages.servers.show.files.nav_title'),
           icon: FolderOpenIcon,
-          route: '',
+          route: route('servers.files', { id: this.id }),
         },
         {
           name: this.$t('pages.servers.show.settings.nav_title'),
           icon: Cog8ToothIcon,
-          route: '',
+          route: route('servers.settings', { id: this.id }),
         },
-      ],
-    };
+      ];
+    },
   },
 
-  mounted () {
-    this.store.getServer(this.$attrs.route_parameters.id);
+  async beforeMount () {
+    await this.store.getServer(this.id);
   },
 });
 </script>

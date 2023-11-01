@@ -121,7 +121,7 @@ import ServerShowTemplate from '../ServerShowTemplate.vue';
 export default defineComponent({
   components: { SwitchGroup, SwitchLabel, Switch },
 
-  template: ServerShowTemplate,
+  layout: ServerShowTemplate,
 
   data () {
     return {
