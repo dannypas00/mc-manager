@@ -4,11 +4,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import CodeEditor from '../../../Components/Editor/CodeEditor.vue';
-import { StorageContentRequest } from '../../../Communications/McManager/Storage/StorageContentRequest';
-import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
-import { FileEntry } from '../../../Types/FileEntry';
+import { FileEntry } from '../../../../Types/FileEntry';
+import { StorageContentRequest } from '../../../../Communications/McManager/Storage/StorageContentRequest';
+import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
+import CodeEditor from '../../../../Components/Editor/CodeEditor.vue';
 
+// TODO: There is probably a v-model loop or something here because editing anything makes the page crash
 export default defineComponent({
   components: { CodeEditor },
 
@@ -26,10 +27,6 @@ export default defineComponent({
       fileData: null as null | string,
     };
   },
-
-  methods: {},
-
-  computed: {},
 
   async mounted () {
     await this.request.setServerId(this.store.model.id)
