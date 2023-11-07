@@ -26,7 +26,7 @@
       </aside>
 
       <main class="px-4 pb-16 sm:px-6 lg:flex-auto lg:px-0 lg:pb-20">
-        <slot v-if="store.model.id"/>
+        <slot v-if="store.model.id" class="lg:w-2/3 lg:mx-auto"/>
       </main>
     </div>
   </MainLayout>
