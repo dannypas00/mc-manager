@@ -1,5 +1,15 @@
 <template>
   <button @click="requestLogs">Request</button>
+
+  <!-- Terminal -->
+  <div class="w-full h-[50em] bg-slate-900 text-white mx-auto">
+    <!-- Text render -->
+    <code class="m-1">
+      test
+    </code>
+
+    <!-- Inputbox -->
+  </div>
 </template>
 
 <script lang="ts">
@@ -7,7 +17,6 @@ import { defineComponent } from 'vue';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
 import { Channel } from 'laravel-echo';
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
-import { generateStream } from '../../../Communications/McManager/Servers/ServerLogStreamRequest';
 
 export default defineComponent({
   layout: ServerShowTemplate,
@@ -21,12 +30,7 @@ export default defineComponent({
   },
 
   methods: {
-    async requestLogs () {
-      const stream = await generateStream(this.store.model.id);
-
-      for await (const chunk of stream) {
-        console.log(chunk);
-      }
+    requestLogs () {
     },
   },
 
