@@ -35,6 +35,8 @@
         "ziggy-js": "^1.6.0"
     },
     "devDependencies": {
-        "@types/lodash": "^4.14.200"
+        "@types/lodash": "^4.14.200",
+        "laravel-echo": "^1.15.3",
+        "pusher-js": "^8.3.0"
     }
 }

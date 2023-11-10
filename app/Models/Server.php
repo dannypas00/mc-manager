@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
+use League\Flysystem\Ftp\FtpAdapter;
 use Storage;
 
 /**
@@ -152,7 +153,7 @@ class Server extends Model
         return $this->rcon;
     }
 
-    public function ftp(): FilesystemAdapter
+    public function ftp(): FtpAdapter|FilesystemAdapter
     {
         if (!$this->fileStorageDisk) {
             $config = [

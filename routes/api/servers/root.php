@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Servers\ServerIndexController;
+use App\Http\Controllers\Servers\ServerLogStreamController;
 use App\Http\Controllers\Servers\ServerShowController;
 use App\Http\Controllers\Storage\StorageContentController;
 use App\Http\Controllers\Storage\StorageListingController;
@@ -15,3 +16,5 @@ Route::prefix('{id}/storage')->as('storage.')->group(static function () {
     Route::get('listing', StorageListingController::class)->name('listing');
     Route::get('content', StorageContentController::class)->name('content');
 });
+
+Route::get('{id}/logs', ServerLogStreamController::class)->name('logs');
