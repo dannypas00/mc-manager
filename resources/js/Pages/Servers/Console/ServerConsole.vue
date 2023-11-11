@@ -35,9 +35,10 @@ export default defineComponent({
   },
 
   mounted () {
-    this.channel.listen('.log-update', (a, b, c) => {
-      console.log(a, b, c);
-    });
+    const stream = new EventSource(route('api.servers.logs', { id : this.store.model.id }));
+    stream.addEventListener('ping', event => {
+      console.log(event);
+    })
   },
 });
 </script>
