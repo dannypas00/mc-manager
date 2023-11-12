@@ -4,55 +4,70 @@ namespace App\Http\Controllers\Servers;
 
 use App\Http\Controllers\Controller;
 use Auth;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ServerLogStreamController extends Controller
 {
+    private const LOG_NAME = 'logs/latest.log';
+
     public function __invoke(int $serverId): StreamedResponse
     {
-        $stream = Auth::user()
-            ?->servers()
-            ->where('servers.id', $serverId)
-            ->first()
-            ?->ftp()
-            ->readStream('logs/latest.log');
-
-
-        if (!$stream) {
-            abort(404, 'Server not found for user');
-        }
-
         // https://pineco.de/simple-event-streaming-in-laravel/
-        return response()->stream(function () use ($stream) {
-            $lastSize = -1;
-            $iteration = 0;
+        return response()->stream(function () use ($serverId) {
+            $ftp = $this->getFtp($serverId);
+
+            $lastSize = 0;
 
             while (true) {
-                if (connection_aborted()) {
+                if (connection_aborted() === 1) {
                     break;
                 }
 
-                $currentSize = fstat($stream)['size'];
+                $currentSize = $ftp->size(self::LOG_NAME);
 
                 if ($currentSize > $lastSize) {
                     Log::debug('File size increased', ['lastSize' => $lastSize, 'currentSize' => $currentSize]);
 
-                    $message = stream_get_contents($stream, false, $lastSize);
+                    $stream = $ftp->readStream(self::LOG_NAME);
+
+                    $message = base64_encode(stream_get_contents($stream, null, $lastSize));
                     $lastSize = $currentSize;
-                    $iteration++;
 
                     // Send data
-                    echo "event: ping" . PHP_EOL, "data: $iteration" . PHP_EOL, "iteration: $iteration", PHP_EOL . PHP_EOL;
-                    ob_flush();
+                    echo "event: ping" . PHP_EOL, "data: $message", PHP_EOL . PHP_EOL;
+
+                    // Push and end stream
                     flush();
+                    clearstatcache();
+                    fclose($stream);
+                } else {
+                    Log::debug('No new info');
                 }
 
-                sleep(5);
+                sleep(0.1);
             }
-        }, 200, [
-            'Cache-Control' => 'no-cache',
-            'Content-Type'  => 'text/event-stream',
-        ]);
+        },
+            200,
+            [
+                'X-Accel-Buffering' => 'no',
+                'Cache-Control'     => 'no-cache',
+                'Content-Type'      => 'text/event-stream',
+            ]
+        );
+    }
+
+    /**
+     * @param int $serverId
+     * @return FilesystemAdapter
+     */
+    public function getFtp(int $serverId): FilesystemAdapter
+    {
+        return Auth::user()
+            ?->servers()
+            ->where('servers.id', $serverId)
+            ->first()
+            ?->ftp();
     }
 }
