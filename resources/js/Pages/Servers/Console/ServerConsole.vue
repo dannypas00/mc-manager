@@ -1,10 +1,9 @@
 <template>
   <!-- Terminal -->
-  <div class="w-full h-[50em] bg-slate-900 text-white mx-auto fs-12">
+  <div class="w-[90%] h-[50em] bg-slate-900 text-white mx-auto fs-12 overflow-auto">
     <!-- Text render -->
-    <code class="m-1">
-      {{ log }}
-    </code>
+    <code v-if="!useFancyLog" class="whitespace-pre-line">{{ log }}</code>
+    <FancyLog v-else :log="log"/>
 
     <!-- Inputbox -->
   </div>
@@ -14,26 +13,27 @@
 import { defineComponent } from 'vue';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
+import FancyLog from './FancyLog.vue';
 
 export default defineComponent({
+  components: { FancyLog },
   layout: ServerShowTemplate,
 
   data () {
     return {
       store: useServerShowStore(),
       log: '',
+      useFancyLog: true,
     };
   },
 
-  methods: {
-  },
+  methods: {},
 
   mounted () {
     const stream = new EventSource(route('api.servers.logs', { id: this.store.model.id }));
     stream.addEventListener('ping', event => {
-      const newData = atob(event.data);
-      this.log += newData;
-      console.log(newData);
+      const newData: string = atob(event.data);
+      this.log += newData.trim() + '\n';
     });
   },
 });
