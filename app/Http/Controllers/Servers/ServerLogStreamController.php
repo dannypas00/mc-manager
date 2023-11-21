@@ -62,8 +62,6 @@ class ServerLogStreamController extends Controller
             flush();
             clearstatcache();
             fclose($stream);
-        } else {
-            Log::debug('No new info');
         }
     }
 }
