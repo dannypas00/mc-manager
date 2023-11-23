@@ -10,6 +10,7 @@ class Kernel extends ConsoleKernel
 {
     protected function schedule(Schedule $schedule): void
     {
+        // TODO: Replace with minecraft query or ping instead of rcon: https://wiki.vg/Query
         $schedule->command(PollServersCommand::class)
             ->everyFiveSeconds();
     }
