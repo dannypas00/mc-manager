@@ -1,6 +1,6 @@
 <template>
   <!-- Terminal -->
-  <div class="w-[90%] h-[50em] bg-slate-900 text-white mx-auto fs-12 overflow-auto">
+  <div class="w-[90%] h-[50em] bg-slate-900 text-white mx-auto fs-12 overflow-auto" ref="log">
     <!-- Text render -->
     <code v-if="!useFancyLog" class="whitespace-pre-line">{{ log }}</code>
     <FancyLog v-else :log="log"/>
@@ -27,6 +27,17 @@ export default defineComponent({
       log: '',
       useFancyLog: true,
     };
+  },
+
+  watch: {
+    log (newLog, oldLog) {
+      if (oldLog === '') {
+        this.$nextTick(() => {
+          console.log('scroll');
+          this.$refs.log.scrollTop = this.$refs.log.scrollHeight;
+        });
+      }
+    },
   },
 
   mounted () {

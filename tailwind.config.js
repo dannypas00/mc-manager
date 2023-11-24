@@ -13,12 +13,5 @@ export default {
   },
   plugins: [
     forms,
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        '.no-overflow-anchoring': {
-          overflowAnchor: 'none',
-        },
-      });
-    }),
   ],
 };

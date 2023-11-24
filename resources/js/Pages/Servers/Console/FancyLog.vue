@@ -3,21 +3,19 @@
     <span
       v-for="(line, index) in output"
       :key="index"
-      class="hover:border-y-2 hover:-my-[2px] border-slate-500 block box-border px-1"
+      class="hover:border-y-2 hover:-my-[2px] border-slate-500 block box-border px-1 flex gap-2"
       style="overflow-anchor: none"
     >
       <template v-if="isObject(line)">
-        <span class="flex gap-2">
-          <span class="text-slate-400" :title="line.time.fromNow()">
-            {{ line.time.format('HH:mm:ss') }}
-          </span>
-
-          <span :class="logLevelText(line.level)">
-            {{ line.message }}
-          </span>
+        <span class="text-slate-400" :title="line.time.fromNow()">
+          {{ line.time.format('HH:mm:ss') }}
         </span>
 
-        <span class="text-slate-400/50 text-xs float-right">
+        <span :class="logLevelText(line.level)" class="grow">
+          {{ line.message }}
+        </span>
+
+        <span class="text-slate-400/50 text-xs">
           {{ line.caller }}
         </span>
       </template>
