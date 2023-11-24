@@ -4,8 +4,8 @@ namespace App\Models;
 
 use App\Enums\ServerStatus;
 use App\Rcon\Rcon;
+use Cache;
 use Crypt;
-use Database\Factories\ServerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -16,49 +16,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
 use League\Flysystem\Ftp\FtpAdapter;
+use Log;
 use Storage;
+use xPaw\MinecraftPing;
+use xPaw\MinecraftPingException;
+use xPaw\MinecraftQuery;
+use xPaw\MinecraftQueryException;
 
 /**
  * App\Models\Server
  *
  * @property int $id
  * @property int $enabled
+ * @property ServerStatus $status
  * @property int $port
  * @property int $rcon_port
- * @property string $name
- * @property string|null $description
- * @property string $icon
- * @property string|null $local_ip
- * @property string $public_ip
- * @property string $rcon_password
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property int $current_players
- * @property int $maximum_players
- * @property-read Collection<int, User> $users
- * @property-read int|null $users_count
- * @method static ServerFactory factory($count = null, $state = [])
- * @method static Builder|Server newModelQuery()
- * @method static Builder|Server newQuery()
- * @method static Builder|Server query()
- * @method static Builder|Server whereCreatedAt($value)
- * @method static Builder|Server whereCurrentPlayers($value)
- * @method static Builder|Server whereDescription($value)
- * @method static Builder|Server whereEnabled($value)
- * @method static Builder|Server whereIcon($value)
- * @method static Builder|Server whereId($value)
- * @method static Builder|Server whereLocalIp($value)
- * @method static Builder|Server whereMaximumPlayers($value)
- * @method static Builder|Server whereName($value)
- * @method static Builder|Server wherePort($value)
- * @method static Builder|Server wherePublicIp($value)
- * @method static Builder|Server whereRconPassword($value)
- * @method static Builder|Server whereRconPort($value)
- * @method static Builder|Server whereUpdatedAt($value)
- * @property string|null $player_list Comma-separated list of users
- * @method static Builder|Server wherePlayerList($value)
- * @property ServerStatus $status
- * @method static Builder|Server whereStatus($value)
  * @property int $enable_ftp
  * @property int $is_sftp
  * @property int $use_ssh_auth
@@ -66,13 +38,48 @@ use Storage;
  * @property string|null $ftp_host
  * @property string|null $ftp_username Contains private key when using ssh key auth
  * @property string|null $ftp_password Contains pass phrase when using ssh key auth
+ * @property int $current_players
+ * @property int $maximum_players
+ * @property string|null $player_list Comma-separated list of users
+ * @property string $name
+ * @property string|null $description
+ * @property string|null $version
+ * @property string $icon
+ * @property string|null $local_ip
+ * @property string $public_ip
+ * @property string $rcon_password
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, User> $users
+ * @property-read int|null $users_count
+ * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
+ * @method static Builder|Server newModelQuery()
+ * @method static Builder|Server newQuery()
+ * @method static Builder|Server query()
+ * @method static Builder|Server whereCreatedAt($value)
+ * @method static Builder|Server whereCurrentPlayers($value)
+ * @method static Builder|Server whereDescription($value)
  * @method static Builder|Server whereEnableFtp($value)
+ * @method static Builder|Server whereEnabled($value)
  * @method static Builder|Server whereFtpHost($value)
  * @method static Builder|Server whereFtpPassword($value)
  * @method static Builder|Server whereFtpPort($value)
  * @method static Builder|Server whereFtpUsername($value)
+ * @method static Builder|Server whereIcon($value)
+ * @method static Builder|Server whereId($value)
  * @method static Builder|Server whereIsSftp($value)
+ * @method static Builder|Server whereLocalIp($value)
+ * @method static Builder|Server whereMaximumPlayers($value)
+ * @method static Builder|Server whereName($value)
+ * @method static Builder|Server wherePlayerList($value)
+ * @method static Builder|Server wherePort($value)
+ * @method static Builder|Server wherePublicIp($value)
+ * @method static Builder|Server whereRconPassword($value)
+ * @method static Builder|Server whereRconPort($value)
+ * @method static Builder|Server whereStatus($value)
+ * @method static Builder|Server whereUpdatedAt($value)
  * @method static Builder|Server whereUseSshAuth($value)
+ * @method static Builder|Server whereVersion($value)
  * @mixin Eloquent
  */
 class Server extends Model
@@ -171,5 +178,69 @@ class Server extends Model
         }
 
         return $this->fileStorageDisk;
+    }
+
+    public function updateByPing(bool $save = true): void
+    {
+        $data = $this->ping(false);
+
+        if ($data) {
+            $this->description = $data['description']['text'];
+            $this->current_players = $data['players']['online'];
+            $this->maximum_players = $data['players']['max'];
+            $this->version = $data['version']['name'];
+
+            if ($save) {
+                $this->save();
+            }
+        }
+    }
+
+    public function ping(bool $save = true): mixed
+    {
+        $ping = (new MinecraftPing($this->local_ip, $this->port));
+
+        try {
+            $response = $ping->Query();
+
+            if (!$response) {
+                $this->status = ServerStatus::Starting;
+            } elseif (is_array($response)) {
+                $this->status = ServerStatus::Up;
+            } else {
+                $this->status = ServerStatus::Unknown;
+            }
+        } catch (MinecraftPingException $e) {
+            $ping->close();
+            $this->status = ServerStatus::Down;
+            $this->save();
+        } finally {
+            $ping->close();
+
+            if ($save) {
+                $this->save();
+            }
+
+            return $response ?? false;
+        }
+    }
+
+    public function getPlayerListAttribute(): array
+    {
+        return Cache::remember($this->id . '-server-plaayer-list', 60, function (): array {
+            try {
+                $query = new MinecraftQuery();
+                $query->Connect($this->local_ip, $this->port);
+                $list = $query->GetPlayers();
+
+                if ($list) {
+                    return $list;
+                }
+                return [];
+            } catch (MinecraftQueryException $e) {
+                Log::error('Exception getting player list', ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+                return [];
+            }
+        });
     }
 }
