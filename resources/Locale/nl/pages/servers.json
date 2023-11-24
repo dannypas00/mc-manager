@@ -1,4 +1,7 @@
 {
+    "listing": {
+        "player_list": "Spelers online:\n"
+    },
     "menu_title": "Servers",
     "show": {
         "console": {

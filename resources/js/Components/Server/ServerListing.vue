@@ -21,7 +21,9 @@
     </div>
 
     <div class="text-end justify-self-end shrink-0 pe-2">
-      <p>{{ server.current_players }} <span class="font-semibold">/ {{ server.maximum_players }}</span></p>
+      <p :title="$t('pages.servers.listing.player_list') + server.player_list">
+        {{ server.current_players }} <span class="font-semibold">/ {{ server.maximum_players }}</span>
+      </p>
     </div>
   </a>
 </template>
@@ -32,10 +34,16 @@ import Server = App.Models.Server;
 
 export default defineComponent({
   props: {
-    server: {
+    initialServer: {
       type: Object as PropType<Server>,
       required: true,
     },
+  },
+
+  data () {
+    return {
+      server: {} as Server,
+    };
   },
 
   computed: {
@@ -49,6 +57,15 @@ export default defineComponent({
           return 'bg-red-100 text-red-950';
       }
     },
+  },
+
+  mounted () {
+    this.server = this.initialServer;
+
+    window.Echo.channel(`servers.${this.initialServer.id}`)
+      .listen('.update', (event: { server: Server }) => {
+        this.server = Object.assign(this.server, event.server);
+      });
   },
 });
 </script>

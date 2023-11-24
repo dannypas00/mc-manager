@@ -1,6 +1,6 @@
 version: '3'
 services:
-  mcm-db:
+  db:
     container_name: mcm-db
     image: mariadb:latest
     ports:
@@ -10,28 +10,26 @@ services:
     volumes:
       - .docker/local/.mysql/data:/var/lib/mysql/
 
-  mcm-redis:
+  redis:
     container_name: mcm-redis
     image: redis:latest
 
-  mcm-php:
+  php:
     container_name: mcm-php
     image: dannypas00/laravel-fpm:8.2
     user: 1000:1000
-    ports:
-      - "6001:6001"
     depends_on:
-      - mcm-db
-      - mcm-redis
+      - db
+      - redis
     volumes:
       - ./:/var/www
 
-  mcm-horizon:
+  horizon:
     container_name: mcm-horizon
     image: dannypas00/laravel-fpm:8.2
     depends_on:
-      - mcm-db
-      - mcm-redis
+      - db
+      - redis
     command:
       - php
       - artisan
@@ -39,12 +37,12 @@ services:
     volumes:
       - ./:/var/www
 
-  mcm-schedule:
+  schedule:
     container_name: mcm-schedule
     image: dannypas00/laravel-fpm:8.2
     depends_on:
-      - mcm-db
-      - mcm-redis
+      - db
+      - redis
     command:
       - php
       - artisan
@@ -52,18 +50,33 @@ services:
     volumes:
       - ./:/var/www
 
-  mcm-nginx:
+  websockets:
+    container_name: mcm-websockets
+    image: dannypas00/laravel-fpm:8.2
+    depends_on:
+      - db
+      - redis
+    command:
+      - php
+      - artisan
+      - websockets:serve
+    ports:
+      - "6001:6001"
+    volumes:
+      - ./:/var/www
+
+  nginx:
     container_name: mcm-nginx
     image: nginx:latest
     depends_on:
-      - mcm-php
+      - php
     ports:
       - "80:80"
     volumes:
       - .docker/local/nginx-includes:/etc/nginx/conf.d
       - ./:/var/www
 
-  mcm-minecraft:
+  minecraft:
     container_name: mcm-minecraft
     image: openjdk:22-slim
     ports:
@@ -81,7 +94,7 @@ services:
       - server.jar
       - nogui
 
-  mcm-ftp:
+  ftp:
     container_name: mcm-ftp
     image: delfer/alpine-ftp-server:latest
     ports:
@@ -92,7 +105,7 @@ services:
     volumes:
       - .docker/local/minecraft:/minecraft
 
-  mcm-sftp:
+  sftp:
     container_name: mcm-sftp
     image: atmoz/sftp:alpine
     ports:

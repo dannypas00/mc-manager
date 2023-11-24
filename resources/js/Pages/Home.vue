@@ -7,7 +7,7 @@
       :key="server.id"
       :href="$route('servers.show', { id: server.id })"
     >
-      <ServerListing :server="server"/>
+      <ServerListing :initial-server="server"/>
     </Link>
   </div>
 </template>

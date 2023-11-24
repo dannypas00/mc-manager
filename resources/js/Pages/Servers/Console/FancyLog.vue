@@ -4,6 +4,7 @@
       v-for="(line, index) in output"
       :key="index"
       class="hover:border-y-2 hover:-my-[2px] border-slate-500 block box-border px-1"
+      style="overflow-anchor: none"
     >
       <template v-if="isObject(line)">
         <span class="flex gap-2">

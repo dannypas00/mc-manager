@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ServerStatus;
+use App\Observers\ServerObserver;
 use App\Rcon\Rcon;
 use Cache;
 use Crypt;
@@ -227,7 +228,7 @@ class Server extends Model
 
     public function getPlayerListAttribute(): array
     {
-        return Cache::remember($this->id . '-server-plaayer-list', 60, function (): array {
+        return Cache::remember($this->id . '-server-player-list', 10, function (): array {
             try {
                 $query = new MinecraftQuery();
                 $query->Connect($this->local_ip, $this->port);
@@ -242,5 +243,12 @@ class Server extends Model
                 return [];
             }
         });
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::observe(ServerObserver::class);
     }
 }

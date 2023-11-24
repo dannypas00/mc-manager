@@ -5,6 +5,8 @@
     <code v-if="!useFancyLog" class="whitespace-pre-line">{{ log }}</code>
     <FancyLog v-else :log="log"/>
 
+    <div style="overflow-anchor: auto; height: 1px"/>
+
     <!-- Inputbox -->
   </div>
 </template>
@@ -27,10 +29,9 @@ export default defineComponent({
     };
   },
 
-  methods: {},
-
   mounted () {
     const stream = new EventSource(route('api.servers.logs', { id: this.store.model.id }));
+
     stream.addEventListener('ping', event => {
       const newData: string = atob(event.data);
       this.log += newData.trim() + '\n';
