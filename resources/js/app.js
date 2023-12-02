@@ -7,7 +7,6 @@ import { InertiaProgress } from '@inertiajs/progress';
 import PortalVue from 'portal-vue';
 import MainLayout from './Layouts/MainLayout.vue';
 import i18n from './i18n.ts';
-import route from 'ziggy-js/src/js/index.js';
 import { createPinia } from 'pinia';
 
 InertiaProgress.init({
