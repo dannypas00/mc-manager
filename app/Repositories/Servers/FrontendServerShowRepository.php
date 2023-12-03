@@ -4,15 +4,19 @@ namespace App\Repositories\Servers;
 
 use App\Models\Server;
 use Auth;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrontendServerShowRepository
 {
-    public function show(int $id): Server
+    public function show(int $id): Server|Model
     {
-        return Server::whereHas(
-            'user',
-            static fn (Builder $user) => $user->whereKey(Auth::user()->id)
-        )->findOrFail($id);
+        $server = Auth::user()?->servers()->findOrFail($id);
+
+        if (!$server) {
+            abort(Response::HTTP_NOT_FOUND, 'no_server_found_for_user');
+        }
+
+        return $server;
     }
 }

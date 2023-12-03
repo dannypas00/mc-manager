@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Storage;
 use App\Http\Requests\Storage\StorageContentRequest;
 use App\Http\Requests\Storage\StorageListingRequest;
 use App\Models\Server;
+use App\Repositories\Servers\FrontendServerShowRepository;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use League\Flysystem\FilesystemException;
@@ -16,26 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StorageContentController
 {
-    public function __invoke(int $serverId, StorageContentRequest $request): JsonResponse
+    public function __invoke(int $serverId, StorageContentRequest $request, FrontendServerShowRepository $showRepository): JsonResponse
     {
-        $server = $this->getServer($serverId);
+        $server = $showRepository->show($serverId);
         return new JsonResponse(['content' => $server->ftp()->get($request->get('path'))]);
-    }
-
-    /**
-     * @param int $serverId
-     * @return Server
-     */
-    private function getServer(int $serverId): Server
-    {
-        try {
-            return Server::whereHas(
-                'users',
-                static fn (Builder $user) => $user->where('id', Auth::user()->id)
-            )->findOrFail($serverId);
-        } catch (ModelNotFoundException) {
-            abort(Response::HTTP_NOT_FOUND, 'no_server_found_for_user');
-        }
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Storage;
 
 use App\Http\Requests\Storage\StorageListingRequest;
 use App\Models\Server;
+use App\Repositories\Servers\FrontendServerShowRepository;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -15,27 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StorageListingController
 {
-    public function __invoke(int $serverId, StorageListingRequest $request): JsonResponse
+    public function __invoke(int $serverId, StorageListingRequest $request, FrontendServerShowRepository $showRepository): JsonResponse
     {
-        $server = $this->getServer($serverId);
+        $server = $showRepository->show($serverId);
         // TODO: Use realpath() to tell frontend the actual directory
         return new JsonResponse($this->getDirectories($server, $request->get('path') ?? ''));
-    }
-
-    /**
-     * @param int $serverId
-     * @return Server
-     */
-    private function getServer(int $serverId): Server
-    {
-        try {
-            return Server::whereHas(
-                'users',
-                static fn (Builder $user) => $user->where('id', Auth::user()->id)
-            )->findOrFail($serverId);
-        } catch (ModelNotFoundException) {
-            abort(Response::HTTP_NOT_FOUND, 'no_server_found_for_user');
-        }
     }
 
     /**
