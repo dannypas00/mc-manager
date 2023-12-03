@@ -1,7 +1,7 @@
 <template>
-  <div class="w-[90%] bg-slate-900 text-white mx-auto fs-12">
+  <div class="w-[90%] w-max-[90%] bg-slate-900 text-white mx-auto fs-12">
     <!-- Terminal -->
-    <div class="h-[50em] overflow-auto" ref="log">
+    <div class="h-[50em] overflow-y-auto" ref="log">
       <!-- Text render -->
       <code v-if="!useFancyLog" class="whitespace-pre-line">{{ log }}</code>
       <FancyLog v-else :log="log"/>
@@ -18,11 +18,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, unref } from 'vue';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import FancyLog from './FancyLog.vue';
 import CodeBracketIcon from '@heroicons/vue/20/solid/CodeBracketIcon';
+import ServerRconCommandRequest from '../../../Communications/McManager/Servers/ServerRconCommandRequest';
+import moment from 'moment';
 
 export default defineComponent({
   components: {
@@ -38,12 +40,23 @@ export default defineComponent({
       log: '',
       useFancyLog: true,
       command: '',
+      rconRequest: new ServerRconCommandRequest(),
     };
   },
 
   methods: {
     onCommandSubmit () {
-      console.log(this.command);
+      this.rconRequest
+        .setId(this.store.model.id)
+        .setCommand(this.command)
+        .getResponse()
+        .then(response => {
+          const formattedDate = moment().format('HH:mm:ss');
+          this.log += `[${formattedDate}] [CONSOLE USER/COMMAND]: ${unref(this.command)}\n`;
+          this.log += `[${formattedDate}] [RCON SERVER/RESPONSE]: ${response.data}\n`;
+        });
+
+      this.command = '';
     }
   },
 
@@ -61,7 +74,9 @@ export default defineComponent({
     const stream = new EventSource(route('api.servers.logs', { id: this.store.model.id }));
 
     stream.addEventListener('ping', event => {
+      // Decode data from base64 to plain
       const newData: string = atob(event.data);
+      console.log(newData);
       this.log += newData.trim() + '\n';
     });
   },

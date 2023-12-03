@@ -3,7 +3,7 @@
     <PageTitle :title="$t('pages.servers.show.title', { name: store.model.name })" :header="store.model.name"/>
 
     <div class="mx-auto lg:flex lg:gap-x-16 lg:px-8">
-      <aside class="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20">
+      <aside class="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20  w-[15%]">
         <nav class="flex-none px-4 sm:px-6 lg:px-0">
           <ul role="list" class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
             <li v-for="item in nav" :key="item.name">
@@ -25,7 +25,7 @@
         </nav>
       </aside>
 
-      <main class="px-4 pb-16 sm:px-6 lg:flex-auto lg:px-0 lg:pb-20">
+      <main class="px-4 pb-16 sm:px-6 lg:flex-auto lg:px-0 lg:pb-20 w-[85%]">
         <slot v-if="store.model.id" class="lg:w-2/3 lg:mx-auto"/>
       </main>
     </div>

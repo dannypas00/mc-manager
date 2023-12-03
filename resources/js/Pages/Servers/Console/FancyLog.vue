@@ -3,7 +3,7 @@
     <span
       v-for="(line, index) in output"
       :key="index"
-      class="hover:border-y-2 hover:-my-[2px] border-slate-500 block box-border px-1 flex gap-2"
+      class="hover:border-y-2 hover:-my-[2px] border-slate-500 box-border px-1 flex gap-2"
       style="overflow-anchor: none"
     >
       <template v-if="isObject(line)">
@@ -61,7 +61,7 @@ export default defineComponent({
     isObject,
 
     transformLine (line: string): LogLine | string {
-      const match = /^\[(\d{2}:\d{2}:\d{2})\] \[(.*)\/(DEBUG|INFO|WARN|ERROR)\]: (.*)$/g.exec(line);
+      const match = /^\[(\d{2}:\d{2}:\d{2})\] \[(.*)\/(DEBUG|INFO|WARN|ERROR|COMMAND|RESPONSE)\]: (.*)$/g.exec(line);
       if (!match) {
         return line;
       }
