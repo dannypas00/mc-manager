@@ -19,10 +19,14 @@ use Illuminate\Support\Carbon;
 use League\Flysystem\Ftp\FtpAdapter;
 use Log;
 use Storage;
+use Str;
+use Throwable;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
+
+use function Laravel\Prompts\error;
 
 /**
  * App\Models\Server
@@ -239,10 +243,26 @@ class Server extends Model
                 }
                 return [];
             } catch (MinecraftQueryException $e) {
-                Log::error('Exception getting player list', ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+                Log::error(
+                    'Exception getting player list',
+                    ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
+                );
                 return [];
             }
         });
+    }
+
+    public function getHasAcceptedEulaAttribute(): bool
+    {
+        try {
+            return Str::isMatch('/.*eula=false.*/', $this->ftp()->get('eula.txt'));
+        } catch (Throwable $e) {
+            Log::error(
+                'Error thrown when retrieving EULA',
+                ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
+            );
+            return true;
+        }
     }
 
     protected static function boot(): void

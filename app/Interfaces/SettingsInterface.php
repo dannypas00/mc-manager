@@ -24,7 +24,7 @@ interface SettingsInterface
     public function getAllowedIncludes(): array;
 
     /**
-     * @return array<array-key, AllowedFilter|string>
+     * @return array<AllowedFilter|string>
      */
     public function getAllowedFilters(): array;
 
@@ -32,4 +32,9 @@ interface SettingsInterface
      * @return string[]
      */
     public function getAllowedSorts(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedAppends(): array;
 }

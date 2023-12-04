@@ -37,4 +37,9 @@ class ServerSettings implements SettingsInterface
     {
         return [];
     }
+
+    public function getAllowedAppends(): array
+    {
+        // TODO: Implement getAllowedAppends() method.
+    }
 }
