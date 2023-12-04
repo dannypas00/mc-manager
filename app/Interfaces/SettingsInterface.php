@@ -32,9 +32,4 @@ interface SettingsInterface
      * @return string[]
      */
     public function getAllowedSorts(): array;
-
-    /**
-     * @return string[]
-     */
-    public function getAllowedAppends(): array;
 }

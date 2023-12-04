@@ -215,7 +215,7 @@ class Server extends Model
             } else {
                 $this->status = ServerStatus::Unknown;
             }
-        } catch (MinecraftPingException $e) {
+        } catch (MinecraftPingException) {
             $ping->close();
             $this->status = ServerStatus::Down;
             $this->save();

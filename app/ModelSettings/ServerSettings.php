@@ -6,7 +6,6 @@ namespace App\ModelSettings;
 
 use App\Interfaces\SettingsInterface;
 use App\Models\Server;
-use App\Models\User;
 
 class ServerSettings implements SettingsInterface
 {
@@ -36,10 +35,5 @@ class ServerSettings implements SettingsInterface
     public function getAllowedSorts(): array
     {
         return [];
-    }
-
-    public function getAllowedAppends(): array
-    {
-        // TODO: Implement getAllowedAppends() method.
     }
 }

@@ -6,7 +6,6 @@ namespace App\Repositories;
 
 use App\Interfaces\SettingsInterface;
 use Illuminate\Database\Eloquent\Collection;
-use Log;
 use Spatie\QueryBuilder\Exceptions\AllowedFieldsMustBeCalledBeforeAllowedIncludes;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -19,12 +18,8 @@ final class AllRepository
      */
     public function get(SettingsInterface $settings): Collection
     {
-        try {
-            return $this->setupQueryBuilder($settings)->get();
-        } catch (AllowedFieldsMustBeCalledBeforeAllowedIncludes) {
-            Log::emergency('Some developer could not resist to not touch this code.');
-            return new Collection();
-        }
+        return $this->setupQueryBuilder($settings)
+            ->get();
     }
 
     /**
