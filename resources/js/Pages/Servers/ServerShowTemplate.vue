@@ -8,14 +8,23 @@
           <ul role="list" class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
             <li v-for="item in nav" :key="item.name">
               <a
-                :class="$route().current().startsWith(item.route) ? 'bg-gray-50 text-emerald-500' : 'text-gray-700 hover:text-emerald-500 hover:bg-gray-50'"
+                :class="
+                  $route().current(item.routeMatch)
+                    ? 'bg-gray-50 text-emerald-500'
+                    : 'text-gray-700 hover:text-emerald-500 hover:bg-gray-50'
+                "
                 class="group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold"
                 role="button"
                 :href="item.route"
               >
                 <Component
                   :is="item.icon"
-                  :class="[$route().current().startsWith(item.route) ? 'text-emerald-500' : 'text-gray-400 group-hover:text-emerald-500', 'h-6 w-6 shrink-0']"
+                  :class="[
+                    $route().current(item.routeMatch)
+                      ? 'text-emerald-500'
+                      : 'text-gray-400 group-hover:text-emerald-500',
+                    'h-6 w-6 shrink-0'
+                  ]"
                   aria-hidden="true"
                 />
                 {{ item.name }}
@@ -40,7 +49,10 @@ import PageTitle from '../../Components/Layout/PageTitle.vue';
 import MainLayout from '../../Layouts/MainLayout.vue';
 
 export default defineComponent({
-  components: { MainLayout, PageTitle },
+  components: {
+    MainLayout,
+    PageTitle,
+  },
 
   layout: MainLayout,
 
@@ -60,16 +72,19 @@ export default defineComponent({
           name: this.$t('pages.servers.show.console.nav_title'),
           icon: UserCircleIcon,
           route: route('servers.console', { id: this.id }),
+          routeMatch: 'servers.console*',
         },
         {
           name: this.$t('pages.servers.show.files.nav_title'),
           icon: FolderOpenIcon,
           route: route('servers.files', { id: this.id }),
+          routeMatch: 'servers.files*',
         },
         {
           name: this.$t('pages.servers.show.settings.nav_title'),
           icon: Cog8ToothIcon,
           route: route('servers.settings', { id: this.id }),
+          routeMatch: 'servers.settings*',
         },
       ];
     },

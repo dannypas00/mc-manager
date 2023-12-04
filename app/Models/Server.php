@@ -45,7 +45,6 @@ use function Laravel\Prompts\error;
  * @property string|null $ftp_password Contains pass phrase when using ssh key auth
  * @property int $current_players
  * @property int $maximum_players
- * @property string|null $player_list Comma-separated list of users
  * @property string $name
  * @property string|null $description
  * @property string|null $version
@@ -55,7 +54,9 @@ use function Laravel\Prompts\error;
  * @property string $rcon_password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, User> $users
+ * @property-read bool $has_accepted_eula
+ * @property-read array $player_list
+ * @property-read Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
@@ -76,7 +77,6 @@ use function Laravel\Prompts\error;
  * @method static Builder|Server whereLocalIp($value)
  * @method static Builder|Server whereMaximumPlayers($value)
  * @method static Builder|Server whereName($value)
- * @method static Builder|Server wherePlayerList($value)
  * @method static Builder|Server wherePort($value)
  * @method static Builder|Server wherePublicIp($value)
  * @method static Builder|Server whereRconPassword($value)
@@ -255,7 +255,7 @@ class Server extends Model
     public function getHasAcceptedEulaAttribute(): bool
     {
         try {
-            return Str::isMatch('/.*eula=false.*/', $this->ftp()->get('eula.txt'));
+            return Str::isMatch('/.*eula=true.*/', $this->ftp()->get('eula.txt'));
         } catch (Throwable $e) {
             Log::error(
                 'Error thrown when retrieving EULA',
