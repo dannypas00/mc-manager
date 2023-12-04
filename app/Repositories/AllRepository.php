@@ -18,8 +18,7 @@ final class AllRepository
      */
     public function get(SettingsInterface $settings): Collection
     {
-        return $this->setupQueryBuilder($settings)
-            ->get();
+        return $this->setupQueryBuilder($settings)->get();
     }
 
     /**
