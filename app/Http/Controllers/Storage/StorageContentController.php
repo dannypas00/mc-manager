@@ -23,23 +23,4 @@ class StorageContentController
         $server = $showRepository->show($serverId);
         return new JsonResponse(['content' => $server->ftp()->get($request->get('path'))]);
     }
-
-    /**
-     * @param Server $server
-     * @param string $storagePath
-     * @return array
-     */
-    private function getDirectories(Server $server, string $storagePath): array
-    {
-        try {
-            $server->ftp()->path('world/..');
-            return $server->ftp()->listContents($storagePath)->map(static fn (StorageAttributes $entry) => $entry->jsonSerialize())->toArray();
-        } catch (FilesystemException $e) {
-            Log::error(
-                'Filesystem error while retrieving directory listing',
-                ['path' => request()?->route(), 'exception' => $e->getTrace()]
-            );
-            abort(Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
 }

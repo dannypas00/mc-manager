@@ -2,6 +2,14 @@
   <MainLayout>
     <PageTitle :title="$t('pages.servers.show.title', { name: store.model.name })" :header="store.model.name"/>
 
+    <FlashNotification
+      :text="$t('pages.servers.show.eula_message.text')"
+      :button-text="$t('pages.servers.show.eula_message.button')"
+      :dismiss-button="false"
+      :on-click-action="$route('servers.files', { id, path: 'eula.txt' })"
+      class="mb-2"
+    />
+
     <div class="mx-auto lg:flex lg:gap-x-16 lg:px-8">
       <aside class="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20  w-[15%]">
         <nav class="flex-none px-4 sm:px-6 lg:px-0">
@@ -47,9 +55,11 @@ import { Cog8ToothIcon, FolderOpenIcon, UserCircleIcon } from '@heroicons/vue/24
 import { useServerShowStore } from '../../Stores/Servers/ServerShowStore';
 import PageTitle from '../../Components/Layout/PageTitle.vue';
 import MainLayout from '../../Layouts/MainLayout.vue';
+import FlashNotification from '../../Components/Global/FlashNotification.vue';
 
 export default defineComponent({
   components: {
+    FlashNotification,
     MainLayout,
     PageTitle,
   },

@@ -7,6 +7,10 @@
         "console": {
             "nav_title": "Konsool"
         },
+        "eula_message": {
+            "button": "Ga naar eula.txt",
+            "text": "EULA moet geaccepteerd worden om de server te starten."
+        },
         "files": {
             "nav_title": "Bestanden",
             "new_file": "Nieuw bestand",
