@@ -5,7 +5,7 @@
         <h1 class="text-base font-semibold leading-6 text-gray-900">
           <a
             class="cursor-pointer hover:underline active:text-indigo-400"
-            @click="path = ''"
+            :href="$route('servers.files', { id: serverStore.model.id })"
           >
             / minecraft
           </a>
@@ -15,7 +15,7 @@
             <a
               v-if="!openedFile"
               class="cursor-pointer hover:underline active:text-indigo-400"
-              @click="path = take(splitPath, index + 1).join('/')"
+              :href="$route('servers.files', {id: serverStore.model.id, path: take(splitPath, index + 1).join('/') })"
             >
               {{ directory }}
             </a>

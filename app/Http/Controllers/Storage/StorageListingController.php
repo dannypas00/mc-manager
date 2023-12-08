@@ -28,9 +28,10 @@ class StorageListingController
         $ftp = $server->ftp();
 
         // TODO: Use realpath() to tell frontend the actual directory
-        $path = $request->get('path', '');
+        // Not using request default because path can actually be null in request
+        $path = $request->get('path') ?? '';
 
-        if ($ftp->directoryExists($path)) {
+        if ($path === '' || $ftp->directoryExists($path)) {
             return new JsonResponse(['directories' => $this->getDirectory($server, $path)]);
         }
 
