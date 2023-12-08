@@ -4,22 +4,22 @@
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-base font-semibold leading-6 text-gray-900">
-          <a
+          <Link
             class="cursor-pointer hover:underline active:text-indigo-400"
             :href="$route('servers.files', { id: serverStore.model.id })"
           >
             / minecraft
-          </a>
+          </Link>
 
           <template v-for="(directory, index) in splitPath" :key="index">
             /
-            <a
+            <Link
               v-if="!openedFile"
               class="cursor-pointer hover:underline active:text-indigo-400"
               :href="$route('servers.files', {id: serverStore.model.id, path: take(splitPath, index + 1).join('/') })"
             >
               {{ directory }}
-            </a>
+            </Link>
 
             <span v-else>
               {{ directory }}
@@ -80,20 +80,18 @@
               <input
                 type="checkbox"
                 class="ms-4 my-4 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                :checked="indeterminate || selectedFiles.length === data.length"
+                :checked="indeterminate || selectedFiles.length === directories.length"
                 :indeterminate="indeterminate"
-                @change="selectedFiles = $event.target.checked ? data : []"
+                @change="selectedFiles = $event.target.checked ? directories : []"
               >
 
               <hr class="divide-y">
 
               <ServerFileList
                 v-model:selected-files="selectedFiles"
-                :entries="data"
+                :entries="directories"
                 :is-root="['', '/'].includes(path)"
-                @go-to-dir="path = $event"
                 @go-up="goUp"
-                @open-file="openFile"
               />
             </template>
           </div>
@@ -122,12 +120,14 @@ import ServerShowTemplate from '../ServerShowTemplate.vue';
 import ConfirmationDialog from '../../../Components/Popups/ConfirmationDialog.vue';
 import { StorageDeleteRequest } from '../../../Communications/McManager/Storage/StorageDeleteRequest';
 import { useToast } from 'vue-toastification';
+import { Link, router } from '@inertiajs/vue3';
 
 export default defineComponent({
   components: {
     ConfirmationDialog,
     ServerFileEditor: defineAsyncComponent(() => import('./Components/ServerFileEditor.vue')),
     ServerFileList,
+    Link,
   },
 
   layout: ServerShowTemplate,
@@ -137,10 +137,10 @@ export default defineComponent({
       serverStore: useServerShowStore(),
       storageListingRequest: new StorageListingRequest(),
       storageDeleteRequest: new StorageDeleteRequest(),
-      data: [] as FileEntry[],
+      directories: (this.$attrs.directories ?? []) as FileEntry[],
       selectedFiles: [] as FileEntry[],
-      path: this.$attrs.route_parameters?.path ?? '',
-      openedFile: null as null | FileEntry,
+      path: (this.$attrs.path ?? '') as string,
+      openedFile: this.$attrs.file ? { path: this.$attrs.file } : null as null | FileEntry,
       confirmDeletionOpen: false,
     };
   },
@@ -149,7 +149,8 @@ export default defineComponent({
     take,
 
     goUp () {
-      this.path = this.path.replace(/\/?[^\/]*$/, '');
+      // Replace everything after last / with blank
+      router.visit(route('servers.files', { id: this.serverStore.model.id, path: this.path.replace(/\/?[^\/]*$/, '') }));
     },
 
     getDir () {
@@ -158,9 +159,9 @@ export default defineComponent({
         .setServerId(this.serverStore.model.id)
         .getResponse()
         .then(response => {
-          this.data = [];
+          this.directories = [];
           if (response.data.directories) {
-            this.data = response.data.directories;
+            this.directories = response.data.directories;
             return;
           }
 
@@ -192,7 +193,8 @@ export default defineComponent({
         .setPaths(_.map(this.selectedFiles, 'path'))
         .getResponse()
         .then(() => {
-          useToast().success(this.$t('pages.servers.show.files.bulk_delete_success_toast', { n: this.selectedFiles.length }));
+          useToast()
+            .success(this.$t('pages.servers.show.files.bulk_delete_success_toast', { n: this.selectedFiles.length }));
           this.selectedFiles = [];
           this.getDir();
         });
@@ -201,24 +203,12 @@ export default defineComponent({
 
   computed: {
     indeterminate () {
-      return this.selectedFiles.length > 0 && this.selectedFiles.length < this.data.length;
+      return this.selectedFiles.length > 0 && this.selectedFiles.length < this.directories.length;
     },
 
     splitPath () {
       return (this.openedFile?.path ?? this.path).split('/').filter(path => path !== '') ?? [];
     },
-  },
-
-  watch: {
-    path (newValue, oldValue) {
-      if (newValue !== oldValue) {
-        this.getDir();
-      }
-    },
-  },
-
-  mounted () {
-    this.getDir();
   },
 });
 </script>

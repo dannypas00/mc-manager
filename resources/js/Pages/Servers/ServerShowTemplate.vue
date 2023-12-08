@@ -102,7 +102,9 @@ export default defineComponent({
   },
 
   async beforeMount () {
-    await this.store.getServer(this.id);
+    if (this.store.model.id !== this.id) {
+      await this.store.getServer(this.id);
+    }
   },
 });
 </script>
