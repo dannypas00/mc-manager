@@ -30,5 +30,6 @@ docker-build:
   script:
     - docker build --pull --file=.docker/production/Dockerfile .
   rules:
-    - exists:
+    - if: $CI_COMMIT_BRANCH = master
+      exists:
         - .docker/production/Dockerfile
