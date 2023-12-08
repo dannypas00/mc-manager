@@ -16,10 +16,10 @@ RUN set -eux; composer install \
     --no-dev
 
 RUN set -eux; mkdir -pv bootstrap/cache storage/app/public storage/framework/views; \
-    php artisan config:cache; \
-    php artisan event:cache; \
-    php artisan route:cache; \
-    php artisan view:cache
+    php artisan --env=build config:cache; \
+    php artisan --env=build event:cache; \
+    php artisan --env=build route:cache; \
+    php artisan --env=build view:cache
 
 RUN set-eux; \
     npm ci; \
