@@ -1,27 +1,34 @@
 {
-    "listing": {
-        "player_list": "Players online:\n"
+  "listing": {
+    "player_list": "Players online:\n"
+  },
+  "menu_title": "Servers",
+  "show": {
+    "console": {
+      "nav_title": "Console"
     },
-    "menu_title": "Servers",
-    "show": {
-        "console": {
-            "nav_title": "Console"
-        },
-        "eula_message": {
-            "button": "Go to eula.txt",
-            "text": "EULA needs to be accepted to start the server."
-        },
-        "files": {
-            "nav_title": "Files",
-            "new_file": "New file",
-            "save": "Save"
-        },
-        "settings": {
-            "nav_title": "Settings"
-        },
-        "title": "Server - {name}"
+    "eula_message": {
+      "button": "Go to eula.txt",
+      "text": "EULA needs to be accepted to start the server."
     },
-    "test": {
-        "test2": "New test"
-    }
+    "files": {
+      "bulk_delete": "Delete file | Delete {n} files",
+      "bulk_delete_confirm": {
+        "message": "The files you have selected for deletion include directories.\nPlease make sure you intend to delete these, since this will delete all files in the directory with no way to retrieve them again.",
+        "positive": "Confirm deletion",
+        "title": "Confirm recursive deletion of directory"
+      },
+      "bulk_delete_success_toast": "Successfully deleted file | Successfully deleted {n} files",
+      "nav_title": "Files",
+      "new_file": "New file",
+      "save": "Save"
+    },
+    "settings": {
+      "nav_title": "Settings"
+    },
+    "title": "Server - {name}"
+  },
+  "test": {
+    "test2": "New test"
+  }
 }

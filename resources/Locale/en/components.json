@@ -1,8 +1,14 @@
 {
-    "file_editor": {
-        "confirm_unsaved_changes": "You have unsaved changes. Are you sure you want to leave the page?"
-    },
-    "flash": {
-        "dismiss": "Dismiss"
-    }
+  "confirmation": {
+    "default_negative_button": "Cancel",
+    "default_positive_button": "Confirm"
+  },
+  "file_editor": {
+    "confirm_unsaved_changes": "You have unsaved changes. Are you sure you want to leave the page?",
+    "nothing_to_save": "No changes to save",
+    "save_sucessful": "Successfully saved {name}"
+  },
+  "flash": {
+    "dismiss": "Dismiss"
+  }
 }

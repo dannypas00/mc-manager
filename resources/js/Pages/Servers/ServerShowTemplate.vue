@@ -3,6 +3,7 @@
     <PageTitle :title="$t('pages.servers.show.title', { name: store.model.name })" :header="store.model.name"/>
 
     <FlashNotification
+      v-if="!store.eulaAccepted"
       :text="$t('pages.servers.show.eula_message.text')"
       :button-text="$t('pages.servers.show.eula_message.button')"
       :dismiss-button="false"

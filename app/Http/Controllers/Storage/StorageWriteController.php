@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorageWriteRequest;
 use App\Repositories\Servers\FrontendServerShowRepository;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * TODO: This is currently most likely an unsafe controller since it allows anyone with access to write any file the ftp has access to
@@ -26,6 +27,6 @@ class StorageWriteController extends Controller
 
         $ftp->put($path, $request->get('content'));
 
-        return new JsonResponse();
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

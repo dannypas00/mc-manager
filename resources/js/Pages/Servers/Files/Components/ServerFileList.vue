@@ -16,11 +16,13 @@
           </a>
         </td>
       </tr>
+
       <tr
         v-for="entry in sortedEntries"
         :key="entry.path"
         :class="[selected.includes(entry) && 'bg-gray-50']"
       >
+        <!-- Checkbox -->
         <td class="relative px-7 sm:w-12 sm:px-6">
           <div
             v-if="selected.includes(entry)"
@@ -33,16 +35,20 @@
             :value="entry"
           >
         </td>
+
+        <!-- Name -->
         <td
           :class="[
             'whitespace-nowrap py-4 pr-3 text-sm font-medium',
             selected.includes(entry.path) ? 'text-indigo-600' : 'text-gray-900'
           ]"
         >
-          <a class="cursor-pointer hover:underline active:text-indigo-400" @click="() => onEntryClick(entry)">
+          <a class="cursor-pointer hover:underline active:text-indigo-400" :href="$route('servers.files', { id: store.model.id, path: entry.path })">
             {{ entry.path + (entry.type === 'dir' ? '/' : '') }}
           </a>
         </td>
+
+        <!-- Filesize -->
         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400 text-right">
           {{ entry.file_size > 0 ? humanFileSize(entry.file_size) : '' }}
         </td>
@@ -56,6 +62,7 @@ import { defineComponent, PropType } from 'vue';
 import _ from 'lodash';
 import { FileEntry } from '../../../../Types/FileEntry';
 import humanFileSize from '../../../../Utils/HumanFileSize';
+import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
 
 export default defineComponent({
   emits: [
@@ -85,7 +92,9 @@ export default defineComponent({
   },
 
   data () {
-    return {};
+    return {
+      store: useServerShowStore(),
+    };
   },
 
   methods: {

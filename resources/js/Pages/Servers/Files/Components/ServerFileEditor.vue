@@ -15,6 +15,7 @@ import { StorageContentRequest } from '../../../../Communications/McManager/Stor
 import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import { StorageWriteRequest } from '../../../../Communications/McManager/Storage/StorageWriteRequest';
+import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   components: {
@@ -45,13 +46,18 @@ export default defineComponent({
 
   methods: {
     save () {
+      if (!this.unsavedChanges) {
+        useToast().warning(this.$t('components.file_editor.nothing_to_save'));
+        return;
+      }
       this.writeRequest
         .setId(this.store.model.id)
         .setPath(this.file.path)
         .setContent(this.fileData)
         .getResponse()
         .then(() => {
-          // TODO: Add success toast
+          useToast().success(this.$t('components.file_editor.save_sucessful', { name: this.file.path }));
+          this.originalFileData = this.fileData;
         });
     },
 

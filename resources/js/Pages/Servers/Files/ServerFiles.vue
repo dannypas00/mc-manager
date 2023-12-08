@@ -1,5 +1,6 @@
 <template>
   <div class="px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-base font-semibold leading-6 text-gray-900">
@@ -10,7 +11,7 @@
             / minecraft
           </a>
 
-          <template v-for="(directory, index) in splitPath">
+          <template v-for="(directory, index) in splitPath" :key="index">
             /
             <a
               v-if="!openedFile"
@@ -47,6 +48,8 @@
         </button>
       </div>
     </div>
+
+    <!-- File list -->
     <div class="mt-2 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -69,14 +72,9 @@
                 <button
                   type="button"
                   class="inline-flex items-center rounded px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                  @click="deleteFiles"
                 >
-                  Bulk edit
-                </button>
-                <button
-                  type="button"
-                  class="inline-flex items-center rounded px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                >
-                  Delete all
+                  {{ $t('pages.servers.show.files.bulk_delete', { n: selectedFiles.length }) }}
                 </button>
               </div>
               <input
@@ -103,6 +101,14 @@
       </div>
     </div>
   </div>
+
+  <ConfirmationDialog
+    v-model:open="confirmDeletionOpen"
+    :title="$t('pages.servers.show.files.bulk_delete_confirm.title')"
+    :message="$t('pages.servers.show.files.bulk_delete_confirm.message')"
+    :positive-button-text="$t('pages.servers.show.files.bulk_delete_confirm.positive')"
+    @positive="onDeleteConfirm"
+  />
 </template>
 
 <script lang="ts">
@@ -111,12 +117,15 @@ import { StorageListingRequest } from '../../../Communications/McManager/Storage
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import ServerFileList from './Components/ServerFileList.vue';
 import { FileEntry } from '../../../Types/FileEntry';
-import { take } from 'lodash';
+import _, { take } from 'lodash';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
-import { router } from '@inertiajs/vue3';
+import ConfirmationDialog from '../../../Components/Popups/ConfirmationDialog.vue';
+import { StorageDeleteRequest } from '../../../Communications/McManager/Storage/StorageDeleteRequest';
+import { useToast } from 'vue-toastification';
 
 export default defineComponent({
   components: {
+    ConfirmationDialog,
     ServerFileEditor: defineAsyncComponent(() => import('./Components/ServerFileEditor.vue')),
     ServerFileList,
   },
@@ -127,10 +136,12 @@ export default defineComponent({
     return {
       serverStore: useServerShowStore(),
       storageListingRequest: new StorageListingRequest(),
+      storageDeleteRequest: new StorageDeleteRequest(),
       data: [] as FileEntry[],
       selectedFiles: [] as FileEntry[],
       path: this.$attrs.route_parameters?.path ?? '',
       openedFile: null as null | FileEntry,
+      confirmDeletionOpen: false,
     };
   },
 
@@ -155,18 +166,36 @@ export default defineComponent({
 
           if (response.data.file) {
             this.openFile({ path: response.data.file } as FileEntry);
-            return;
           }
-
-          // When no path found, show error and send user back to root
-          // TODO: Toast error
-          console.error('Neither file nor directory returned from entry');
-          router.visit(route('servers.files', { id: this.serverStore.model.id, path: '' }));
         });
     },
 
     openFile (file: FileEntry) {
       this.openedFile = file;
+    },
+
+    deleteFiles () {
+      // If file list includes at least one directory, request confirmation
+      const directories = this.selectedFiles.filter(file => file.type === 'dir');
+      if (directories.length > 0) {
+        this.confirmDeletionOpen = true;
+        return;
+      }
+
+      this.onDeleteConfirm();
+    },
+
+    onDeleteConfirm () {
+      console.log(_.map(this.selectedFiles, 'path'));
+      this.storageDeleteRequest
+        .setId(this.serverStore.model.id)
+        .setPaths(_.map(this.selectedFiles, 'path'))
+        .getResponse()
+        .then(() => {
+          useToast().success(this.$t('pages.servers.show.files.bulk_delete_success_toast', { n: this.selectedFiles.length }));
+          this.selectedFiles = [];
+          this.getDir();
+        });
     },
   },
 

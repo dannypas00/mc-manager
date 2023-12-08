@@ -1,4 +1,5 @@
 import './bootstrap';
+import 'vue-toastification/dist/index.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
@@ -8,6 +9,8 @@ import PortalVue from 'portal-vue';
 import MainLayout from './Layouts/MainLayout.vue';
 import i18n from './i18n.ts';
 import { createPinia } from 'pinia';
+import VueToastificationPlugin, { PluginOptions, POSITION, useToast } from 'vue-toastification';
+import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
 
 InertiaProgress.init({
   delay: 250,
@@ -15,6 +18,10 @@ InertiaProgress.init({
   includeCSS: true,
   showSpinner: false,
 });
+
+const toastOptions: PluginOptions = {
+  position: POSITION.TOP_RIGHT,
+};
 
 createInertiaApp({
   resolve: name => {
@@ -32,9 +39,12 @@ createInertiaApp({
       .use(plugin)
       .use(i18n)
       .use(PortalVue)
-      .use(createPinia());
+      .use(createPinia())
+      .use(autoAnimatePlugin)
+      .use(VueToastificationPlugin, toastOptions);
 
     vue.config.globalProperties.$route = route;
+    vue.config.globalProperties.$toast = useToast();
 
     vue.mount(el);
   },
