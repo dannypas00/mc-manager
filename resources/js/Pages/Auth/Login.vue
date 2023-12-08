@@ -88,7 +88,7 @@ export default defineComponent({
 
   methods: {
     login () {
-      router.post(route('auth.login'), {
+      router.post(route('auth.authenticate'), {
         email: this.email,
         password: this.password,
         remember: this.rememberMe,

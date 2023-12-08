@@ -21,6 +21,12 @@ A couple services are run from the Docker Compose configuration:
 - Minecraft as a test Minecraft server. Defaults to port 25565 and RCON port 25575 with password test1234
 - FTP and SFTP for FTP connections to the local Minecraft server
 
+## Manually build production Docker image
+If for some reason you want to manually build the production Docker image, it can be done through the following command:  
+```bash
+docker build -f .docker/production/Dockerfile .
+```
+
 # Licensing
 Minecraft Manager is licensed under the [MIT License](LICENSE), with some changes. Please find the full license in the project root.  
 The license and its changes come down to that you're completely free to do anything with the project and its code, so long as you don't earn money from selling this product.
