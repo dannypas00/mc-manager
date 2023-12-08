@@ -1,4 +1,5 @@
 import { Request } from './Request';
+import { uniq } from 'lodash';
 
 type QueryBuilderData = {
   filter?: Record<string, string | number>;
@@ -6,16 +7,16 @@ type QueryBuilderData = {
   per_page?: number;
   include?: string[];
   sort?: string[];
+  fields?: string[];
 }
 
-export abstract class QueryBuilderRequest<T, D = Record<string, any>> extends Request<T, D & QueryBuilderData> {
-  private page: number = 1;
-  private perPage: number = 25;
+export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends Request<T, D & QueryBuilderData> {
+  private page = 1;
+  private perPage = 25;
   private filter: Record<string, string | number> = {};
   private sort: string[] = [];
   private include: string[] = [];
   private fields: string[] = ['*'];
-  private appends: string[] = [];
 
   // Pagination:
   public setPage (page: number): this {
@@ -111,5 +112,20 @@ export abstract class QueryBuilderRequest<T, D = Record<string, any>> extends Re
     return this;
   }
 
-  // TODO: Fields and appends
+  // Fields
+  public addFields (fields: string): this {
+    this.fields.push(fields);
+    this.data.fields = uniq(this.fields);
+    return this;
+  }
+
+  public removeFields (fields: string): this {
+    this.fields.findIndex(value => value === fields);
+    return this;
+  }
+
+  public clearFields (): this {
+    this.fields = [];
+    return this;
+  }
 }

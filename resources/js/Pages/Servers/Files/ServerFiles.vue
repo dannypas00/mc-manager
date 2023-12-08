@@ -1,24 +1,25 @@
 <template>
   <div class="px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
     <div class="sm:flex sm:items-center">
       <div class="sm:flex-auto">
         <h1 class="text-base font-semibold leading-6 text-gray-900">
-          <a
+          <Link
             class="cursor-pointer hover:underline active:text-indigo-400"
-            @click="path = ''"
+            :href="$route('servers.files', { id: serverStore.model.id })"
           >
             / minecraft
-          </a>
+          </Link>
 
-          <template v-for="(directory, index) in splitPath">
+          <template v-for="(directory, index) in splitPath" :key="index">
             /
-            <a
+            <Link
               v-if="!openedFile"
               class="cursor-pointer hover:underline active:text-indigo-400"
-              @click="path = take(splitPath, index + 1).join('/')"
+              :href="$route('servers.files', {id: serverStore.model.id, path: take(splitPath, index + 1).join('/') })"
             >
               {{ directory }}
-            </a>
+            </Link>
 
             <span v-else>
               {{ directory }}
@@ -27,6 +28,7 @@
         </h1>
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <!-- New file button -->
         <button
           v-if="!openedFile"
           type="button"
@@ -35,26 +37,26 @@
           {{ $t('pages.servers.show.files.new_file') }}
         </button>
 
+        <!-- Save button -->
         <button
           v-else
           type="button"
           class="block rounded-md bg-green-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          @click="$refs.editor.save"
         >
           {{ $t('pages.servers.show.files.save') }}
         </button>
       </div>
     </div>
+
+    <!-- File list -->
     <div class="mt-2 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="relative">
-
             <template v-if="openedFile !== null">
               <Suspense>
-                <ServerFileEditor
-                  :file="openedFile"
-                  class="h-[70vh]"
-                />
+                <ServerFileEditor ref="editor" :file="openedFile"/>
 
                 <template #fallback>
                   Loading editor...
@@ -70,33 +72,26 @@
                 <button
                   type="button"
                   class="inline-flex items-center rounded px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
+                  @click="deleteFiles"
                 >
-                  Bulk edit
-                </button>
-                <button
-                  type="button"
-                  class="inline-flex items-center rounded px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-                >
-                  Delete all
+                  {{ $t('pages.servers.show.files.bulk_delete', { n: selectedFiles.length }) }}
                 </button>
               </div>
               <input
                 type="checkbox"
                 class="ms-4 my-4 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                :checked="indeterminate || selectedFiles.length === data.length"
+                :checked="indeterminate || selectedFiles.length === directories.length"
                 :indeterminate="indeterminate"
-                @change="selectedFiles = $event.target.checked ? data : []"
+                @change="selectedFiles = $event.target.checked ? directories : []"
               >
 
               <hr class="divide-y">
 
               <ServerFileList
                 v-model:selected-files="selectedFiles"
-                :entries="data"
+                :entries="directories"
                 :is-root="['', '/'].includes(path)"
-                @go-to-dir="path = $event"
                 @go-up="goUp"
-                @open-file="openFile"
               />
             </template>
           </div>
@@ -104,6 +99,14 @@
       </div>
     </div>
   </div>
+
+  <ConfirmationDialog
+    v-model:open="confirmDeletionOpen"
+    :title="$t('pages.servers.show.files.bulk_delete_confirm.title')"
+    :message="$t('pages.servers.show.files.bulk_delete_confirm.message')"
+    :positive-button-text="$t('pages.servers.show.files.bulk_delete_confirm.positive')"
+    @positive="onDeleteConfirm"
+  />
 </template>
 
 <script lang="ts">
@@ -112,13 +115,19 @@ import { StorageListingRequest } from '../../../Communications/McManager/Storage
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import ServerFileList from './Components/ServerFileList.vue';
 import { FileEntry } from '../../../Types/FileEntry';
-import { take } from 'lodash';
+import _, { take } from 'lodash';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
+import ConfirmationDialog from '../../../Components/Popups/ConfirmationDialog.vue';
+import { StorageDeleteRequest } from '../../../Communications/McManager/Storage/StorageDeleteRequest';
+import { useToast } from 'vue-toastification';
+import { Link, router } from '@inertiajs/vue3';
 
 export default defineComponent({
   components: {
+    ConfirmationDialog,
     ServerFileEditor: defineAsyncComponent(() => import('./Components/ServerFileEditor.vue')),
     ServerFileList,
+    Link,
   },
 
   layout: ServerShowTemplate,
@@ -127,10 +136,12 @@ export default defineComponent({
     return {
       serverStore: useServerShowStore(),
       storageListingRequest: new StorageListingRequest(),
-      data: [] as FileEntry[],
+      storageDeleteRequest: new StorageDeleteRequest(),
+      directories: (this.$attrs.directories ?? []) as FileEntry[],
       selectedFiles: [] as FileEntry[],
-      path: '',
-      openedFile: null as null | FileEntry,
+      path: (this.$attrs.path ?? '') as string,
+      openedFile: this.$attrs.file ? { path: this.$attrs.file } : null as null | FileEntry,
+      confirmDeletionOpen: false,
     };
   },
 
@@ -138,7 +149,8 @@ export default defineComponent({
     take,
 
     goUp () {
-      this.path = this.path.replace(/\/?[^\/]*$/, '');
+      // Replace everything after last / with blank
+      router.visit(route('servers.files', { id: this.serverStore.model.id, path: this.path.replace(/\/?[^\/]*$/, '') }));
     },
 
     getDir () {
@@ -147,36 +159,56 @@ export default defineComponent({
         .setServerId(this.serverStore.model.id)
         .getResponse()
         .then(response => {
-          this.data = [];
-          this.data = response.data;
+          this.directories = [];
+          if (response.data.directories) {
+            this.directories = response.data.directories;
+            return;
+          }
+
+          if (response.data.file) {
+            this.openFile({ path: response.data.file } as FileEntry);
+          }
         });
     },
 
     openFile (file: FileEntry) {
       this.openedFile = file;
     },
+
+    deleteFiles () {
+      // If file list includes at least one directory, request confirmation
+      const directories = this.selectedFiles.filter(file => file.type === 'dir');
+      if (directories.length > 0) {
+        this.confirmDeletionOpen = true;
+        return;
+      }
+
+      this.onDeleteConfirm();
+    },
+
+    onDeleteConfirm () {
+      console.log(_.map(this.selectedFiles, 'path'));
+      this.storageDeleteRequest
+        .setId(this.serverStore.model.id)
+        .setPaths(_.map(this.selectedFiles, 'path'))
+        .getResponse()
+        .then(() => {
+          useToast()
+            .success(this.$t('pages.servers.show.files.bulk_delete_success_toast', { n: this.selectedFiles.length }));
+          this.selectedFiles = [];
+          this.getDir();
+        });
+    },
   },
 
   computed: {
     indeterminate () {
-      return this.selectedFiles.length > 0 && this.selectedFiles.length < this.data.length;
+      return this.selectedFiles.length > 0 && this.selectedFiles.length < this.directories.length;
     },
 
     splitPath () {
       return (this.openedFile?.path ?? this.path).split('/').filter(path => path !== '') ?? [];
     },
-  },
-
-  watch: {
-    path (newValue, oldValue) {
-      if (newValue !== oldValue) {
-        this.getDir();
-      }
-    },
-  },
-
-  mounted () {
-    this.getDir();
   },
 });
 </script>

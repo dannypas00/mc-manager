@@ -1,5 +1,11 @@
 <template>
-  <CodeEditor v-if="fileData !== null" v-model="fileData" class="w-full h-full"/>
+  <div class="h-[60vh] w-full">
+    <VueMonacoEditor
+      v-model:value="fileData"
+      theme="vs-dark"
+      :options="monacoOptions"
+    />
+  </div>
 </template>
 
 <script lang="ts">
@@ -7,11 +13,14 @@ import { defineComponent, PropType } from 'vue';
 import { FileEntry } from '../../../../Types/FileEntry';
 import { StorageContentRequest } from '../../../../Communications/McManager/Storage/StorageContentRequest';
 import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
-import CodeEditor from '../../../../Components/Editor/CodeEditor.vue';
+import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
+import { StorageWriteRequest } from '../../../../Communications/McManager/Storage/StorageWriteRequest';
+import { useToast } from 'vue-toastification';
 
-// TODO: There is probably a v-model loop or something here because editing anything makes the page crash
 export default defineComponent({
-  components: { CodeEditor },
+  components: {
+    VueMonacoEditor,
+  },
 
   props: {
     file: {
@@ -24,17 +33,67 @@ export default defineComponent({
     return {
       store: useServerShowStore(),
       request: new StorageContentRequest(),
-      fileData: null as null | string,
+      writeRequest: new StorageWriteRequest(),
+      fileData: '',
+      originalFileData: '',
+      monacoOptions: {
+        automaticLayout: true,
+        formatOnType: true,
+        formatOnPaste: true,
+      },
     };
   },
 
+  methods: {
+    save () {
+      if (!this.unsavedChanges) {
+        useToast().warning(this.$t('components.file_editor.nothing_to_save'));
+        return;
+      }
+      this.writeRequest
+        .setId(this.store.model.id)
+        .setPath(this.file.path)
+        .setContent(this.fileData)
+        .getResponse()
+        .then(() => {
+          useToast().success(this.$t('components.file_editor.save_sucessful', { name: this.file.path }));
+          this.originalFileData = this.fileData;
+        });
+    },
+
+    onBeforeUnload (e: BeforeUnloadEvent) {
+      e.preventDefault();
+
+      e.returnValue = $t('components.file_editor.confirm_unsaved_changes');
+    },
+  },
+
+  computed: {
+    unsavedChanges () {
+      return this.fileData !== this.originalFileData;
+    },
+  },
+
+  watch: {
+    unsavedChanges (value: boolean) {
+      if (value) {
+        window.addEventListener('beforeunload', this.onBeforeUnload);
+        return;
+      }
+
+      window.removeEventListener('beforeunload', this.onBeforeUnload);
+    },
+  },
+
   async mounted () {
-    await this.request.setServerId(this.store.model.id)
+    console.log(this.file);
+    const response = await this.request
+      .setServerId(this.store.model.id)
       .setPath(this.file.path)
-      .getResponse()
-      .then(response => {
-        this.fileData = response.data.content
-      });
+      .getResponse();
+
+    this.fileData = response.data.content;
+    this.originalFileData = response.data.content;
   },
 });
 </script>

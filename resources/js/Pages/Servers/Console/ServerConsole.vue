@@ -23,8 +23,8 @@ import ServerShowTemplate from '../ServerShowTemplate.vue';
 import { useServerShowStore } from '../../../Stores/Servers/ServerShowStore';
 import FancyLog from './FancyLog.vue';
 import CodeBracketIcon from '@heroicons/vue/20/solid/CodeBracketIcon';
-import ServerRconCommandRequest from '../../../Communications/McManager/Servers/ServerRconCommandRequest';
 import moment from 'moment';
+import { ServerRconCommandRequest } from '../../../Communications/McManager/Servers/ServerRconCommandRequest';
 
 export default defineComponent({
   components: {

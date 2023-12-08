@@ -1,7 +1,8 @@
 import { Request } from '../../Base/Request';
 import { Method } from 'axios';
+import { FileEntry } from '../../../Types/FileEntry';
 
-export class StorageListingRequest extends Request<any> {
+export class StorageListingRequest extends Request<{ directories?: FileEntry[], file?: string }, { path: string }> {
   private serverId = -1;
 
   protected getEndPoint () {

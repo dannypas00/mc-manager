@@ -15,7 +15,6 @@ final class ShowRepository
      * @codeCoverageIgnore It's just the vendor query builder
      * @param SettingsInterface $settings
      * @param int $id
-     * @throws ModelNotFoundException
      * @return Model
      */
     public function show(SettingsInterface $settings, int $id): Model

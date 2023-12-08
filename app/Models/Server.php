@@ -19,10 +19,14 @@ use Illuminate\Support\Carbon;
 use League\Flysystem\Ftp\FtpAdapter;
 use Log;
 use Storage;
+use Str;
+use Throwable;
 use xPaw\MinecraftPing;
 use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
+
+use function Laravel\Prompts\error;
 
 /**
  * App\Models\Server
@@ -41,7 +45,6 @@ use xPaw\MinecraftQueryException;
  * @property string|null $ftp_password Contains pass phrase when using ssh key auth
  * @property int $current_players
  * @property int $maximum_players
- * @property string|null $player_list Comma-separated list of users
  * @property string $name
  * @property string|null $description
  * @property string|null $version
@@ -51,7 +54,9 @@ use xPaw\MinecraftQueryException;
  * @property string $rcon_password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection<int, User> $users
+ * @property-read bool $has_accepted_eula
+ * @property-read array $player_list
+ * @property-read Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
@@ -72,7 +77,6 @@ use xPaw\MinecraftQueryException;
  * @method static Builder|Server whereLocalIp($value)
  * @method static Builder|Server whereMaximumPlayers($value)
  * @method static Builder|Server whereName($value)
- * @method static Builder|Server wherePlayerList($value)
  * @method static Builder|Server wherePort($value)
  * @method static Builder|Server wherePublicIp($value)
  * @method static Builder|Server whereRconPassword($value)
@@ -211,7 +215,7 @@ class Server extends Model
             } else {
                 $this->status = ServerStatus::Unknown;
             }
-        } catch (MinecraftPingException $e) {
+        } catch (MinecraftPingException) {
             $ping->close();
             $this->status = ServerStatus::Down;
             $this->save();
@@ -239,10 +243,26 @@ class Server extends Model
                 }
                 return [];
             } catch (MinecraftQueryException $e) {
-                Log::error('Exception getting player list', ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]);
+                Log::error(
+                    'Exception getting player list',
+                    ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
+                );
                 return [];
             }
         });
+    }
+
+    public function getHasAcceptedEulaAttribute(): bool
+    {
+        try {
+            return Str::isMatch('/.*eula=true.*/', $this->ftp()->get('eula.txt'));
+        } catch (Throwable $e) {
+            Log::error(
+                'Error thrown when retrieving EULA',
+                ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
+            );
+            return true;
+        }
     }
 
     protected static function boot(): void

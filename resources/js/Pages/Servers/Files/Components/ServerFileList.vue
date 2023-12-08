@@ -1,6 +1,7 @@
 <template>
   <table class="min-w-full table-fixed divide-y divide-gray-300">
     <tbody class="divide-y divide-gray-200">
+      <!-- Directory up -->
       <tr v-if="!isRoot">
         <td class="relative px-7 sm:w-12 sm:px-6">
           <div
@@ -10,17 +11,19 @@
         <td :class="['whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900']">
           <a
             class="cursor-pointer hover:underline active:text-indigo-400"
-            @click="() => $emit('go-up')"
+            @click="$emit('go-up')"
           >
             ../
           </a>
         </td>
       </tr>
+
       <tr
         v-for="entry in sortedEntries"
         :key="entry.path"
         :class="[selected.includes(entry) && 'bg-gray-50']"
       >
+        <!-- Checkbox -->
         <td class="relative px-7 sm:w-12 sm:px-6">
           <div
             v-if="selected.includes(entry)"
@@ -33,16 +36,23 @@
             :value="entry"
           >
         </td>
+
+        <!-- Name -->
         <td
           :class="[
             'whitespace-nowrap py-4 pr-3 text-sm font-medium',
             selected.includes(entry.path) ? 'text-indigo-600' : 'text-gray-900'
           ]"
         >
-          <a class="cursor-pointer hover:underline active:text-indigo-400" @click="() => onEntryClick(entry)">
+          <Link
+            class="cursor-pointer hover:underline active:text-indigo-400"
+            :href="$route('servers.files', { id: store.model.id, path: entry.path })"
+          >
             {{ entry.path + (entry.type === 'dir' ? '/' : '') }}
-          </a>
+          </Link>
         </td>
+
+        <!-- Filesize -->
         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400 text-right">
           {{ entry.file_size > 0 ? humanFileSize(entry.file_size) : '' }}
         </td>
@@ -56,16 +66,18 @@ import { defineComponent, PropType } from 'vue';
 import _ from 'lodash';
 import { FileEntry } from '../../../../Types/FileEntry';
 import humanFileSize from '../../../../Utils/HumanFileSize';
+import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
+import { Link } from '@inertiajs/vue3';
 
 export default defineComponent({
   emits: [
     'update:selected-files',
-    'go-to-dir',
     'go-up',
-    'open-file',
   ],
 
-  components: {},
+  components: {
+    Link,
+  },
 
   props: {
     entries: {
@@ -85,20 +97,13 @@ export default defineComponent({
   },
 
   data () {
-    return {};
+    return {
+      store: useServerShowStore(),
+    };
   },
 
   methods: {
     humanFileSize,
-
-    onEntryClick (entry: FileEntry) {
-      if (entry.type === 'dir') {
-        this.$emit('go-to-dir', entry.path);
-        return;
-      }
-
-      this.$emit('open-file', entry);
-    },
   },
 
   computed: {
@@ -107,8 +112,7 @@ export default defineComponent({
     },
 
     sortedDirectories (): FileEntry[] {
-      const directories = _.sortBy(_.filter(this.entries, entry => entry.type === 'dir'), 'path');
-      return directories;
+      return _.sortBy(_.filter(this.entries, entry => entry.type === 'dir'), 'path');
     },
 
     sortedFiles () {
@@ -119,7 +123,7 @@ export default defineComponent({
       get () {
         return this.selectedFiles;
       },
-      set (value) {
+      set (value: string[]) {
         this.$emit('update:selected-files', value);
       },
     },

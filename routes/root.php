@@ -23,7 +23,7 @@ Route::as('auth.')->prefix('auth')->middleware(['web'])->group(static function (
             return redirect()->intended(RouteServiceProvider::HOME);
         }
     )->middleware('guest')
-        ->name('login');
+        ->name('authenticate');
 
     Route::get(
         'logout',

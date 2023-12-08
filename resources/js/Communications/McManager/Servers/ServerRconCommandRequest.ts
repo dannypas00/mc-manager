@@ -1,7 +1,7 @@
 import { Request } from '../../Base/Request';
 import { Method } from 'axios';
 
-export default class ServerRconCommandRequest extends Request<string> {
+export class ServerRconCommandRequest extends Request<string> {
   private id?: number;
 
   protected getEndPoint (): string {

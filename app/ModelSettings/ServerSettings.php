@@ -6,7 +6,6 @@ namespace App\ModelSettings;
 
 use App\Interfaces\SettingsInterface;
 use App\Models\Server;
-use App\Models\User;
 
 class ServerSettings implements SettingsInterface
 {
