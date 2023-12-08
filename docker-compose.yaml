@@ -4,11 +4,14 @@ services:
     container_name: mcm-db
     image: mariadb:latest
     ports:
-      - "3306:3306"
+      - "${MARIADB_PORT}:${MARIADB_PORT}"
     env_file:
       - .env
     volumes:
       - mysql:/var/lib/mysql/
+    command:
+      - mariadb
+      - --port=${MARIADB_PORT}
 
   redis:
     container_name: mcm-redis
