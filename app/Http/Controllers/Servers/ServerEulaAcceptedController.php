@@ -8,11 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 class ServerEulaAcceptedController extends Controller
 {
-    /**
-     * @param int $serverId
-     * @param FrontendServerShowRepository $showRepository
-     * @return JsonResponse
-     */
     public function __invoke(int $serverId, FrontendServerShowRepository $showRepository): JsonResponse
     {
         $server = $showRepository->show($serverId);

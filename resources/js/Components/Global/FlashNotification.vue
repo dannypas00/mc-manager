@@ -1,16 +1,16 @@
 <template>
   <div class="flex items-center gap-x-6 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 rounded-xl" :class="[ backgroundColor ]">
     <p class="text-sm leading-6 text-center font-semibold">
-      <a
+      <Link
         :class="textColor"
         :href="isString(onClickAction) ? onClickAction : '#'"
         class="font-semibold"
         @click="isFunction(onClickAction) ? onClickAction : () => {}"
       >
         {{ text }}
-      </a>
+      </Link>
 
-      <a
+      <Link
         v-if="buttonText"
         :href="isString(onClickAction) ? onClickAction : '#'"
         :class="[ buttonBackgroundColor, buttonTextColor ]"
@@ -18,8 +18,9 @@
         @click="isFunction(onClickAction) ? onClickAction : () => {}"
       >
         {{ buttonText }} <span aria-hidden="true">&rarr;</span>
-      </a>
+      </Link>
     </p>
+
     <div class="flex flex-1 justify-end">
       <button
         v-if="dismissButton"
@@ -41,11 +42,12 @@
 import { defineComponent, PropType } from 'vue';
 import { XMarkIcon } from '@heroicons/vue/24/outline';
 import { isFunction, isString } from 'lodash';
+import { Link } from '@inertiajs/vue3';
 
 export default defineComponent({
-  methods: { isFunction, isString },
   components: {
     XMarkIcon,
+    Link,
   },
 
   props: {
@@ -95,6 +97,11 @@ export default defineComponent({
       required: false,
       default: undefined,
     },
+  },
+
+  methods: {
+    isFunction,
+    isString,
   },
 });
 </script>
