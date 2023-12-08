@@ -16,11 +16,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 class StorageListingController
 {
-    public function __invoke(int $serverId, StorageListingRequest $request, FrontendServerShowRepository $showRepository): JsonResponse
-    {
+    /**
+     * @throws FilesystemException
+     */
+    public function __invoke(
+        int $serverId,
+        StorageListingRequest $request,
+        FrontendServerShowRepository $showRepository
+    ): JsonResponse {
         $server = $showRepository->show($serverId);
+        $ftp = $server->ftp();
+
         // TODO: Use realpath() to tell frontend the actual directory
-        return new JsonResponse($this->getDirectories($server, $request->get('path') ?? ''));
+        $path = $request->get('path', '');
+
+        if ($ftp->directoryExists($path)) {
+            return new JsonResponse(['directories' => $this->getDirectory($server, $path)]);
+        }
+
+        if ($ftp->fileExists($path)) {
+            return new JsonResponse(['file' => $path]);
+        }
+
+        return new JsonResponse(['error' => 'path_not_found'], Response::HTTP_NOT_FOUND);
     }
 
     /**
@@ -28,11 +46,12 @@ class StorageListingController
      * @param string $storagePath
      * @return array
      */
-    private function getDirectories(Server $server, string $storagePath): array
+    private function getDirectory(Server $server, string $storagePath): array
     {
         try {
-            $server->ftp()->path('world/..');
-            return $server->ftp()->listContents($storagePath)->map(static fn (StorageAttributes $entry) => $entry->jsonSerialize())->toArray();
+            return $server->ftp()->listContents($storagePath)->map(
+                static fn (StorageAttributes $entry) => $entry->jsonSerialize()
+            )->toArray();
         } catch (FilesystemException $e) {
             Log::error(
                 'Filesystem error while retrieving directory listing',

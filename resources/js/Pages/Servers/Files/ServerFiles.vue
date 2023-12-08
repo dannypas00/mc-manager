@@ -27,6 +27,7 @@
         </h1>
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <!-- New file button -->
         <button
           v-if="!openedFile"
           type="button"
@@ -35,10 +36,12 @@
           {{ $t('pages.servers.show.files.new_file') }}
         </button>
 
+        <!-- Save button -->
         <button
           v-else
           type="button"
           class="block rounded-md bg-green-600 px-3 py-1.5 text-center text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          @click="$refs.editor.save"
         >
           {{ $t('pages.servers.show.files.save') }}
         </button>
@@ -48,13 +51,9 @@
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div class="relative">
-
             <template v-if="openedFile !== null">
               <Suspense>
-                <ServerFileEditor
-                  :file="openedFile"
-                  class="h-[70vh]"
-                />
+                <ServerFileEditor ref="editor" :file="openedFile"/>
 
                 <template #fallback>
                   Loading editor...
@@ -114,6 +113,7 @@ import ServerFileList from './Components/ServerFileList.vue';
 import { FileEntry } from '../../../Types/FileEntry';
 import { take } from 'lodash';
 import ServerShowTemplate from '../ServerShowTemplate.vue';
+import { router } from '@inertiajs/vue3';
 
 export default defineComponent({
   components: {
@@ -129,7 +129,7 @@ export default defineComponent({
       storageListingRequest: new StorageListingRequest(),
       data: [] as FileEntry[],
       selectedFiles: [] as FileEntry[],
-      path: '',
+      path: this.$attrs.route_parameters?.path ?? '',
       openedFile: null as null | FileEntry,
     };
   },
@@ -148,7 +148,20 @@ export default defineComponent({
         .getResponse()
         .then(response => {
           this.data = [];
-          this.data = response.data;
+          if (response.data.directories) {
+            this.data = response.data.directories;
+            return;
+          }
+
+          if (response.data.file) {
+            this.openFile({ path: response.data.file } as FileEntry);
+            return;
+          }
+
+          // When no path found, show error and send user back to root
+          // TODO: Toast error
+          console.error('Neither file nor directory returned from entry');
+          router.visit(route('servers.files', { id: this.serverStore.model.id, path: '' }));
         });
     },
 

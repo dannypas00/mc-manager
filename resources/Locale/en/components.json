@@ -1,4 +1,7 @@
 {
+    "file_editor": {
+        "confirm_unsaved_changes": "You have unsaved changes. Are you sure you want to leave the page?"
+    },
     "flash": {
         "dismiss": "Dismiss"
     }

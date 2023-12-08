@@ -1,4 +1,7 @@
 {
+    "file_editor": {
+        "confirm_unsaved_changes": "Je hebt onopgeslagen veranderingen. Weet je zeker dat je de pagina wilt verlaten?"
+    },
     "flash": {
         "dismiss": "Sluiten"
     }
