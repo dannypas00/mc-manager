@@ -13,11 +13,9 @@ import { defineComponent, PropType } from 'vue';
 import { FileEntry } from '../../../../Types/FileEntry';
 import { StorageContentRequest } from '../../../../Communications/McManager/Storage/StorageContentRequest';
 import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
-import CodeEditor from '../../../../Components/Editor/CodeEditor.vue';
 import { VueMonacoEditor } from '@guolao/vue-monaco-editor';
 import { StorageWriteRequest } from '../../../../Communications/McManager/Storage/StorageWriteRequest';
 
-// TODO: There is probably a v-model loop or something here because editing anything makes the page crash
 export default defineComponent({
   components: {
     VueMonacoEditor,
