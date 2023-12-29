@@ -26,8 +26,6 @@ use xPaw\MinecraftPingException;
 use xPaw\MinecraftQuery;
 use xPaw\MinecraftQueryException;
 
-use function Laravel\Prompts\error;
-
 /**
  * App\Models\Server
  *
@@ -58,6 +56,7 @@ use function Laravel\Prompts\error;
  * @property-read array $player_list
  * @property-read Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
+ *
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
  * @method static Builder|Server newQuery()
@@ -85,6 +84,7 @@ use function Laravel\Prompts\error;
  * @method static Builder|Server whereUpdatedAt($value)
  * @method static Builder|Server whereUseSshAuth($value)
  * @method static Builder|Server whereVersion($value)
+ *
  * @mixin Eloquent
  */
 class Server extends Model
@@ -92,7 +92,8 @@ class Server extends Model
     use HasFactory;
 
     private ?Rcon $rcon = null;
-    private FilesystemAdapter|null $fileStorageDisk = null;
+
+    private ?FilesystemAdapter $fileStorageDisk = null;
 
     protected $fillable = [
         'name',
@@ -241,12 +242,14 @@ class Server extends Model
                 if ($list) {
                     return $list;
                 }
+
                 return [];
             } catch (MinecraftQueryException $e) {
                 Log::error(
                     'Exception getting player list',
                     ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
                 );
+
                 return [];
             }
         });
@@ -261,6 +264,7 @@ class Server extends Model
                 'Error thrown when retrieving EULA',
                 ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
             );
+
             return true;
         }
     }

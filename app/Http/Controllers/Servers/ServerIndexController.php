@@ -11,11 +11,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class ServerIndexController extends Controller
 {
-    /**
-     * @param ServerSettings $settings
-     * @param IndexRepository $repository
-     * @return LengthAwarePaginator
-     */
     public function __invoke(ServerSettings $settings, IndexRepository $repository): LengthAwarePaginator
     {
         return $repository->getPaginator($settings);

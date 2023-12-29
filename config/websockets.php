@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     * This package comes with multi tenancy out of the box. Here you can

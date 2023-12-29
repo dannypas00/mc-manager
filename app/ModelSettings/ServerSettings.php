@@ -9,7 +9,6 @@ use App\Models\Server;
 
 class ServerSettings implements SettingsInterface
 {
-
     public function getModelName(): string
     {
         return Server::class;

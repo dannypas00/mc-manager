@@ -13,8 +13,6 @@ final class AllRepository
 {
     /**
      * @codeCoverageIgnore It's just the vendor query builder
-     * @param SettingsInterface $settings
-     * @return Collection
      */
     public function get(SettingsInterface $settings): Collection
     {
@@ -23,9 +21,8 @@ final class AllRepository
 
     /**
      * @codeCoverageIgnore It's just the vendor query builder
-     * @param SettingsInterface $settings
+     *
      * @throws AllowedFieldsMustBeCalledBeforeAllowedIncludes
-     * @return QueryBuilder
      */
     private function setupQueryBuilder(SettingsInterface $settings): QueryBuilder
     {

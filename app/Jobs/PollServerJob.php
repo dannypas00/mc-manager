@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Str;
 
 class PollServerJob implements ShouldQueue
 {
@@ -48,6 +47,7 @@ class PollServerJob implements ShouldQueue
         if (in_array($server->status, self::DOWN_STATUSES, true)) {
             $server->current_players = 0;
             $server->player_list = null;
+
             return;
         }
     }

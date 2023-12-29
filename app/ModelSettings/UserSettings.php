@@ -9,7 +9,6 @@ use App\Models\User;
 
 class UserSettings implements SettingsInterface
 {
-
     public function getModelName(): string
     {
         return User::class;

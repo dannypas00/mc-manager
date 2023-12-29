@@ -56,7 +56,7 @@ class ServerLogStreamController extends Controller
             $lastSize = $currentSize;
 
             // Send data
-            echo "event: ping" . PHP_EOL, "data: $message", PHP_EOL . PHP_EOL;
+            echo 'event: ping' . PHP_EOL, "data: $message", PHP_EOL . PHP_EOL;
 
             // Push and end stream
             flush();

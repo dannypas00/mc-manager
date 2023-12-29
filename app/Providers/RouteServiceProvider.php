@@ -21,11 +21,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
     }
 
-    /**
-     * @param string $directory
-     * @return string|null
-     */
-    protected function matchMiddleware(string $directory): string|null
+    protected function matchMiddleware(string $directory): ?string
     {
         if (Str::startsWith($directory, 'api')) {
             return 'authapi';
