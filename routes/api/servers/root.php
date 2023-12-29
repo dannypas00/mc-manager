@@ -15,5 +15,3 @@ Route::prefix('{id}')->group(static function () {
     Route::get('logs', ServerLogStreamController::class)->name('logs');
     Route::post('command', ServerRconCommandController::class)->name('command');
 })->whereNumber('id');
-
-

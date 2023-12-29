@@ -4,9 +4,13 @@ namespace App\Exceptions;
 
 use Auth;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore Turns out it is nigh-impossible to test this class, so we trust that a single if-check works as expected
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -22,9 +26,11 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
+        // If the user is not logged in, redirect them to the login screen (or return 401 if json) on exception
+        // This is done to prevent enumerating pages as an unauthenticated actor
         if (!Auth::check() && !app()->hasDebugModeEnabled()) {
             return $request->expectsJson()
-                ? response()->setStatusCode(Response::HTTP_FORBIDDEN)->json()
+                ? new JsonResponse(null, Response::HTTP_UNAUTHORIZED)
                 : redirect(route('auth.login'));
         }
 

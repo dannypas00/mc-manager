@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Storage;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Servers\FrontendServerShowRepository;
-use App\Services\StorageListingService;
+use App\Services\ServerStorageService;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,13 +20,13 @@ class StoragePathController extends Controller
      */
     public function __invoke(
         FrontendServerShowRepository $showRepository,
-        StorageListingService $service,
+        ServerStorageService $storageService,
         int $id,
         ?string $path = '',
     ): Response {
         return Inertia::render('Servers/Files/ServerFiles', [
             'path' => $path ?? '',
-            ...$service->listContents($showRepository->show($id), $path ?? '')
+            ...$storageService->listContents($showRepository->show($id), $path ?? '')
         ]);
     }
 }

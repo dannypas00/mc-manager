@@ -7,9 +7,11 @@ namespace App\ModelSettings;
 use App\Interfaces\SettingsInterface;
 use App\Models\Server;
 
+/**
+ * @codeCoverageIgnore useless to test settings files
+ */
 class ServerSettings implements SettingsInterface
 {
-
     public function getModelName(): string
     {
         return Server::class;

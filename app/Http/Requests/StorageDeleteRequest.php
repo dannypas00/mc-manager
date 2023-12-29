@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StorageDeleteRequest extends FormRequest
 {
+    /**
+     * @codeCoverageIgnore we trust that returning an array works
+     */
     public function rules(): array
     {
         return [

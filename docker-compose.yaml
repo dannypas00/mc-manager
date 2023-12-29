@@ -4,28 +4,46 @@ services:
     container_name: mcm-db
     image: mariadb:latest
     ports:
-      - "${MARIADB_PORT}:${MARIADB_PORT}"
+      - "${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}"
     env_file:
       - .env
     volumes:
       - mysql:/var/lib/mysql/
     command:
       - mariadbd
-      - --port=${MARIADB_PORT}
+      - --port=${MARIADB_PORT:-3306}
 
   redis:
     container_name: mcm-redis
     image: redis:latest
 
+  test:
+    container_name: mcm-test
+    build:
+      dockerfile: .docker/local/Dockerfile
+      context: .
+    user: 1000:1000
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    command:
+      - sh
+      - -c
+      - |
+          composer install -q;
+
   php:
     container_name: mcm-php
-    image: dannypas00/laravel-fpm:8.2
+    build:
+      dockerfile: .docker/local/Dockerfile
+      context: .
     user: 1000:1000
     depends_on:
       - db
       - redis
     volumes:
       - ./:/var/www
+      - ./tests/output:/opt/phpstorm-coverage
 
   horizon:
     container_name: mcm-horizon
@@ -89,6 +107,7 @@ services:
     volumes:
       - .docker/local/minecraft:/minecraft
     working_dir: /minecraft
+    restart: on-failure
     command:
       - java
       - -Xmx1G

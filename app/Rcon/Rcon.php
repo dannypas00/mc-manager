@@ -9,20 +9,27 @@ namespace App\Rcon;
  * more information about Source RCON Packets
  *
  * @copyright 2013 Chris Churchwell
+ *
+ * @codeCoverageIgnore external library that didn't have a composer package
  */
 class Rcon
 {
     private mixed $socket;
 
     private $authorized;
+
     private $last_response;
 
     const PACKET_AUTHORIZE = 5;
+
     const PACKET_COMMAND = 6;
 
     const SERVERDATA_AUTH = 3;
+
     const SERVERDATA_AUTH_RESPONSE = 2;
+
     const SERVERDATA_EXECCOMMAND = 2;
+
     const SERVERDATA_RESPONSE_VALUE = 0;
 
     public function __construct(
@@ -49,6 +56,7 @@ class Rcon
 
         if (!$this->socket) {
             $this->last_response = $errstr;
+
             return false;
         }
 
@@ -93,6 +101,7 @@ class Rcon
             && $responsePacket['type'] === self::SERVERDATA_RESPONSE_VALUE
         ) {
             $this->last_response = $responsePacket['body'];
+
             return $responsePacket['body'];
         }
 
@@ -107,11 +116,13 @@ class Rcon
         if ($response_packet['type'] == self::SERVERDATA_AUTH_RESPONSE) {
             if ($response_packet['id'] == self::PACKET_AUTHORIZE) {
                 $this->authorized = true;
+
                 return true;
             }
         }
 
         $this->disconnect();
+
         return false;
     }
 
@@ -129,7 +140,7 @@ class Rcon
         */
 
         //create packet
-        $packet = pack("VV", $packet_id, $packet_type);
+        $packet = pack('VV', $packet_id, $packet_type);
         $packet = $packet . $packet_body . "\x00";
         $packet = $packet . "\x00";
 
@@ -137,7 +148,7 @@ class Rcon
         $packet_size = strlen($packet);
 
         // attach size to packet.
-        $packet = pack("V", $packet_size) . $packet;
+        $packet = pack('V', $packet_size) . $packet;
 
         // write packet.
         fwrite($this->socket, $packet, strlen($packet));
@@ -148,7 +159,7 @@ class Rcon
     {
         //get packet size.
         $size_data = fread($this->socket, 4);
-        $size_pack = unpack("V1size", $size_data);
+        $size_pack = unpack('V1size', $size_data);
         $size = $size_pack['size'];
 
         // if size is > 4096, the response will be in multiple packets.
@@ -158,7 +169,7 @@ class Rcon
         // currently, this script does not support multi-packet responses.
 
         $packet_data = fread($this->socket, $size);
-        $packet_pack = unpack("V1id/V1type/a*body", $packet_data);
+        $packet_pack = unpack('V1id/V1type/a*body', $packet_data);
 
         return $packet_pack;
     }

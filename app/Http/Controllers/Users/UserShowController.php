@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserShowController extends Controller
 {
+    /**
+     * @codeCoverageIgnore It's just a show
+     */
     public function __invoke(int $id, UserSettings $settings, ShowRepository $repository): User|Model
     {
         return $repository->show($settings, $id);

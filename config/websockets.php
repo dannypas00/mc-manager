@@ -1,4 +1,7 @@
 <?php
+
+use BeyondCode\LaravelWebSockets\Statistics\Models\WebSocketsStatisticsEntry;
+
 return [
     /*
     * This package comes with multi tenancy out of the box. Here you can
@@ -51,7 +54,7 @@ return [
         * The only requirement is that the model should extend
         * `WebSocketsStatisticsEntry` provided by this package.
         */
-        'model'                             => \BeyondCode\LaravelWebSockets\Statistics\Models\WebSocketsStatisticsEntry::class,
+        'model'                             => WebSocketsStatisticsEntry::class,
 
         /*
         * Here you can specify the interval in seconds at which statistics should be logged.

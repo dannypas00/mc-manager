@@ -8,9 +8,6 @@ use Spatie\QueryBuilder\AllowedFilter;
 
 interface SettingsInterface
 {
-    /**
-     * @return string
-     */
     public function getModelName(): string;
 
     /**

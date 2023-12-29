@@ -2,21 +2,22 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Storage;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
-     * @throws Exception
      * @return array<string, mixed>
+     *
+     * @throws Exception
      */
     public function definition(): array
     {

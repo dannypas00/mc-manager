@@ -10,6 +10,9 @@ use App\ModelSettings\ServerSettings;
 use App\Repositories\ShowRepository;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @codeCoverageIgnore CRUD route that only calls repository. Repository is already tested
+ */
 class ServerShowController extends Controller
 {
     public function __invoke(int $id, ServerSettings $settings, ShowRepository $repository): Server|Model
