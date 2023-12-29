@@ -22,3 +22,5 @@ yarn-error.log
 _ide_helper.php
 .bash_history
 .config
+/tests/output
+.composer

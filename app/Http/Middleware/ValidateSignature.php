@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Illuminate\Routing\Middleware\ValidateSignature as Middleware;
 
+/**
+ * @codeCoverageIgnore We trust laravel default middleware does its job
+ */
 class ValidateSignature extends Middleware
 {
     /**

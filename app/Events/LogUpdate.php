@@ -6,6 +6,9 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * @codeCoverageIgnore Event definition doesn't need testing
+ */
 class LogUpdate implements ShouldBroadcast
 {
     use InteractsWithBroadcasting;

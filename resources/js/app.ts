@@ -7,7 +7,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { InertiaProgress } from '@inertiajs/progress';
 import PortalVue from 'portal-vue';
 import MainLayout from './Layouts/MainLayout.vue';
-import i18n from './i18n.ts';
+import i18n from './i18n';
 import { createPinia } from 'pinia';
 import VueToastificationPlugin, { PluginOptions, POSITION, useToast } from 'vue-toastification';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue';

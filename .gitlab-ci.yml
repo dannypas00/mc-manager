@@ -1,3 +1,58 @@
+stages:
+  - test
+  - build
+#  - deploy
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
+
+pint:
+  image: dannypas00/laravel-fpm:8.2-npm
+  stage: test
+  before_script:
+    - composer install -q
+  script:
+    - vendor/bin/pint --test
+
+test:
+  image: dannypas00/laravel-fpm:8.2-npm
+  stage: test
+  variables:
+    XDEBUG_MODE: "coverage"
+  before_script:
+    - docker-php-ext-enable xdebug
+    - touch .env
+    - composer install -q
+    - npm ci
+    - npm run build
+  script:
+    - php artisan test --coverage -p --min=100
+  artifacts:
+    when: always
+    reports:
+      junit: tests/output/junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: tests/output/cobertura.xml
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+
+docker-smoke-test:
+  image: docker:cli
+  stage: test
+  services:
+    - docker:dind
+  variables:
+    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  script:
+    - docker build --pull --file=.docker/production/Dockerfile .
+  rules:
+    - exists:
+        - .docker/production/Dockerfile
+
 docker-push:
   image: docker:cli
   stage: build
@@ -16,20 +71,5 @@ docker-push:
         docker push "$CI_REGISTRY_IMAGE:latest"
       fi
   rules:
-    - if: $CI_COMMIT_BRANCH
-      exists:
-        - .docker/production/Dockerfile
-
-docker-build:
-  image: docker:cli
-  stage: build
-  services:
-    - docker:dind
-  variables:
-    DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  script:
-    - docker build --pull --file=.docker/production/Dockerfile .
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      exists:
+    - exists:
         - .docker/production/Dockerfile

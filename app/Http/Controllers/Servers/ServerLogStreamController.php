@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Servers;
 
 use App\Http\Controllers\Controller;
-use Auth;
+use App\Repositories\Servers\FrontendServerShowRepository;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -12,11 +12,15 @@ class ServerLogStreamController extends Controller
 {
     private const LOG_NAME = 'logs/latest.log';
 
-    public function __invoke(int $serverId): StreamedResponse
+    /**
+     * @codeCoverageIgnore Stream technically never ends unless user asynchronously breaks connection
+     * Because of this, the test will run forever. The logic function however is properly tested
+     */
+    public function __invoke(int $id, FrontendServerShowRepository $showRepository): StreamedResponse
     {
         return response()
-            ->stream(function () use ($serverId) {
-                $ftp = $this->getFtp($serverId);
+            ->stream(function () use ($showRepository, $id) {
+                $ftp = $showRepository->show($id)->ftp;
 
                 $lastSize = 0;
 
@@ -34,19 +38,11 @@ class ServerLogStreamController extends Controller
             ]);
     }
 
-    public function getFtp(int $serverId): FilesystemAdapter
-    {
-        return Auth::user()
-            ?->servers()
-            ->where('servers.id', $serverId)
-            ->first()
-            ?->ftp();
-    }
-
-    private function tryReadFile(FilesystemAdapter $ftp, int &$lastSize): void
+    public function tryReadFile(FilesystemAdapter $ftp, int &$lastSize): void
     {
         $currentSize = $ftp->size(self::LOG_NAME);
 
+        // If the filesize changed, sent a new message over the event stream
         if ($currentSize > $lastSize) {
             Log::debug('File size increased', ['lastSize' => $lastSize, 'currentSize' => $currentSize]);
 

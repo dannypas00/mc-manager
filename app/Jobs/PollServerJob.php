@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Enums\ServerStatus;
 use App\Models\Server;
+use App\Repositories\Servers\ServerShowRepository;
+use App\Repositories\Servers\ServerUpdateRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,29 +28,19 @@ class PollServerJob implements ShouldQueue
     {
     }
 
-    /**
-     * Execute the job.
-     */
-    public function handle(): void
+    public function handle(ServerShowRepository $showRepository, ServerUpdateRepository $updateRepository): void
     {
-        $server = $this->getServer();
-        $this->updateServer($server);
-        $server->save();
+        $server = $showRepository->findOrFail($this->id);
+        $this->updateServer($server, $updateRepository);
     }
 
-    private function getServer(): Server
+    private function updateServer(Server $server, ServerUpdateRepository $updateRepository): void
     {
-        return Server::findOrFail($this->id);
-    }
+        $updateRepository->updateByPing($server);
+        $server->refresh();
 
-    private function updateServer(Server $server): void
-    {
-        $server->updateByPing();
         if (in_array($server->status, self::DOWN_STATUSES, true)) {
             $server->current_players = 0;
-            $server->player_list = null;
-
-            return;
         }
     }
 }

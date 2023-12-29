@@ -7,6 +7,9 @@ namespace App\ModelSettings;
 use App\Interfaces\SettingsInterface;
 use App\Models\User;
 
+/**
+ * @codeCoverageIgnore useless to test settings files
+ */
 class UserSettings implements SettingsInterface
 {
     public function getModelName(): string

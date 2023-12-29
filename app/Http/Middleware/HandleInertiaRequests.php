@@ -5,6 +5,9 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+/**
+ * @codeCoverageIgnore We trust laravel default middleware does its job
+ */
 class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'app';

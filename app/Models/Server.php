@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Enums\ServerStatus;
 use App\Observers\ServerObserver;
 use App\Rcon\Rcon;
+use App\Services\ServerConnectivityService;
 use Cache;
 use Crypt;
+use Database\Factories\ServerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,14 +19,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
 use League\Flysystem\Ftp\FtpAdapter;
-use Log;
-use Storage;
-use Str;
-use Throwable;
-use xPaw\MinecraftPing;
-use xPaw\MinecraftPingException;
-use xPaw\MinecraftQuery;
-use xPaw\MinecraftQueryException;
 
 /**
  * App\Models\Server
@@ -52,12 +46,14 @@ use xPaw\MinecraftQueryException;
  * @property string $rcon_password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read FtpAdapter|FilesystemAdapter $ftp
  * @property-read bool $has_accepted_eula
  * @property-read array $player_list
- * @property-read Collection<int, \App\Models\User> $users
+ * @property-read Rcon|false $rcon
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
- * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
+ * @method static ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
  * @method static Builder|Server newQuery()
  * @method static Builder|Server query()
@@ -91,10 +87,6 @@ class Server extends Model
 {
     use HasFactory;
 
-    private ?Rcon $rcon = null;
-
-    private ?FilesystemAdapter $fileStorageDisk = null;
-
     protected $fillable = [
         'name',
         'description',
@@ -125,6 +117,8 @@ class Server extends Model
         'status' => ServerStatus::class,
     ];
 
+    // Attributes
+
     public function rconPassword(): Attribute
     {
         return Attribute::make(
@@ -149,126 +143,40 @@ class Server extends Model
         );
     }
 
+    public function getRconAttribute(): Rcon|false
+    {
+        return app(ServerConnectivityService::class)->getRcon($this);
+    }
+
+    public function getFtpAttribute(): FtpAdapter|FilesystemAdapter
+    {
+        return app(ServerConnectivityService::class)->getFilesystem($this);
+    }
+
+    public function getPlayerListAttribute(): array
+    {
+        return Cache::remember(
+            $this->id . '-server-player-list',
+            10,
+            fn (): array => app(ServerConnectivityService::class)->getPlayers($this)
+        );
+    }
+
+    public function getHasAcceptedEulaAttribute(): bool
+    {
+        return app(ServerConnectivityService::class)->getEulaAcceptedStatus($this);
+    }
+
+    // Relations
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
 
-    public function rcon(): Rcon|false
-    {
-        if (!$this->rcon) {
-            $this->rcon = new Rcon($this->local_ip, $this->rcon_port, $this->rcon_password, 30);
-            if (!$this->rcon->connect()) {
-                return false;
-            }
-        }
-
-        return $this->rcon;
-    }
-
-    public function ftp(): FtpAdapter|FilesystemAdapter
-    {
-        if (!$this->fileStorageDisk) {
-            $config = [
-                'driver' => $this->is_sftp ? 'sftp' : 'ftp',
-                'host'   => $this->ftp_host,
-                'port'   => $this->ftp_port,
-
-                ($this->use_ssh_auth ? 'privateKey' : 'username') => $this->ftp_username,
-                ($this->use_ssh_auth ? 'passphrase' : 'password') => $this->ftp_password,
-            ];
-
-            $this->fileStorageDisk = $this->is_sftp
-                ? Storage::createSftpDriver($config)
-                : Storage::createFtpDriver($config);
-        }
-
-        return $this->fileStorageDisk;
-    }
-
-    public function updateByPing(bool $save = true): void
-    {
-        $data = $this->ping(false);
-
-        if ($data) {
-            $this->description = $data['description']['text'];
-            $this->current_players = $data['players']['online'];
-            $this->maximum_players = $data['players']['max'];
-            $this->version = $data['version']['name'];
-
-            if ($save) {
-                $this->save();
-            }
-        }
-    }
-
-    public function ping(bool $save = true): mixed
-    {
-        $ping = (new MinecraftPing($this->local_ip, $this->port));
-
-        try {
-            $response = $ping->Query();
-
-            if (!$response) {
-                $this->status = ServerStatus::Starting;
-            } elseif (is_array($response)) {
-                $this->status = ServerStatus::Up;
-            } else {
-                $this->status = ServerStatus::Unknown;
-            }
-        } catch (MinecraftPingException) {
-            $ping->close();
-            $this->status = ServerStatus::Down;
-            $this->save();
-        } finally {
-            $ping->close();
-
-            if ($save) {
-                $this->save();
-            }
-
-            return $response ?? false;
-        }
-    }
-
-    public function getPlayerListAttribute(): array
-    {
-        return Cache::remember($this->id . '-server-player-list', 10, function (): array {
-            try {
-                $query = new MinecraftQuery();
-                $query->Connect($this->local_ip, $this->port);
-                $list = $query->GetPlayers();
-
-                if ($list) {
-                    return $list;
-                }
-
-                return [];
-            } catch (MinecraftQueryException $e) {
-                Log::error(
-                    'Exception getting player list',
-                    ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
-                );
-
-                return [];
-            }
-        });
-    }
-
-    public function getHasAcceptedEulaAttribute(): bool
-    {
-        try {
-            return Str::isMatch('/.*eula=true.*/', $this->ftp()->get('eula.txt'));
-        } catch (Throwable $e) {
-            Log::error(
-                'Error thrown when retrieving EULA',
-                ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
-            );
-
-            return true;
-        }
-    }
-
+    /**
+     * @codeCoverageIgnore Can't cover the boot (heh)
+     */
     protected static function boot(): void
     {
         parent::boot();

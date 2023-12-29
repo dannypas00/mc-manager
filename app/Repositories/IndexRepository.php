@@ -10,6 +10,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexRepository
 {
+    /**
+     * @codeCoverageIgnore It's just the vendor query builder
+     */
     public function getPaginator(SettingsInterface $settings): LengthAwarePaginator
     {
         return QueryBuilder::for($settings->getModelName())

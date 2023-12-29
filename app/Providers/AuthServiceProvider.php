@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
+/**
+ * @codeCoverageIgnore we trust laravel default providers work
+ */
 class AuthServiceProvider extends ServiceProvider
 {
     /**

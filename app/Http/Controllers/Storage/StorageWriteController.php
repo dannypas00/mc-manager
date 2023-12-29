@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorageWriteRequest;
 use App\Repositories\Servers\FrontendServerShowRepository;
+use App\Services\ServerStorageService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,12 +21,11 @@ class StorageWriteController extends Controller
         int $serverId,
         string $path,
         StorageWriteRequest $request,
-        FrontendServerShowRepository $showRepository
+        FrontendServerShowRepository $showRepository,
+        ServerStorageService $storageService,
     ): JsonResponse {
         $server = $showRepository->show($serverId);
-        $ftp = $server->ftp();
-
-        $ftp->put($path, $request->get('content'));
+        $storageService->put($server, $path, $request->get('content'));
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }

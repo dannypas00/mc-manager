@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Str;
 
+/**
+ * @codeCoverageIgnore we trust laravel default providers work
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     public const HOME = '/';

@@ -16,6 +16,9 @@ use ReflectionException;
 use Str;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @codeCoverageIgnore This is only a dev command to generate typescript models for the developer, no need to test it since it doesn't run in production
+ */
 class ExportTypescriptModelsCommand extends Command
 {
     // Don't replace this with the ::class constant, it breaks things when matching the parent class

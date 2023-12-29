@@ -9,6 +9,8 @@ namespace App\Rcon;
  * more information about Source RCON Packets
  *
  * @copyright 2013 Chris Churchwell
+ *
+ * @codeCoverageIgnore external library that didn't have a composer package
  */
 class Rcon
 {
