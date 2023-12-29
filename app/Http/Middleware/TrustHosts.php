@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Middleware\TrustHosts as Middleware;
 
+/**
+ * @codeCoverageIgnore We trust laravel default middleware does its job
+ */
 class TrustHosts extends Middleware
 {
     /**

@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @codeCoverageIgnore we trust laravel default providers work
+ */
 class FakerServiceProvider extends ServiceProvider
 {
     /**

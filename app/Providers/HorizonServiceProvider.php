@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Gate;
 use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
 
+/**
+ * @codeCoverageIgnore we trust laravel default providers work
+ */
 class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     /**

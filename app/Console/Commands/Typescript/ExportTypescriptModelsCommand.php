@@ -16,6 +16,9 @@ use ReflectionException;
 use Str;
 use Symfony\Component\Finder\SplFileInfo;
 
+/**
+ * @codeCoverageIgnore This is only a dev command to generate typescript models for the developer, no need to test it since it doesn't run in production
+ */
 class ExportTypescriptModelsCommand extends Command
 {
     // Don't replace this with the ::class constant, it breaks things when matching the parent class
@@ -40,22 +43,22 @@ class ExportTypescriptModelsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param GenerateCliOutput $generateCliOutput
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws ReflectionException
-     * @return int
      */
     public function handle(GenerateCliOutput $generateCliOutput): int
     {
         if (!app()->environment('local')) {
             $this->error('Command should only be run in local context.');
+
             return self::INVALID;
         }
 
         $body = $generateCliOutput($this->gatherModels(), false, true);
 
         $this->writeToFile($body);
+
         return self::SUCCESS;
     }
 
@@ -79,9 +82,6 @@ class ExportTypescriptModelsCommand extends Command
 
     /**
      * Take the filepath between app/Models and .php, replace forward slashes to backward slashes and we should have most of the PSR-4 namespace
-     *
-     * @param string $fileName
-     * @return string
      */
     private function guessModelNamespace(string $fileName): string
     {
@@ -93,11 +93,11 @@ class ExportTypescriptModelsCommand extends Command
             ),
             '.php'
         );
+
         return 'App\\Models\\' . $baseName;
     }
 
     /**
-     * @param string $body
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

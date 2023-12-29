@@ -5,14 +5,13 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+/**
+ * @codeCoverageIgnore We trust laravel default middleware does its job
+ */
 class HandleInertiaRequests extends Middleware
 {
     protected $rootView = 'app';
 
-    /**
-     * @param Request $request
-     * @return array
-     */
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [

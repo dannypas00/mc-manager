@@ -5,6 +5,9 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
 use Illuminate\Http\Request;
 
+/**
+ * @codeCoverageIgnore We trust laravel default middleware does its job
+ */
 class TrustProxies extends Middleware
 {
     /**

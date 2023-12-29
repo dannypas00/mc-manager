@@ -13,10 +13,9 @@ use InvalidArgumentException;
 class UserIndexController extends Controller
 {
     /**
-     * @param UserSettings $settings
-     * @param IndexRepository $repository
+     * @codeCoverageIgnore It's just a paginator
+     *
      * @throws InvalidArgumentException
-     * @return LengthAwarePaginator
      */
     public function __invoke(UserSettings $settings, IndexRepository $repository): LengthAwarePaginator
     {

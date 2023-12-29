@@ -20,6 +20,7 @@ Route::as('auth.')->prefix('auth')->middleware(['web'])->group(static function (
         'login',
         static function (LoginRequest $request, AuthenticatedSessionController $controller): RedirectResponse {
             $controller->store($request);
+
             return redirect()->intended(RouteServiceProvider::HOME);
         }
     )->middleware('guest')
@@ -29,6 +30,7 @@ Route::as('auth.')->prefix('auth')->middleware(['web'])->group(static function (
         'logout',
         static function (Request $request, AuthenticatedSessionController $controller): RedirectResponse {
             $controller->destroy($request);
+
             return redirect(route('auth.login'));
         }
     )->middleware('auth')

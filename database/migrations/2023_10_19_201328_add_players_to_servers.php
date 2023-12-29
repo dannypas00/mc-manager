@@ -23,8 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('servers', static function (Blueprint $table) {
-            $table->dropColumn('current_players');
-            $table->dropColumn('maximum_players');
+            $table->dropColumn(['current_players', 'maximum_players']);
         });
     }
 };
