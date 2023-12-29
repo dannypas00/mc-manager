@@ -4,7 +4,7 @@ namespace Tests\Unit\Http\Controllers\Storage;
 
 use App\Http\Controllers\Storage\StorageDeleteController;
 use App\Models\Server;
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\UnableToDeleteFile;
@@ -40,7 +40,7 @@ class StorageDeleteControllerTest extends UnitTestCase
         $this->beUser();
 
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->expects('delete')
                 ->withSomeOfArgs('testdir/testpath')
@@ -63,7 +63,7 @@ class StorageDeleteControllerTest extends UnitTestCase
         $this->beUser();
 
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->expects('delete')
                 ->times(5)
@@ -85,7 +85,7 @@ class StorageDeleteControllerTest extends UnitTestCase
         $this->beUser();
 
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->expects('delete')
                 ->withSomeOfArgs('testdir/testpath')

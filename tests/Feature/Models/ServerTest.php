@@ -53,6 +53,11 @@ class ServerTest extends FeatureTestCase
             'field' => 'rcon_password',
             'value' => 'test1234',
         ];
+
+        yield 'ssh_key' => [
+            'field' => 'ssh_key',
+            'value' => 'test1234',
+        ];
     }
 
     /**

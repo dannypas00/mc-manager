@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorageDeleteRequest;
 use App\Models\Server;
 use App\Repositories\Servers\FrontendServerShowRepository;
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Illuminate\Http\JsonResponse;
 use League\Flysystem\FilesystemException;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ class StorageDeleteController extends Controller
         int $serverId,
         StorageDeleteRequest $request,
         FrontendServerShowRepository $showRepository,
-        ServerStorageService $storageService,
+        ServerFilesystemStorageService $storageService,
     ): JsonResponse {
         $server = $showRepository->show($serverId);
         $paths = collect($request->get('paths', []));
@@ -35,7 +35,7 @@ class StorageDeleteController extends Controller
         );
     }
 
-    private function deletePath(ServerStorageService $storageService, Server $server, string $path, array &$responseData): void
+    private function deletePath(ServerFilesystemStorageService $storageService, Server $server, string $path, array &$responseData): void
     {
         try {
             $storageService->delete($server, $path);

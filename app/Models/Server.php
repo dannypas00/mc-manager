@@ -149,6 +149,14 @@ class Server extends Model
         );
     }
 
+    public function sshKey(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (?string $value): ?string => $value ? Crypt::decrypt($value) : null,
+            set: static fn (?string $value): ?string => $value ? Crypt::encrypt($value) : null,
+        );
+    }
+
     public function getRconAttribute(): Rcon|false
     {
         return app(ServerConnectivityService::class)->getRcon($this);

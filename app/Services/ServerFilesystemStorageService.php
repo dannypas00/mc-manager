@@ -6,11 +6,12 @@ use App\Models\Server;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Log;
+use JetBrains\PhpStorm\ArrayShape;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\Ftp\FtpAdapter;
 use League\Flysystem\StorageAttributes;
 
-class ServerStorageService
+class ServerFilesystemStorageService implements ServerStorageServiceInterface
 {
     public function getFtp(Server $server): FilesystemAdapter|FtpAdapter
     {
@@ -41,7 +42,10 @@ class ServerStorageService
      * @throws FileNotFoundException
      * @throws FilesystemException
      */
-    public function listContents(Server $server, string $path): array
+    #[ArrayShape([
+        'directories' => StorageAttributes::class . '[]|null',
+        'files'       => 'string|null'
+    ])] public function listContents(Server $server, string $path): array
     {
         $ftp = $this->getFtp($server);
 
@@ -58,13 +62,13 @@ class ServerStorageService
 
     /**
      * @throws FilesystemException
+     * @returns StorageAttributes[]
      */
     public function getDirectory(Server $server, string $storagePath): array
     {
         try {
             return $this->getFtp($server)
                 ->listContents($storagePath)
-                ->map(static fn (StorageAttributes $entry) => $entry->jsonSerialize())
                 ->toArray();
         } catch (FilesystemException $e) {
             Log::error(

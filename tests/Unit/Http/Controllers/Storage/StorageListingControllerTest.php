@@ -3,7 +3,7 @@
 namespace Tests\Unit\Http\Controllers\Storage;
 
 use App\Http\Controllers\Storage\StorageListingController;
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use RuntimeException;
@@ -33,7 +33,7 @@ class StorageListingControllerTest extends UnitTestCase
         $this->beUser();
         $this->mockFrontendServerShow();
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('listContents')
                 ->andThrows(new RuntimeException('test'))

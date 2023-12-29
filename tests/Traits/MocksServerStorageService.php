@@ -2,7 +2,7 @@
 
 namespace Tests\Traits;
 
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Mockery\MockInterface;
 use Storage;
@@ -12,7 +12,7 @@ trait MocksServerStorageService
     public function mockServeStorageServiceGetContents(?string $returns = null): void
     {
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->expects('getContents')
                 ->andReturn($returns)
@@ -22,7 +22,7 @@ trait MocksServerStorageService
     public function mockServerStorageServiceGetFtp(?Filesystem $returns = null): void
     {
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('getFtp')
                 ->andReturn($returns ?? Storage::fake())
@@ -32,7 +32,7 @@ trait MocksServerStorageService
     public function mockServerStorageServiceDelete(): void
     {
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('delete')
                 ->andReturn(true)
@@ -42,7 +42,7 @@ trait MocksServerStorageService
     public function mockServerStorageServiceListContents(array $returns = []): void
     {
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('listContents')
                 ->andReturn($returns)
@@ -52,7 +52,7 @@ trait MocksServerStorageService
     public function mockServerStorageServiceGetDirectory(array $returns = []): void
     {
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('getDirectory')
                 ->andReturn($returns)
@@ -62,7 +62,7 @@ trait MocksServerStorageService
     public function mockServerStorageServicePut(string $expectedPath): void
     {
         $this->mock(
-            ServerStorageService::class,
+            ServerFilesystemStorageService::class,
             fn (MockInterface $mock) => $mock
                 ->shouldReceive('put')
                 ->withSomeOfArgs($expectedPath)

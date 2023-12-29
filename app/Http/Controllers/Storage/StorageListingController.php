@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Storage;
 
 use App\Http\Requests\Storage\StorageListingRequest;
 use App\Repositories\Servers\FrontendServerShowRepository;
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -15,7 +15,7 @@ class StorageListingController
         int $serverId,
         StorageListingRequest $request,
         FrontendServerShowRepository $showRepository,
-        ServerStorageService $storageService,
+        ServerFilesystemStorageService $storageService,
     ): JsonResponse {
         $server = $showRepository->show($serverId);
 

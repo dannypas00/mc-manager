@@ -131,9 +131,20 @@ services:
     container_name: mcm-sftp
     image: atmoz/sftp:alpine
     ports:
-      - "22:22"
+      - "23:22"
     environment:
-      - "SFTP_USERS=mcm-test|mcm-test|/minecraft"
+      - "SFTP_USERS=mcm-test:mcm-test:::/minecraft"
+    volumes:
+      - .docker/local/minecraft:/minecraft
+
+  ssh:
+    container_name: mcm-ssh
+    image: linuxserver/openssh-server
+    ports:
+      - "2222:2222"
+    environment:
+      - "USER_NAME=mcm-test"
+      - "PUBLIC_KEY=ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAF0JviXigZIXknkj7em8jfNM8nK9YnnP6p0ou1kftNH9n5/O5cbfHa0fYD20qGxk/G4Eo8au+mDM8CumG6cf7Lu5wGMHCLggXykoHzYXAH0I9ZYpaOKRkX2cW0W36Cbgy/fYKOio6aE8zUQeNq+q3vMBLHhUcICtnjQBq5r1iA5iAzSog== root@60e6f5524e95"
     volumes:
       - .docker/local/minecraft:/minecraft
 

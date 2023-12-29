@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Storage;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Servers\FrontendServerShowRepository;
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,7 +20,7 @@ class StoragePathController extends Controller
      */
     public function __invoke(
         FrontendServerShowRepository $showRepository,
-        ServerStorageService $storageService,
+        ServerFilesystemStorageService $storageService,
         int $id,
         ?string $path = '',
     ): Response {

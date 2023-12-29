@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('servers', static function (Blueprint $table) {
+            $table->longText('ssh_key')->after('ftp_password')->nullable();
             $table->string('ssh_port')->after('ftp_password')->nullable();
             $table->string('ssh_username')->after('ftp_password')->nullable();
-            $table->string('ssh_key')->after('ftp_password')->nullable();
         });
     }
 

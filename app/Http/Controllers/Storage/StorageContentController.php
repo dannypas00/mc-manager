@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Storage;
 
 use App\Http\Requests\Storage\StorageContentRequest;
 use App\Repositories\Servers\FrontendServerShowRepository;
-use App\Services\ServerStorageService;
+use App\Services\ServerFilesystemStorageService;
 use Illuminate\Http\JsonResponse;
 
 class StorageContentController
@@ -13,7 +13,7 @@ class StorageContentController
         int $serverId,
         StorageContentRequest $request,
         FrontendServerShowRepository $showRepository,
-        ServerStorageService $storageService
+        ServerFilesystemStorageService $storageService
     ): JsonResponse {
         $server = $showRepository->show($serverId);
 
