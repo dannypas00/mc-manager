@@ -35,6 +35,9 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property string|null $ftp_host
  * @property string|null $ftp_username Contains private key when using ssh key auth
  * @property string|null $ftp_password Contains pass phrase when using ssh key auth
+ * @property string|null $ssh_key
+ * @property string|null $ssh_username
+ * @property string|null $ssh_port
  * @property int $current_players
  * @property int $maximum_players
  * @property string $name
@@ -76,6 +79,9 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @method static Builder|Server wherePublicIp($value)
  * @method static Builder|Server whereRconPassword($value)
  * @method static Builder|Server whereRconPort($value)
+ * @method static Builder|Server whereSshKey($value)
+ * @method static Builder|Server whereSshPort($value)
+ * @method static Builder|Server whereSshUsername($value)
  * @method static Builder|Server whereStatus($value)
  * @method static Builder|Server whereUpdatedAt($value)
  * @method static Builder|Server whereUseSshAuth($value)
