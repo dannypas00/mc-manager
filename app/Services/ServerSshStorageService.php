@@ -27,9 +27,6 @@ class ServerSshStorageService implements ServerStorageServiceInterface
             ->disableStrictHostKeyChecking();
     }
 
-    /**
-     * @throws SshException
-     */
     private function executeSsh(Server $server, string $command): Process
     {
         // TODO: This seems wildly unsafe, but I currently don't see any other option for how to do this without breaking open Spatie's package
@@ -62,9 +59,6 @@ class ServerSshStorageService implements ServerStorageServiceInterface
             ->isSuccessful();
     }
 
-    /**
-     * @throws SshException
-     */
     #[ArrayShape([
         'directories' => StorageAttributes::class . '[]|null',
         'files'       => 'string|null'

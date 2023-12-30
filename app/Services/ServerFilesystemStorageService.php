@@ -24,9 +24,6 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
             ->get($path);
     }
 
-    /**
-     * @throws FilesystemException
-     */
     public function delete(Server $server, string $path): ?bool
     {
         $ftp = $this->getFtp($server);
@@ -38,10 +35,6 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
         return $ftp->delete($path);
     }
 
-    /**
-     * @throws FileNotFoundException
-     * @throws FilesystemException
-     */
     #[ArrayShape([
         'directories' => StorageAttributes::class . '[]|null',
         'files'       => 'string|null'

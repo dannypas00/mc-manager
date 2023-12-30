@@ -15,7 +15,6 @@ class StorageListingController
         int $serverId,
         StorageListingRequest $request,
         FrontendServerShowRepository $showRepository,
-        ServerFilesystemStorageService $storageService,
     ): JsonResponse {
         $server = $showRepository->show($serverId);
 
@@ -24,7 +23,7 @@ class StorageListingController
         $path = $request->get('path') ?? '';
 
         try {
-            return new JsonResponse($storageService->listContents($server, $path));
+            return new JsonResponse($server->storage_service->listContents($server, $path));
         } catch (Throwable $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_NOT_FOUND);
         }
