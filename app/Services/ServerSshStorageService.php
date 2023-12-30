@@ -17,7 +17,7 @@ use Spatie\Ssh\Ssh;
 use Str;
 
 /**
- * @codeCoverageIgnore Testing will be done in integration tests
+ * @codeCoverageIgnore Testing will be done in system tests
  */
 class ServerSshStorageService implements ServerStorageServiceInterface
 {
