@@ -35,7 +35,7 @@ class StorageDeleteControllerTest extends UnitTestCase
 
     public function testDeleteIsCalled(): void
     {
-        $this->mockFrontendServerShow(Server::factory()->makeOne());
+        $this->mockFrontendServerShow(Server::factory()->withFtp()->makeOne());
 
         $this->beUser();
 
@@ -58,7 +58,7 @@ class StorageDeleteControllerTest extends UnitTestCase
 
     public function testManyDeletesAreCalled(): void
     {
-        $this->mockFrontendServerShow(Server::factory()->makeOne());
+        $this->mockFrontendServerShow(Server::factory()->withFtp()->makeOne());
 
         $this->beUser();
 
@@ -80,7 +80,7 @@ class StorageDeleteControllerTest extends UnitTestCase
 
     public function testUnsuccessfulResponseOnException()
     {
-        $this->mockFrontendServerShow(Server::factory()->makeOne());
+        $this->mockFrontendServerShow(Server::factory()->withFtp()->makeOne());
 
         $this->beUser();
 

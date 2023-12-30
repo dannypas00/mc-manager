@@ -20,6 +20,7 @@ class ServerLogStreamController extends Controller
     {
         return response()
             ->stream(function () use ($showRepository, $id) {
+                // TODO: Refactor to allow ssh streaming of java process output
                 $ftp = $showRepository->show($id)->ftp;
 
                 $lastSize = 0;

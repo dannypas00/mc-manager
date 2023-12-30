@@ -12,13 +12,14 @@ return new class extends Migration
             $table->longText('ssh_key')->after('ftp_password')->nullable();
             $table->string('ssh_port')->after('ftp_password')->nullable();
             $table->string('ssh_username')->after('ftp_password')->nullable();
+            $table->boolean('enable_ssh')->after('ftp_password')->default(false);
         });
     }
 
     public function down(): void
     {
         Schema::table('servers', static function (Blueprint $table) {
-            $table->dropColumn(['ssh_port', 'ssh_username', 'ssh_key']);
+            $table->dropColumn(['ssh_port', 'ssh_username', 'ssh_key', 'enable_ssh']);
         });
     }
 };

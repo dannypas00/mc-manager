@@ -176,7 +176,7 @@ class Server extends Model
         return Cache::remember(
             $this->id . '-server-player-list',
             10,
-            static fn (): array => app(ServerConnectivityService::class)->getPlayers($this)
+            fn (): array => app(ServerConnectivityService::class)->getPlayers($this)
         );
     }
 
@@ -190,15 +190,15 @@ class Server extends Model
      */
     public function getStorageServiceAttribute(): ServerStorageServiceInterface
     {
-        if ($this->ftp_username && $this->ftp_password && $this->ftp_host && $this->ftp_port) {
+        if ($this->enable_ftp) {
             return app(ServerFilesystemStorageService::class);
         }
 
-        if ($this->ssh_username && $this->ssh_key && $this->ssh_port) {
+        if ($this->enable_ssh) {
             return app(ServerSshStorageService::class);
         }
 
-        throw new NoStorageServiceConfiguredException($this->id);
+        throw new NoStorageServiceConfiguredException($this->id ?? -1);
     }
 
     // Relations

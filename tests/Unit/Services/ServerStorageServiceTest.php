@@ -12,14 +12,14 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Storage;
 use Tests\Traits\MocksServerConnectivityService;
-use Tests\Traits\MocksServerStorageService;
+use Tests\Traits\MockServerFilesystemStorageService;
 use Tests\UnitTestCase;
 
 #[CoversClass(ServerFilesystemStorageService::class)]
 class ServerStorageServiceTest extends UnitTestCase
 {
     use MocksServerConnectivityService;
-    use MocksServerStorageService;
+    use MockServerFilesystemStorageService;
 
     public function testGetFtp(): void
     {
@@ -69,7 +69,7 @@ class ServerStorageServiceTest extends UnitTestCase
         $ftp = $this->mockServerConnectivityServiceGetFilesystem();
         $ftp->put('testfile', 'testvalue');
 
-        $this->mockServerStorageServiceGetDirectory(['test']);
+        $this->mockFsGetDirectory(['test']);
 
         $result = app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), '');
 
@@ -81,7 +81,7 @@ class ServerStorageServiceTest extends UnitTestCase
         $ftp = $this->mockServerConnectivityServiceGetFilesystem();
         $ftp->put('testdir/testfile', 'testvalue');
 
-        $this->mockServerStorageServiceGetDirectory(['test']);
+        $this->mockFsGetDirectory(['test']);
 
         $result = app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), 'testdir');
 
@@ -93,7 +93,7 @@ class ServerStorageServiceTest extends UnitTestCase
         $ftp = $this->mockServerConnectivityServiceGetFilesystem();
         $ftp->put('testfile', 'testvalue');
 
-        $this->mockServerStorageServiceGetDirectory(['test']);
+        $this->mockFsGetDirectory(['test']);
 
         $result = app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), 'testfile');
 
@@ -104,7 +104,7 @@ class ServerStorageServiceTest extends UnitTestCase
     {
         $this->mockServerConnectivityServiceGetFilesystem();
 
-        $this->mockServerStorageServiceGetDirectory(['test']);
+        $this->mockFsGetDirectory(['test']);
 
         $this->expectException(FileNotFoundException::class);
         app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), 'nonexistentpath');

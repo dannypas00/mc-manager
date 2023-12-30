@@ -7,9 +7,9 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Mockery\MockInterface;
 use Storage;
 
-trait MocksServerStorageService
+trait MockServerFilesystemStorageService
 {
-    public function mockServeStorageServiceGetContents(?string $returns = null): void
+    public function mockFsGetContent(?string $returns = null): void
     {
         $this->mock(
             ServerFilesystemStorageService::class,
@@ -19,7 +19,7 @@ trait MocksServerStorageService
         )->makePartial();
     }
 
-    public function mockServerStorageServiceGetFtp(?Filesystem $returns = null): void
+    public function mockFsGetFtp(?Filesystem $returns = null): void
     {
         $this->mock(
             ServerFilesystemStorageService::class,
@@ -29,7 +29,7 @@ trait MocksServerStorageService
         )->makePartial();
     }
 
-    public function mockServerStorageServiceDelete(): void
+    public function mockFsDelete(): void
     {
         $this->mock(
             ServerFilesystemStorageService::class,
@@ -39,7 +39,7 @@ trait MocksServerStorageService
         )->makePartial();
     }
 
-    public function mockServerStorageServiceListContents(array $returns = []): void
+    public function mockFsListContents(array $returns = []): void
     {
         $this->mock(
             ServerFilesystemStorageService::class,
@@ -49,7 +49,7 @@ trait MocksServerStorageService
         )->makePartial();
     }
 
-    public function mockServerStorageServiceGetDirectory(array $returns = []): void
+    public function mockFsGetDirectory(array $returns = []): void
     {
         $this->mock(
             ServerFilesystemStorageService::class,
@@ -59,7 +59,7 @@ trait MocksServerStorageService
         )->makePartial();
     }
 
-    public function mockServerStorageServicePut(string $expectedPath): void
+    public function mockFsPut(string $expectedPath): void
     {
         $this->mock(
             ServerFilesystemStorageService::class,

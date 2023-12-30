@@ -3,23 +3,24 @@
 namespace Tests\Unit\Http\Controllers\Storage;
 
 use App\Http\Controllers\Storage\StoragePathController;
+use App\Models\Server;
 use Inertia\Testing\AssertableInertia;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\Traits\MocksFrontendServerShowRepository;
-use Tests\Traits\MocksServerStorageService;
+use Tests\Traits\MockServerFilesystemStorageService;
 use Tests\UnitTestCase;
 
 #[CoversClass(StoragePathController::class)]
 class StoragePathControllerTest extends UnitTestCase
 {
     use MocksFrontendServerShowRepository;
-    use MocksServerStorageService;
+    use MockServerFilesystemStorageService;
 
     public function testReturnsInertiaResponse(): void
     {
         $this->beUser();
-        $this->mockFrontendServerShow();
-        $this->mockServerStorageServiceListContents(['files' => ['testpath']]);
+        $this->mockFrontendServerShow(Server::factory()->withFtp()->makeOne());
+        $this->mockFsListContents(['files' => ['testpath']]);
 
         $response = $this->get(route('servers.files', ['id' => 1, 'path' => 'test']));
 

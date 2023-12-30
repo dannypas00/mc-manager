@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
             'ftp_host'        => 'mcm-ftp',
             'ftp_username'    => 'mcm-test',
             'ftp_password'    => 'mcm-test',
+            'enable_ssh'      => true,
             'ssh_username'    => 'mcm-test',
             'ssh_key'         => '-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAArAAAABNlY2RzYS

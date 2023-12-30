@@ -4,23 +4,44 @@ namespace Tests\Unit\Http\Controllers\Storage;
 
 use App\Http\Controllers\Storage\StorageContentController;
 use App\Models\Server;
+use Closure;
+use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\Traits\MockServerSshStorageService;
 use Tests\Traits\MocksFrontendServerShowRepository;
-use Tests\Traits\MocksServerStorageService;
+use Tests\Traits\MockServerFilesystemStorageService;
 use Tests\UnitTestCase;
 
 #[CoversClass(StorageContentController::class)]
 class StorageContentControllerTest extends UnitTestCase
 {
     use MocksFrontendServerShowRepository;
-    use MocksServerStorageService;
+    use MockServerFilesystemStorageService;
+    use MockServerSshStorageService;
 
-    public function testItCallsStorageGet(): void
+    public function testItCallsStorageGetFilesystem(): void
     {
-        $server = Server::factory()->makeOne();
+        $server = Server::factory()->withFtp()->makeOne();
 
         $this->mockFrontendServerShow($server);
-        $this->mockServeStorageServiceGetContents('testvalue');
+        $this->mockFsGetContent('testvalue');
+
+        $this->beUser();
+
+        $response = $this->getJson(
+            route('api.servers.storage.content', ['id' => 1, 'path' => 'testpath']),
+            ['path' => 'testpath']
+        );
+
+        $response->assertJson(['content' => 'testvalue']);
+    }
+
+    public function testItCallsStorageGetSsh(): void
+    {
+        $server = Server::factory()->withSsh()->makeOne();
+
+        $this->mockFrontendServerShow($server);
+        $this->mockSshGetContent('testvalue');
 
         $this->beUser();
 
