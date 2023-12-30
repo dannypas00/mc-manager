@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'ftp_host'        => 'mcm-ftp',
             'ftp_username'    => 'mcm-test',
             'ftp_password'    => 'mcm-test',
-            'ssh_username'    => 'root',
+            'ssh_username'    => 'mcm-test',
             'ssh_key'         => '-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAArAAAABNlY2RzYS
 1zaGEyLW5pc3RwNTIxAAAACG5pc3RwNTIxAAAAhQQBdCb4l4oGSF5J5I+3pvI3zTPJyvWJ
@@ -60,6 +60,7 @@ AAAIUEAXQm+JeKBkheSeSPt6byN80zycr1iec/qnSi7WR+00f2fn87lxt8drR9gPbSobGT
 KjpoTzNRB42r6re8wEseFRwgK2eNAGrmvWIDmIDNKiAAAAQgEbg4CwdXC+584UjT5BF8c7
 dgAfB/ZqOw2RSEx+AOGosli7YwoponJ4NiiEm4M2NRHqQYmsPq78UdiY03rKwWG8UAAAAB
 Fyb290QDYwZTZmNTUyNGU5NQE=
+-----END OPENSSH PRIVATE KEY-----
 ',
             'ssh_port'        => '2222',
         ]);

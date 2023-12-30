@@ -2,70 +2,133 @@
 
 namespace App\Services;
 
+use App\Exceptions\SshException;
 use App\Models\Server;
+use Carbon\Carbon;
+use File;
+use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\ArrayShape;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
 use Spatie\Ssh\Ssh;
+use Str;
+use Symfony\Component\Process\Process;
 
 class ServerSshStorageService implements ServerStorageServiceInterface
 {
-    private function getSsh(Server $server): Ssh
+    private const BASE_PATH = '/minecraft';
+
+    private function getSsh(Server $server, string $keyPath): Ssh
     {
-        $privateKeyPath = 'php://memory';
-        file_put_contents($privateKeyPath, $server->ssh_key);
         return Ssh::create($server->ssh_username, $server->local_ip)
-            ->usePrivateKey($privateKeyPath)
-            ->usePort($server->port)
+            ->usePrivateKey($keyPath)
+            ->usePort($server->ssh_port)
             ->disableStrictHostKeyChecking();
+    }
+
+    /**
+     * @throws SshException
+     */
+    private function executeSsh(Server $server, string $command): Process
+    {
+        // TODO: This seems wildly unsafe, but I currently don't see any other option for how to do this without breaking open Spatie's package
+        File::ensureDirectoryExists(storage_path('keys'));
+        $keypath = storage_path('keys/' . $server->id . '-key');
+        File::put($keypath, $server->ssh_key);
+        File::chmod($keypath, 0600);
+
+        $ssh = $this->getSsh($server, $keypath);
+        $process = $ssh->execute('cd ' . static::BASE_PATH . ' && ' . $command);
+
+        File::delete($keypath);
+
+        if (!$process->isSuccessful()) {
+            throw new SshException($process->getErrorOutput(), $process->getExitCode());
+        }
+
+        return $process;
     }
 
     public function getContents(Server $server, string $path): ?string
     {
-        return $this->getSsh($server)
-            ->execute("cat $path")
+        return $this->executeSsh($server, "cat $path")
             ->getOutput();
     }
 
     public function delete(Server $server, string $path): ?bool
     {
-        return $this->getSsh($server)
-            ->execute("rm -rf $path")
+        return $this->executeSsh($server, "rm -rf $path")
             ->isSuccessful();
     }
 
+    /**
+     * @throws SshException
+     */
     #[ArrayShape([
         'directories' => StorageAttributes::class . '[]|null',
         'files'       => 'string|null'
     ])]
     public function listContents(Server $server, string $path): array
     {
-        dd($this->getSsh($server)->getExecuteCommand('echo test'));
+        $process = $this->executeSsh($server, "ls -lA --full-time $path");
+
         $ls = collect(
             explode(
                 PHP_EOL,
-                dd($this->getSsh($server)
-                    ->execute("echo test")
-                    ->getOutput())
+                $process->getOutput()
             )
         );
 
-        dd($ls);
-
-        if (preg_match('/^total \d+$/', trim($ls->first()))) {
+        if (!preg_match('/^total \d+$/', trim($ls->first()))) {
             return ['file' => $path];
         }
 
-        $dirs = $ls->filter(static fn (string $line) => $line[0] === 'd')
-            ->map(fn (string $line) => $this->mapLsToStorageAttributes($server, $line))
+        $du = collect(explode(PHP_EOL, $this->executeSsh($server, "du --max-depth=1 $path")->getOutput()));
+        try {
+            $mimes = collect(explode(PHP_EOL, $this->executeSsh($server, "file --mime-type $path/*")->getOutput()));
+        } catch (SshException $e) {
+            // When file can't be executed (because it is not a GNU command and so not present on all systems), we stop trying to understand the mimetype
+            // Instead we tell the user that every file is an application/octet-stream, because "The "octet-stream" subtype is used to indicate that a body contains arbitrary binary data."
+            $mimes = collect();
+        }
+
+        dd($mimes);
+
+        $dirs = $ls->filter(static fn (string $line) => $line[0] === 'd' || $line[0] === '-')
+            ->map(fn (string $line) => $this->mapLsToStorageAttributes($server, $line, $du, $mimes))
             ->toArray();
 
         return ['directories' => $dirs];
     }
 
-    private function mapLsToStorageAttributes(Server $server, string $line): StorageAttributes
+    private function mapLsToStorageAttributes(Server $server, string $line, Collection $du, Collection $mimes): StorageAttributes
     {
+        $type = $line[0] === 'd' ? StorageAttributes::TYPE_DIRECTORY : StorageAttributes::TYPE_FILE;
         [, , $user, $group, $size, $date, $time, $permissions, $name] = explode(' ', $line);
-        dd($user, $group, $size, $date, $time, $permissions, $name);
+
+        if ($type === StorageAttributes::TYPE_DIRECTORY) {
+            $duEntry = $du->first(static fn (string $duLine) => Str::contains($duLine, $name));
+            $size = Str::before($duEntry, "\t");
+        }
+
+        $mime = Str::before(
+            $mimes->first(static fn (string $mimeLine) => Str::contains($mimeLine, $name)) ?? 'application/octet-stream',
+            "\t"
+        );
+
+        $attributes = [
+            StorageAttributes::ATTRIBUTE_PATH          => $name,
+            StorageAttributes::ATTRIBUTE_FILE_SIZE     => $size,
+            StorageAttributes::ATTRIBUTE_LAST_MODIFIED => Carbon::parse("$date $time")->timestamp,
+            StorageAttributes::ATTRIBUTE_MIME_TYPE     => $mime,
+        ];
+
+        dd($attributes);
+
+        return $type === StorageAttributes::TYPE_DIRECTORY
+            ? DirectoryAttributes::fromArray($attributes)
+            : FileAttributes::fromArray($attributes);
     }
 
     public function put(Server $server, string $path, string $content): void

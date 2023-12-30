@@ -139,7 +139,9 @@ services:
 
   ssh:
     container_name: mcm-ssh
-    image: linuxserver/openssh-server
+    build:
+      dockerfile: .docker/local/ssh/Dockerfile
+      context: .
     ports:
       - "2222:2222"
     environment:
