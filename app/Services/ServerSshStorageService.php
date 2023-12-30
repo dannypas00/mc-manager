@@ -6,15 +6,19 @@ use App\Exceptions\SshException;
 use App\Models\Server;
 use Carbon\Carbon;
 use File;
+use Illuminate\Contracts\Process\ProcessResult;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Process;
 use JetBrains\PhpStorm\ArrayShape;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
 use Spatie\Ssh\Ssh;
 use Str;
-use Symfony\Component\Process\Process;
 
+/**
+ * @codeCoverageIgnore Testing will be done in integration tests
+ */
 class ServerSshStorageService implements ServerStorageServiceInterface
 {
     private const BASE_PATH = '/minecraft';
@@ -24,10 +28,14 @@ class ServerSshStorageService implements ServerStorageServiceInterface
         return Ssh::create($server->ssh_username, $server->local_ip)
             ->usePrivateKey($keyPath)
             ->usePort($server->ssh_port)
-            ->disableStrictHostKeyChecking();
+            ->disableStrictHostKeyChecking()
+            ->setTimeout(5);
     }
 
-    private function executeSsh(Server $server, string $command): Process
+    /**
+     * @throws SshException
+     */
+    private function executeSsh(Server $server, string $command): ProcessResult
     {
         // TODO: This seems wildly unsafe, but I currently don't see any other option for how to do this without breaking open Spatie's package
         File::ensureDirectoryExists(storage_path('keys'));
@@ -35,13 +43,13 @@ class ServerSshStorageService implements ServerStorageServiceInterface
         File::put($keypath, $server->ssh_key);
         File::chmod($keypath, 0600);
 
-        $ssh = $this->getSsh($server, $keypath);
-        $process = $ssh->execute('cd ' . static::BASE_PATH . ' && ' . $command);
+        $command = $this->getSsh($server, $keypath)->getExecuteCommand('cd ' . static::BASE_PATH . PHP_EOL . $command);
+        $process = Process::run($command);
 
         File::delete($keypath);
 
-        if (!$process->isSuccessful()) {
-            throw new SshException($process->getErrorOutput(), $process->getExitCode());
+        if (!$process->successful()) {
+            throw new SshException($process->errorOutput(), $process->exitCode());
         }
 
         return $process;
@@ -50,13 +58,13 @@ class ServerSshStorageService implements ServerStorageServiceInterface
     public function getContents(Server $server, string $path): ?string
     {
         return $this->executeSsh($server, "cat $path")
-            ->getOutput();
+            ->output();
     }
 
     public function delete(Server $server, string $path): ?bool
     {
         return $this->executeSsh($server, "rm -rf $path")
-            ->isSuccessful();
+            ->successful();
     }
 
     #[ArrayShape([
@@ -73,7 +81,7 @@ class ServerSshStorageService implements ServerStorageServiceInterface
         $ls = collect(
             explode(
                 PHP_EOL,
-                $process->getOutput()
+                $process->output()
             )
         );
 

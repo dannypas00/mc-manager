@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Models;
 
+use App\Exceptions\NoStorageServiceConfiguredException;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\ServerFilesystemStorageService;
@@ -106,6 +107,14 @@ class ServerTest extends FeatureTestCase
         $server = Server::factory()->withSsh()->makeOne();
 
         $this->assertEquals(ServerSshStorageService::class, $server->storage_service::class);
+    }
+
+    public function testUndefinedServiceAttribute(): void
+    {
+        $server = Server::factory()->makeOne();
+
+        $this->expectException(NoStorageServiceConfiguredException::class);
+        $server->storage_service;
     }
 
     public function testUsers()

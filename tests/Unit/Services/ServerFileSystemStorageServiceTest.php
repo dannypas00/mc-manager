@@ -16,7 +16,7 @@ use Tests\Traits\MockServerFilesystemStorageService;
 use Tests\UnitTestCase;
 
 #[CoversClass(ServerFilesystemStorageService::class)]
-class ServerStorageServiceTest extends UnitTestCase
+class ServerFileSystemStorageServiceTest extends UnitTestCase
 {
     use MocksServerConnectivityService;
     use MockServerFilesystemStorageService;
