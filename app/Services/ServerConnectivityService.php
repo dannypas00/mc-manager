@@ -20,7 +20,7 @@ use xPaw\MinecraftQueryException;
  * To be replaced with strategy pattern to accommodate for missing connectivity
  * e.g. ftp over ssh or missing query settings
  *
- * @codeCoverageIgnore This should really be tested in system testing, so ignoring it for the unit tests
+ * @codeCoverageIgnore This should really be tested in integration testing, so ignoring it for the unit tests
  */
 class ServerConnectivityService
 {
