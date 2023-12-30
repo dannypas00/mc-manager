@@ -69,8 +69,11 @@ class ServerSshStorageService implements ServerStorageServiceInterface
         'directories' => StorageAttributes::class . '[]|null',
         'files'       => 'string|null'
     ])]
-    public function listContents(Server $server, string $path): array
+    public function listContents(Server $server, ?string $path): array
     {
+        if (empty($path)) {
+            $path = '.';
+        }
         $process = $this->executeSsh($server, "ls -lA --full-time $path");
 
         $ls = collect(
@@ -93,8 +96,6 @@ class ServerSshStorageService implements ServerStorageServiceInterface
             $mimes = collect();
         }
 
-        dd($mimes);
-
         $dirs = $ls->filter(static fn (string $line) => $line[0] === 'd' || $line[0] === '-')
             ->map(fn (string $line) => $this->mapLsToStorageAttributes($server, $line, $du, $mimes))
             ->toArray();
@@ -104,6 +105,7 @@ class ServerSshStorageService implements ServerStorageServiceInterface
 
     private function mapLsToStorageAttributes(Server $server, string $line, Collection $du, Collection $mimes): StorageAttributes
     {
+        $line = preg_replace('/\s+/', ' ', $line);
         $type = $line[0] === 'd' ? StorageAttributes::TYPE_DIRECTORY : StorageAttributes::TYPE_FILE;
         [, , $user, $group, $size, $date, $time, $permissions, $name] = explode(' ', $line);
 
@@ -118,21 +120,23 @@ class ServerSshStorageService implements ServerStorageServiceInterface
         );
 
         $attributes = [
-            StorageAttributes::ATTRIBUTE_PATH          => $name,
-            StorageAttributes::ATTRIBUTE_FILE_SIZE     => $size,
+            StorageAttributes::ATTRIBUTE_PATH          => Str::after($name, './'),
+            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int) $size,
             StorageAttributes::ATTRIBUTE_LAST_MODIFIED => Carbon::parse("$date $time")->timestamp,
-            StorageAttributes::ATTRIBUTE_MIME_TYPE     => $mime,
+            StorageAttributes::ATTRIBUTE_MIME_TYPE     => Str::afterLast($mime, ' '),
+            StorageAttributes::ATTRIBUTE_TYPE          => $type,
         ];
-
-        dd($attributes);
 
         return $type === StorageAttributes::TYPE_DIRECTORY
             ? DirectoryAttributes::fromArray($attributes)
             : FileAttributes::fromArray($attributes);
     }
 
+    /**
+     * @throws SshException
+     */
     public function put(Server $server, string $path, string $content): void
     {
-        // TODO: Implement put() method.
+        $this->executeSsh($server, "echo '$content' > ./$path");
     }
 }

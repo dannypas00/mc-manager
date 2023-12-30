@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use App\Enums\ServerStatus;
+use App\Exceptions\NoStorageServiceConfiguredException;
 use App\Observers\ServerObserver;
 use App\Rcon\Rcon;
 use App\Services\ServerConnectivityService;
+use App\Services\ServerFilesystemStorageService;
+use App\Services\ServerSshStorageService;
+use App\Services\ServerStorageServiceInterface;
 use Cache;
 use Crypt;
 use Database\Factories\ServerFactory;
@@ -172,13 +176,29 @@ class Server extends Model
         return Cache::remember(
             $this->id . '-server-player-list',
             10,
-            fn (): array => app(ServerConnectivityService::class)->getPlayers($this)
+            static fn (): array => app(ServerConnectivityService::class)->getPlayers($this)
         );
     }
 
     public function getHasAcceptedEulaAttribute(): bool
     {
         return app(ServerConnectivityService::class)->getEulaAcceptedStatus($this);
+    }
+
+    /**
+     * @throws NoStorageServiceConfiguredException
+     */
+    public function getStorageServiceAttribute(): ServerStorageServiceInterface
+    {
+        if ($this->ftp_username && $this->ftp_password && $this->ftp_host && $this->ftp_port) {
+            return app(ServerFilesystemStorageService::class);
+        }
+
+        if ($this->ssh_username && $this->ssh_key && $this->ssh_port) {
+            return app(ServerSshStorageService::class);
+        }
+
+        throw new NoStorageServiceConfiguredException($this->id);
     }
 
     // Relations
