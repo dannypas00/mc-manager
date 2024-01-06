@@ -1,0 +1,98 @@
+version: '3'
+services:
+  php:
+    container_name: test-mcm-php
+    build:
+      dockerfile: .docker/local/Dockerfile
+      context: .
+    user: 1000:1000
+    volumes:
+      - ./:/var/www
+      - ./tests/output:/opt/phpstorm-coverage
+
+  websockets:
+    container_name: test-mcm-websockets
+    image: dannypas00/laravel-fpm:8.2
+    command:
+      - php
+      - artisan
+      - websockets:serve
+    ports:
+      - "6001:6001"
+    volumes:
+      - ./:/var/www
+
+  minecraft-base:
+    container_name: test-mcm-minecraft-base
+    build:
+      dockerfile: tests/MinecraftTest.Dockerfile
+      context: .
+    user: 1000:1000
+    volumes:
+      - ./tests/sandbox/minecraft_base:/minecraft
+    working_dir: /minecraft
+    command:
+      - sh
+      - -c
+      - |
+        screen -dmS mc java -Xmx1G -Xms1G -jar server.jar nogui;
+        echo "Sleeping for 30 seconds";
+        sleep 30;
+        screen -X stuff "stop^M";
+
+  minecraft:
+    container_name: test-mcm-minecraft
+    image: openjdk:22-slim
+    ports:
+      - "25565:25565"
+      - "25575:25575"
+    user: 1000:1000
+    volumes:
+      - ./tests/sandbox/minecraft:/minecraft
+    working_dir: /minecraft
+    command:
+      - java
+      - -Xmx1G
+      - -Xms1G
+      - -jar
+      - server.jar
+      - nogui
+
+  ftp:
+    container_name: test-mcm-ftp
+    image: delfer/alpine-ftp-server:latest
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    environment:
+      - "USERS=mcm-test|mcm-test|/minecraft|1000"
+    volumes:
+      - ./tests/sandbox/minecraft:/minecraft
+
+  sftp:
+    container_name: test-mcm-sftp
+    image: atmoz/sftp:alpine
+    ports:
+      - "22:22"
+    environment:
+      - "SFTP_USERS=mcm-test:mcm-test:::/minecraft"
+    volumes:
+      - ./tests/sandbox/minecraft:/minecraft
+
+  ssh:
+    container_name: test-mcm-ssh
+    build:
+      dockerfile: .docker/local/ssh/Dockerfile
+      context: .
+    ports:
+      - "2222:2222"
+    environment:
+      - "PUID=1000"
+      - "PGID=1000"
+      - "TZ=Etc/UTC"
+      - "USER_NAME=mcm-test"
+      - "PUBLIC_KEY_FILE=/public_key"
+      - "LOG_STDOUT=true"
+    volumes:
+      - ./tests/sandbox/minecraft:/minecraft
+      - .docker/local/public_key:/public_key
