@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use Process;
-use Storage;
+use Symfony\Component\Console\Output\Output;
 use Throwable;
 
 #[CoversNothing]
@@ -30,7 +30,7 @@ class IntegrationTestCase extends UnitTestCase
         $application = parent::createApplication();
 
         // Set up minecraft base
-        if (!File::exists(self::MINECRAFT_BASE_PATH . '/server.jar')) {
+        if (!File::exists(self::MINECRAFT_BASE_PATH . '/world')) {
             $this->setupBase();
         }
 
@@ -56,7 +56,8 @@ class IntegrationTestCase extends UnitTestCase
             file_put_contents(self::MINECRAFT_BASE_PATH . '/server.jar', file_get_contents(self::MINECRAFT_URL));
             file_put_contents(self::MINECRAFT_BASE_PATH . '/eula.txt', 'eula=true');
 
-            $this->startCompose('minecraft-base');
+            echo 'Starting the minecraft server, please give this a minute or two to build the server and world once';
+            dd($this->startCompose('minecraft-base', false)->output());
         } catch (Throwable $e) {
             File::deleteDirectory(self::MINECRAFT_BASE_PATH);
             File::deleteDirectory(self::MINECRAFT_PATH);
@@ -84,8 +85,10 @@ class IntegrationTestCase extends UnitTestCase
         return Process::run("docker compose -f docker-compose-test.yaml kill $services");
     }
 
-    public function startCompose(string $services = ''): ProcessResult
+    public function startCompose(string $services = '', bool $detach = true): ProcessResult
     {
-        return Process::run("docker compose -f docker-compose-test.yaml up -d $services")->throw();
+        return Process::timeout(300)
+            ->run('docker compose -f docker-compose-test.yaml' . ($detach ? ' -d ' : ' ') . "up $services")
+            ->throw();
     }
 }
