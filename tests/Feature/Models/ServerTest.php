@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Models;
 
+use App\Exceptions\NoStorageServiceConfiguredException;
 use App\Models\Server;
 use App\Models\User;
+use App\Services\ServerFilesystemStorageService;
+use App\Services\ServerSshStorageService;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
@@ -53,6 +56,11 @@ class ServerTest extends FeatureTestCase
             'field' => 'rcon_password',
             'value' => 'test1234',
         ];
+
+        yield 'ssh_key' => [
+            'field' => 'ssh_key',
+            'value' => 'test1234',
+        ];
     }
 
     /**
@@ -60,7 +68,7 @@ class ServerTest extends FeatureTestCase
      */
     public function testGetServiceAttribute(string $mock, string $attribute)
     {
-        $server = Server::make();
+        $server = Server::factory()->makeOne();
         $this->$mock();
 
         // Assertions are done by mock expectations
@@ -85,6 +93,28 @@ class ServerTest extends FeatureTestCase
             'mock'      => 'mockServerConnectivityServiceGetEulaAcceptedStatus',
             'attribute' => 'has_accepted_eula'
         ];
+    }
+
+    public function testFilesystemServiceAttribute(): void
+    {
+        $server = Server::factory()->withFtp()->makeOne();
+
+        $this->assertEquals(ServerFilesystemStorageService::class, $server->storage_service::class);
+    }
+
+    public function testSshServiceAttribute(): void
+    {
+        $server = Server::factory()->withSsh()->makeOne();
+
+        $this->assertEquals(ServerSshStorageService::class, $server->storage_service::class);
+    }
+
+    public function testUndefinedServiceAttribute(): void
+    {
+        $server = Server::factory()->makeOne();
+
+        $this->expectException(NoStorageServiceConfiguredException::class);
+        $server->storage_service;
     }
 
     public function testUsers()

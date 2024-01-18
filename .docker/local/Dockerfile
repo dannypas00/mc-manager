@@ -10,4 +10,6 @@ ADD .docker/local/xdebug.ini /usr/local/etc/php/conf.d/zz_xdebug.ini
 RUN mkdir /opt/phpstorm-coverage
 RUN chown 1000:1000 /opt/phpstorm-coverage
 
+RUN apt update && apt install -y openssh-client
+
 USER 1000

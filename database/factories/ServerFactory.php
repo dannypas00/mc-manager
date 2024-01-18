@@ -29,4 +29,29 @@ class ServerFactory extends Factory
             'maximum_players' => $this->faker->numberBetween(25, 50),
         ];
     }
+
+    public function withFtp(): static
+    {
+        return $this->state(
+            fn (array $attributes) => [
+                'enable_ftp' => true,
+                'ftp_port'        => 21,
+                'ftp_host'        => $this->faker->ipv4,
+                'ftp_username'    => $this->faker->userName,
+                'ftp_password'    => $this->faker->password,
+            ]
+        );
+    }
+
+    public function withSsh(): static
+    {
+        return $this->state(
+            fn (array $attributes) => [
+                'enable_ssh' => true,
+                'ssh_username'    => 'mcm-test',
+                'ssh_key'         => $this->faker->randomKey,
+                'ssh_port'        => '22',
+            ]
+        );
+    }
 }

@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\ServerStatus;
+use App\Exceptions\NoStorageServiceConfiguredException;
 use App\Observers\ServerObserver;
 use App\Rcon\Rcon;
 use App\Services\ServerConnectivityService;
+use App\Services\ServerFilesystemStorageService;
+use App\Services\ServerSshStorageService;
+use App\Services\ServerStorageServiceInterface;
 use Cache;
 use Crypt;
-use Database\Factories\ServerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -35,6 +38,9 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property string|null $ftp_host
  * @property string|null $ftp_username Contains private key when using ssh key auth
  * @property string|null $ftp_password Contains pass phrase when using ssh key auth
+ * @property string|null $ssh_username
+ * @property string|null $ssh_port
+ * @property string|null $ssh_key
  * @property int $current_players
  * @property int $maximum_players
  * @property string $name
@@ -46,14 +52,15 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property string $rcon_password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read FtpAdapter|FilesystemAdapter $ftp
+ * @property-read \League\Flysystem\Ftp\FtpAdapter|\Illuminate\Filesystem\FilesystemAdapter $ftp
  * @property-read bool $has_accepted_eula
  * @property-read array $player_list
- * @property-read Rcon|false $rcon
- * @property-read Collection<int, User> $users
+ * @property-read \App\Rcon\Rcon|false $rcon
+ * @property-read \App\Services\ServerStorageServiceInterface $storage_service
+ * @property-read Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  *
- * @method static ServerFactory factory($count = null, $state = [])
+ * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
  * @method static Builder|Server newQuery()
  * @method static Builder|Server query()
@@ -76,6 +83,9 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @method static Builder|Server wherePublicIp($value)
  * @method static Builder|Server whereRconPassword($value)
  * @method static Builder|Server whereRconPort($value)
+ * @method static Builder|Server whereSshKey($value)
+ * @method static Builder|Server whereSshPort($value)
+ * @method static Builder|Server whereSshUsername($value)
  * @method static Builder|Server whereStatus($value)
  * @method static Builder|Server whereUpdatedAt($value)
  * @method static Builder|Server whereUseSshAuth($value)
@@ -143,6 +153,14 @@ class Server extends Model
         );
     }
 
+    public function sshKey(): Attribute
+    {
+        return Attribute::make(
+            get: static fn (?string $value): ?string => $value ? Crypt::decrypt($value) : null,
+            set: static fn (?string $value): ?string => $value ? Crypt::encrypt($value) : null,
+        );
+    }
+
     public function getRconAttribute(): Rcon|false
     {
         return app(ServerConnectivityService::class)->getRcon($this);
@@ -165,6 +183,22 @@ class Server extends Model
     public function getHasAcceptedEulaAttribute(): bool
     {
         return app(ServerConnectivityService::class)->getEulaAcceptedStatus($this);
+    }
+
+    /**
+     * @throws NoStorageServiceConfiguredException
+     */
+    public function getStorageServiceAttribute(): ServerStorageServiceInterface
+    {
+        if ($this->enable_ftp) {
+            return app(ServerFilesystemStorageService::class);
+        }
+
+        if ($this->enable_ssh) {
+            return app(ServerSshStorageService::class);
+        }
+
+        throw new NoStorageServiceConfiguredException($this->id ?? -1);
     }
 
     // Relations

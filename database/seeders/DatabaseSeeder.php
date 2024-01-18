@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'name'            => 'test_server',
             'description'     => 'Local docker test server',
             'icon'            => 'dev-images/cavern-icon.png',
-            'local_ip'        => 'mcm-minecraft',
+            'local_ip'        => '172.17.0.1',
             'public_ip'       => 'mcm-minecraft',
             'port'            => 25565,
             'rcon_port'       => 25575,
@@ -48,6 +48,10 @@ class DatabaseSeeder extends Seeder
             'ftp_host'        => 'mcm-ftp',
             'ftp_username'    => 'mcm-test',
             'ftp_password'    => 'mcm-test',
+            'enable_ssh'      => true,
+            'ssh_username'    => 'mcm-test',
+            'ssh_key'         => file_get_contents(base_path('.docker/local/private_key')),
+            'ssh_port'        => '2222',
         ]);
 
         if (env('SEED_RANDOM_SERVERS', false)) {
