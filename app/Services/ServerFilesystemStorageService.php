@@ -6,11 +6,12 @@ use App\Models\Server;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Log;
+use JetBrains\PhpStorm\ArrayShape;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\Ftp\FtpAdapter;
 use League\Flysystem\StorageAttributes;
 
-class ServerStorageService
+class ServerFilesystemStorageService implements ServerStorageServiceInterface
 {
     public function getFtp(Server $server): FilesystemAdapter|FtpAdapter
     {
@@ -23,9 +24,6 @@ class ServerStorageService
             ->get($path);
     }
 
-    /**
-     * @throws FilesystemException
-     */
     public function delete(Server $server, string $path): ?bool
     {
         $ftp = $this->getFtp($server);
@@ -37,10 +35,10 @@ class ServerStorageService
         return $ftp->delete($path);
     }
 
-    /**
-     * @throws FileNotFoundException
-     * @throws FilesystemException
-     */
+    #[ArrayShape([
+        'directories' => StorageAttributes::class . '[]|null',
+        'files'       => 'string|null'
+    ])]
     public function listContents(Server $server, string $path): array
     {
         $ftp = $this->getFtp($server);
@@ -58,13 +56,14 @@ class ServerStorageService
 
     /**
      * @throws FilesystemException
+     *
+     * @returns StorageAttributes[]
      */
     public function getDirectory(Server $server, string $storagePath): array
     {
         try {
             return $this->getFtp($server)
                 ->listContents($storagePath)
-                ->map(static fn (StorageAttributes $entry) => $entry->jsonSerialize())
                 ->toArray();
         } catch (FilesystemException $e) {
             Log::error(
@@ -78,5 +77,27 @@ class ServerStorageService
     public function put(Server $server, string $path, string $content): void
     {
         $this->getFtp($server)->put($path, $content);
+    }
+
+    public function size(Server $server, string $path): int
+    {
+        return $this->getFtp($server)->size($path);
+    }
+
+    /**
+     * @throws FilesystemException
+     */
+    public function tail(Server $server, string $path, int $offset): string
+    {
+        $stream = $this->getFtp($server)->readStream($path);
+        $contents = stream_get_contents($stream, null, $offset);
+        fclose($stream);
+
+        return $contents;
+    }
+
+    public function append(Server $server, string $path, string $content): void
+    {
+        $this->getFtp($server)->append($path, $content, '');
     }
 }

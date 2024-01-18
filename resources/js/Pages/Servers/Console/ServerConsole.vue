@@ -12,7 +12,10 @@
     <!-- Inputbox -->
     <form class="h-7 border-t-2 border-slate-300 px-1 flex" @submit.prevent="onCommandSubmit">
       <CodeBracketIcon class="inline-block h-6 w-6"/>
-      <input v-model="command" class="inline-block bg-transparent border-0 focus:border-0 focus:ring-0 p-0 px-2 outline-0 h-6 grow">
+      <input
+        v-model="command"
+        class="inline-block bg-transparent border-0 focus:border-0 focus:ring-0 p-0 px-2 outline-0 h-6 grow"
+      >
     </form>
   </div>
 </template>
@@ -49,15 +52,27 @@ export default defineComponent({
       this.rconRequest
         .setId(this.store.model.id)
         .setCommand(this.command)
-        .getResponse()
-        .then(response => {
-          const formattedDate = moment().format('HH:mm:ss');
-          this.log += `[${formattedDate}] [CONSOLE USER/COMMAND]: ${unref(this.command)}\n`;
-          this.log += `[${formattedDate}] [RCON SERVER/RESPONSE]: ${response.data}\n`;
-        });
+        .getResponse();
 
       this.command = '';
-    }
+    },
+
+    stream (start?: number) {
+      const stream = new EventSource(route('api.servers.logs', { id: this.store.model.id, start }));
+
+      stream.addEventListener('ping', event => {
+        // Decode data from base64 to plain
+        const newData: string = atob(event.data);
+        // Remove any RCON connection logs because every command logs an RCON connection
+        const filteredData = newData.replace(/.*Thread RCON Client.*/g, '');
+        this.log += filteredData.trim() + '\n';
+      });
+
+      stream.addEventListener('end', event => {
+        stream.close();
+        this.stream(event.data);
+      });
+    },
   },
 
   watch: {
@@ -71,14 +86,7 @@ export default defineComponent({
   },
 
   mounted () {
-    const stream = new EventSource(route('api.servers.logs', { id: this.store.model.id }));
-
-    stream.addEventListener('ping', event => {
-      // Decode data from base64 to plain
-      const newData: string = atob(event.data);
-      console.log(newData);
-      this.log += newData.trim() + '\n';
-    });
+    this.stream();
   },
 });
 </script>

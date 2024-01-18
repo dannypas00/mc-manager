@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Servers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Servers\ServerLogStreamRequest;
+use App\Models\Server;
 use App\Repositories\Servers\FrontendServerShowRepository;
-use Illuminate\Filesystem\FilesystemAdapter;
+use App\Services\ServerStorageServiceInterface;
 use Log;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -16,21 +18,27 @@ class ServerLogStreamController extends Controller
      * @codeCoverageIgnore Stream technically never ends unless user asynchronously breaks connection
      * Because of this, the test will run forever. The logic function however is properly tested
      */
-    public function __invoke(int $id, FrontendServerShowRepository $showRepository): StreamedResponse
+    public function __invoke(int $id, ServerLogStreamRequest $request, FrontendServerShowRepository $showRepository): StreamedResponse
     {
         return response()
-            ->stream(function () use ($showRepository, $id) {
-                $ftp = $showRepository->show($id)->ftp;
+            ->stream(function () use ($request, $showRepository, $id) {
+                // TODO: Refactor to allow ssh streaming of java process output
+                $server = $showRepository->show($id);
+                $storage = $server->storage_service;
 
-                $lastSize = 0;
+                $lastSize = $request->get('start', 0);
 
-                while (sleep(0.1) === 0) {
+                for ($i = 0; $i < 120; $i++) {
+                    sleep(0.5);
                     if (connection_aborted() === 1) {
                         break;
                     }
 
-                    $this->tryReadFile($ftp, $lastSize);
+                    $this->tryReadFile($server, $storage, $lastSize);
                 }
+
+                $size = $storage->size($server, self::LOG_NAME);
+                echo 'event: end' . PHP_EOL . "data: $size" . PHP_EOL . PHP_EOL;
             }, 200, [
                 'X-Accel-Buffering' => 'no',
                 'Cache-Control'     => 'no-cache',
@@ -38,17 +46,15 @@ class ServerLogStreamController extends Controller
             ]);
     }
 
-    public function tryReadFile(FilesystemAdapter $ftp, int &$lastSize): void
+    public function tryReadFile(Server $server, ServerStorageServiceInterface $storage, int &$lastSize): void
     {
-        $currentSize = $ftp->size(self::LOG_NAME);
+        $currentSize = $storage->size($server, self::LOG_NAME);
 
         // If the filesize changed, sent a new message over the event stream
         if ($currentSize > $lastSize) {
             Log::debug('File size increased', ['lastSize' => $lastSize, 'currentSize' => $currentSize]);
 
-            $stream = $ftp->readStream(self::LOG_NAME);
-
-            $message = base64_encode(stream_get_contents($stream, null, $lastSize));
+            $message = base64_encode($storage->tail($server, self::LOG_NAME, $lastSize));
             $lastSize = $currentSize;
 
             // Send data
@@ -57,7 +63,6 @@ class ServerLogStreamController extends Controller
             // Push and end stream
             flush();
             clearstatcache();
-            fclose($stream);
         }
     }
 }
