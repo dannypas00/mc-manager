@@ -1,9 +1,11 @@
 <template>
   <Portal to="main-layout-header">
-    <div class="mx-auto px-4 py-4 sm:px-6 lg:px-8">
+    <div class="mx-auto px-4 py-4 flex justify-between sm:px-6 lg:px-8">
       <h1 class="text-lg font-semibold leading-6 text-slate-900">
         {{ props.title }}
       </h1>
+
+      <slot/>
     </div>
   </Portal>
 </template>

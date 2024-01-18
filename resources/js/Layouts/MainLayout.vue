@@ -216,8 +216,16 @@ export default defineComponent({
       ApplicationLogo,
 
       navigation: [
-        { name: this.$t('pages.dashboard.menu_title'), href: route('home'), current: true },
-        { name: this.$t('pages.servers.menu_title'), href: '#', current: false },
+        {
+          name: this.$t('pages.dashboard.menu_title'),
+          href: route('home'),
+          current: route().current('home'),
+        },
+        {
+          name: this.$t('pages.servers.menu_title'),
+          href: route('servers.index'),
+          current: route().current('servers.index'),
+        },
       ],
 
       userNavigation: [

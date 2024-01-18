@@ -1,34 +1,38 @@
 {
-  "listing": {
-    "player_list": "Spelers online:\n"
-  },
-  "menu_title": "Servers",
-  "show": {
-    "console": {
-      "nav_title": "Konsool"
+    "index": {
+        "add_button_text`": "Nieuwe server",
+        "title": "Jouw servers"
     },
-    "eula_message": {
-      "button": "Ga naar eula.txt",
-      "text": "EULA moet geaccepteerd worden om de server te starten."
+    "listing": {
+        "player_list": "Spelers online:\n"
     },
-    "files": {
-      "bulk_delete": "Verwijder bestand | Delete {n} files",
-      "bulk_delete_confirm": {
-        "message": "De bestanden die u heeft geselecteerd om te verwijderen bevatten folders.\nLet op dat alle ondeliggende bestanden onherroepelijk worden verwijderd.",
-        "positive": "Bevestig verwijderen",
-        "title": "Bevestig recursief verwijderen van folder"
-      },
-      "bulk_delete_success_toast": "Bestand successvol verwijderd | {n} bestanden successvol verwijderd",
-      "nav_title": "Bestanden",
-      "new_file": "Nieuw bestand",
-      "save": "Sla op"
+    "menu_title": "Servers",
+    "show": {
+        "console": {
+            "nav_title": "Konsool"
+        },
+        "eula_message": {
+            "button": "Ga naar eula.txt",
+            "text": "EULA moet geaccepteerd worden om de server te starten."
+        },
+        "files": {
+            "bulk_delete": "Verwijder bestand | Delete {n} files",
+            "bulk_delete_confirm": {
+                "message": "De bestanden die u heeft geselecteerd om te verwijderen bevatten folders.\nLet op dat alle ondeliggende bestanden onherroepelijk worden verwijderd.",
+                "positive": "Bevestig verwijderen",
+                "title": "Bevestig recursief verwijderen van folder"
+            },
+            "bulk_delete_success_toast": "Bestand successvol verwijderd | {n} bestanden successvol verwijderd",
+            "nav_title": "Bestanden",
+            "new_file": "Nieuw bestand",
+            "save": "Sla op"
+        },
+        "settings": {
+            "nav_title": "Instellingen"
+        },
+        "title": "Server - {name}"
     },
-    "settings": {
-      "nav_title": "Instellingen"
-    },
-    "title": "Server - {name}"
-  },
-  "test": {
-    "test2": "Nieuwe test"
-  }
+    "test": {
+        "test2": "Nieuwe test"
+    }
 }

@@ -1,15 +1,6 @@
 <template>
   <PageTitle :title="$t('pages.dashboard.title')"/>
 
-  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
-    <Link
-      v-for="server in userStore.user.servers"
-      :key="server.id"
-      :href="$route('servers.show', { id: server.id })"
-    >
-      <ServerListing :initial-server="server"/>
-    </Link>
-  </div>
 </template>
 
 <script lang="ts">
