@@ -1,4 +1,7 @@
 {
+    "create": {
+        "title": "Maak nieuwe server"
+    },
     "index": {
         "add_button_text`": "Nieuwe server",
         "title": "Jouw servers"

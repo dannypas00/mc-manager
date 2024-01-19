@@ -3,9 +3,9 @@
     <PositiveButton
       :text="$t('pages.servers.index.add_button_text`')"
       :href="$route('servers.create')"
-      class="bg-emerald-800"
+      class="h-full"
     >
-      <PlusIcon class="w-4 h-4"/>
+      <PlusIcon class="h-full"/>
     </PositiveButton>
   </PageTitle>
 

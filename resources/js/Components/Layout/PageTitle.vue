@@ -1,7 +1,7 @@
 <template>
   <Portal to="main-layout-header">
-    <div class="mx-auto px-4 py-4 flex justify-between sm:px-6 lg:px-8">
-      <h1 class="text-lg font-semibold leading-6 text-slate-900">
+    <div class="mx-auto px-4 py-4 h-16 flex justify-between items-center sm:px-6 lg:px-8">
+      <h1 class="text-lg font-semibold text-slate-900 align-middle inline-block">
         {{ props.title }}
       </h1>
 

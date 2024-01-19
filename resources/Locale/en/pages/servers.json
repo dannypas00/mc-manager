@@ -1,4 +1,7 @@
 {
+    "create": {
+        "title": "Create new server"
+    },
     "index": {
         "add_button_text`": "New server",
         "title": "Your servers"
