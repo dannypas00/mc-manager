@@ -16,6 +16,24 @@
             "title": "Choose a server type"
         }
     },
+    "form": {
+        "description": {
+            "description": "Visible in minecraft server list",
+            "label": "Server description",
+            "placeholder": "My awesome server!"
+        },
+        "icon_upload": {
+            "label": "Server icon"
+        },
+        "info_segment": {
+            "description": "Mostly non-technical information used for displayin the server",
+            "title": "General information"
+        },
+        "name": {
+            "label": "Server name",
+            "placeholder": "My favourite server"
+        }
+    },
     "index": {
         "add_button_text`": "New server",
         "title": "Your servers"

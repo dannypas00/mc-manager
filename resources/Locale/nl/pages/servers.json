@@ -16,6 +16,24 @@
             "title": "Kies een server type"
         }
     },
+    "form": {
+        "description": {
+            "description": "Zichtbaar in de minecraft server lijst",
+            "label": "Server omschrijving",
+            "placeholder": "Mijn geweldige server!"
+        },
+        "icon_upload": {
+            "label": "Server icoon"
+        },
+        "info_segment": {
+            "description": "Voornamelijk niet-technische informatie gebruikt voor het vertonen van de server",
+            "title": "Algemene informatie"
+        },
+        "name": {
+            "label": "Server naam",
+            "placeholder": "Mijn favorite server"
+        }
+    },
     "index": {
         "add_button_text`": "Nieuwe server",
         "title": "Jouw servers"

@@ -50,7 +50,6 @@ export default defineComponent({
 
   methods: {
     onTypeSelect (type: ServerType) {
-      console.log(type);
       this.serverStore.model.type = type;
     },
   },

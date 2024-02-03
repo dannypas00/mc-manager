@@ -187,7 +187,6 @@ export default defineComponent({
     },
 
     onDeleteConfirm () {
-      console.log(_.map(this.selectedFiles, 'path'));
       this.storageDeleteRequest
         .setId(this.serverStore.model.id)
         .setPaths(_.map(this.selectedFiles, 'path'))

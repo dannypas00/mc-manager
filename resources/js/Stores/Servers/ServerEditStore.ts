@@ -1,15 +1,17 @@
 import { defineStore } from 'pinia';
 import _ from 'lodash';
-import Server = App.Models.Server;
 import { AxiosResponse } from 'axios';
 import { useUserStore } from '../UserStore';
 import { ServerShowRequest } from '../../Communications/McManager/Servers/ServerShowRequest';
+import Server = App.Models.Server;
 
 export const useServerEditStore = defineStore('ServerEdit', {
   state: () => ({
     model: {} as Server,
     original: {} as FormData,
     showRequest: new ServerShowRequest(),
+
+    icon: null as File | null,
   }),
 
   getters: {

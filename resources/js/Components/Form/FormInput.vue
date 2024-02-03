@@ -1,17 +1,17 @@
 <template>
-  <div class="sm:col-span-4">
+  <div>
     <label
       v-if="label"
       :for="id"
       class="block text-sm font-medium leading-6 mb-2 text-gray-900"
     >
-      Website
+      {{ label }}
     </label>
 
     <div class="flex rounded-md shadow-sm ring-1 ring-inset pl-2 ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-      <span v-if="$slots.prefix" class="flex select-none items-center pl-1 text-gray-500 sm:text-sm">
-        <slot name="prefix"/>
-      </span>
+    <span v-if="$slots.prefix" class="flex select-none items-center pl-1 text-gray-500 sm:text-sm">
+      <slot name="prefix"/>
+    </span>
 
       <input
         :id="id"

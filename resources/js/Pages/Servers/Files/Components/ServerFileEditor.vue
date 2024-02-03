@@ -86,7 +86,6 @@ export default defineComponent({
   },
 
   async mounted () {
-    console.log(this.file);
     const response = await this.request
       .setServerId(this.store.model.id)
       .setPath(this.file.path)
