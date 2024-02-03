@@ -6,20 +6,38 @@ declare namespace App.Models {
     // columns
     id: number
     enabled: boolean
+    type: ServerType
     status: ServerStatus
     port: number
     rcon_port: number
+    enable_ftp: boolean
+    is_sftp: boolean
+    use_ssh_auth: boolean
+    ftp_port: number|null
+    ftp_host: string|null
+    ftp_username: string|null
+    ftp_password: string|null
+    enable_ssh: boolean
+    ssh_username: string|null
+    ssh_port: string|null
+    ssh_key: string|null
     current_players: number
     maximum_players: number
-    player_list: string|null
     name: string
     description: string|null
+    version: string|null
     icon: string
     local_ip: string|null
     public_ip: string
     rcon_password: string
     created_at: Date|null
     updated_at: Date|null
+    // mutators
+    rcon: Rcon
+    ftp: FtpAdapter
+    player_list: array
+    has_accepted_eula: bool
+    storage_service: ServerStorageServiceInterface
     // relations
     users: Users
   }
@@ -42,6 +60,14 @@ declare namespace App.Models {
     notifications: DatabaseNotifications
   }
   export type Users = User[]
+
+  const ServerType = {
+    Manual: 1,
+    Installed: 2,
+    Managed: 3,
+  } as const;
+
+  export type ServerType = typeof ServerType[keyof typeof ServerType]
 
   const ServerStatus = {
     Unknown: 'unknown',

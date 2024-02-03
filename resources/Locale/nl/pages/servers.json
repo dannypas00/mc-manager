@@ -1,6 +1,20 @@
 {
     "create": {
-        "title": "Maak nieuwe server"
+        "title": "Maak nieuwe server",
+        "type_selector": {
+            "description": {
+                "1": "Handmatige servers zijn volledig door jou beheerd. Jij kiest op welke server de minecraft server draait, jij installeerd alle benodigde software, en jij zorgt ervoor dat minecraft geinstalleerd wordt en draait.",
+                "2": "Wanneer je voor een geinstalleerde server kiest ben je alleen verantwoordelijk voor het voorzien van een SSH verbinding met een server omgeving (op dit moment worden alleen debian-gebaseerde omgevingen ondersteund). Wanneer de verbinding opgezet is zal MC-Manager alle benodigde software installeren en de server draaiende houden.",
+                "3": "[Nog niet beschikbaar]\nBeheerde servers worden gemaakt en onderhouden door MC-Manager. Dit verzekert optimale compatibiliteit, betere ondersteuning, en geen gedoe met het installeren. Klik simpelweg op installeer en laat ons de rest afhandelen."
+            },
+            "names": {
+                "1": "Handmatig",
+                "2": "Breng-je-eigen-VM",
+                "3": "Beheerd door MC-Manager"
+            },
+            "next_title": "Begin server te maken met type {type}",
+            "title": "Kies een server type"
+        }
     },
     "index": {
         "add_button_text`": "Nieuwe server",

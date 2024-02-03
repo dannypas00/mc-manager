@@ -3,6 +3,7 @@
     <PositiveButton
       :text="$t('pages.servers.index.add_button_text`')"
       :href="$route('servers.create')"
+      is-link
       class="h-full"
     >
       <PlusIcon class="h-full"/>

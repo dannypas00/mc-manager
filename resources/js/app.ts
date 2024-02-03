@@ -11,6 +11,12 @@ import i18n from './i18n';
 import { createPinia } from 'pinia';
 import VueToastificationPlugin, { PluginOptions, POSITION, useToast } from 'vue-toastification';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
+
+library.add(fas, fab, far);
 
 InertiaProgress.init({
   delay: 250,

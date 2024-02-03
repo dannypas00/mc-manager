@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ServerStatus;
+use App\Enums\ServerType;
 use App\Exceptions\NoStorageServiceConfiguredException;
 use App\Observers\ServerObserver;
 use App\Rcon\Rcon;
@@ -28,6 +29,7 @@ use League\Flysystem\Ftp\FtpAdapter;
  *
  * @property int $id
  * @property int $enabled
+ * @property string $type
  * @property ServerStatus $status
  * @property int $port
  * @property int $rcon_port
@@ -38,6 +40,7 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property string|null $ftp_host
  * @property string|null $ftp_username Contains private key when using ssh key auth
  * @property string|null $ftp_password Contains pass phrase when using ssh key auth
+ * @property int $enable_ssh
  * @property string|null $ssh_username
  * @property string|null $ssh_port
  * @property string|null $ssh_key
@@ -59,7 +62,6 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property-read \App\Services\ServerStorageServiceInterface $storage_service
  * @property-read Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
- *
  * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
  * @method static Builder|Server newQuery()
@@ -68,6 +70,7 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @method static Builder|Server whereCurrentPlayers($value)
  * @method static Builder|Server whereDescription($value)
  * @method static Builder|Server whereEnableFtp($value)
+ * @method static Builder|Server whereEnableSsh($value)
  * @method static Builder|Server whereEnabled($value)
  * @method static Builder|Server whereFtpHost($value)
  * @method static Builder|Server whereFtpPassword($value)
@@ -87,10 +90,10 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @method static Builder|Server whereSshPort($value)
  * @method static Builder|Server whereSshUsername($value)
  * @method static Builder|Server whereStatus($value)
+ * @method static Builder|Server whereType($value)
  * @method static Builder|Server whereUpdatedAt($value)
  * @method static Builder|Server whereUseSshAuth($value)
  * @method static Builder|Server whereVersion($value)
- *
  * @mixin Eloquent
  */
 class Server extends Model
@@ -125,6 +128,7 @@ class Server extends Model
 
     protected $casts = [
         'status' => ServerStatus::class,
+        'type' => ServerType::class,
     ];
 
     // Attributes
@@ -161,12 +165,12 @@ class Server extends Model
         );
     }
 
-    public function getRconAttribute(): Rcon|false
+    public function getRconAttribute(): Rcon
     {
         return app(ServerConnectivityService::class)->getRcon($this);
     }
 
-    public function getFtpAttribute(): FtpAdapter|FilesystemAdapter
+    public function getFtpAttribute(): FtpAdapter
     {
         return app(ServerConnectivityService::class)->getFilesystem($this);
     }

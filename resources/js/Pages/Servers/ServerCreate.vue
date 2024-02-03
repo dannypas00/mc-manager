@@ -9,7 +9,9 @@
     </NeutralButton>
   </PageTitle>
 
-  <ServerForm :type="FormType.Create"/>
+  <ServerForm v-if="serverStore.model.type" :type="FormType.Create"/>
+
+  <ServerTypeSelector v-else @save="onTypeSelect"/>
 </template>
 
 <script lang="ts">
@@ -19,6 +21,9 @@ import { ArrowLeftIcon } from '@heroicons/vue/24/solid';
 import NeutralButton from '../../Components/Buttons/NeutralButton.vue';
 import ServerForm from './Form/ServerForm.vue';
 import { FormType } from '../../Enums/FormType';
+import { useServerEditStore } from '../../Stores/Servers/ServerEditStore';
+import ServerTypeSelector from './Form/ServerTypeSelector.vue';
+import ServerType = App.Models.ServerType;
 
 /**
  * TODO:
@@ -30,6 +35,7 @@ import { FormType } from '../../Enums/FormType';
 
 export default defineComponent({
   components: {
+    ServerTypeSelector,
     ServerForm,
     PageTitle,
     ArrowLeftIcon,
@@ -37,15 +43,26 @@ export default defineComponent({
   },
 
   data () {
-    return {};
+    return {
+      serverStore: useServerEditStore(),
+    };
   },
 
-  methods: {},
+  methods: {
+    onTypeSelect (type: ServerType) {
+      console.log(type);
+      this.serverStore.model.type = type;
+    },
+  },
 
   computed: {
     FormType () {
       return FormType;
     },
+  },
+
+  mounted () {
+    this.serverStore.setEmpty();
   },
 });
 </script>
