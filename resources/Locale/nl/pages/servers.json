@@ -17,6 +17,10 @@
         }
     },
     "form": {
+        "connection_segment": {
+            "description": "Instellingen om MC-Manager met je server te verbinden",
+            "title": "Verbinding instellingen"
+        },
         "description": {
             "description": "Zichtbaar in de minecraft server lijst",
             "label": "Server omschrijving",
@@ -28,6 +32,21 @@
         "info_segment": {
             "description": "Voornamelijk niet-technische informatie gebruikt voor het vertonen van de server",
             "title": "Algemene informatie"
+        },
+        "installed_segment": {
+            "title": "Geinstalleerde server instellingen"
+        },
+        "local_ip": {
+            "explanation": "Het IP adres waarop de MC-Manager server de minecraft host kan bereiken. Het wordt aangeraden om de minecraft server op hetzelfde netwerk als MC-Manager te hosten. In dit geval zal dit een lokaal IP zijn.",
+            "label": "Verbinding IP"
+        },
+        "managed_segment": {
+            "description": "Instellingen die de beheerde server omgeving aansturen",
+            "title": "Beheerde server instellingen"
+        },
+        "minecraft_segment": {
+            "description": "Instellingen voor de installatie van de minecraft server",
+            "title": "Minecraft instellingen"
         },
         "name": {
             "label": "Server naam",

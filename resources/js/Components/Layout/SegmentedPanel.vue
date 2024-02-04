@@ -1,8 +1,9 @@
 <template>
   <div class="space-y-10 divide-y divide-gray-900/10">
     <div
-      v-for="segment in segments"
+      v-for="(segment, index) in segments"
       :key="segment.slotName"
+      :class="{ 'pt-10': index > 0 }"
       class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3"
     >
       <div class="px-4 sm:px-0">

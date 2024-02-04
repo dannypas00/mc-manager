@@ -17,6 +17,10 @@
         }
     },
     "form": {
+        "connection_segment": {
+            "description": "Settings for connecting MC-Manager to your server",
+            "title": "Connection settings"
+        },
         "description": {
             "description": "Visible in minecraft server list",
             "label": "Server description",
@@ -26,8 +30,23 @@
             "label": "Server icon"
         },
         "info_segment": {
-            "description": "Mostly non-technical information used for displayin the server",
+            "description": "Mostly non-technical information used for displaying the server",
             "title": "General information"
+        },
+        "installed_segment": {
+            "title": "Installed server settings"
+        },
+        "local_ip": {
+            "explanation": "The IP address the MC-Manager server can reach the minecraft host on. It is recommended to host the minecraft server on the same network as MC-Manager, in which case this should be a local IP.",
+            "label": "Connection IP"
+        },
+        "managed_segment": {
+            "description": "Settings that control the managed server instance",
+            "title": "Managed server settings"
+        },
+        "minecraft_segment": {
+            "description": "Settings for the minecraft server installation",
+            "title": "Minecraft settings"
         },
         "name": {
             "label": "Server name",

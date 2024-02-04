@@ -49,6 +49,10 @@ export const useServerEditStore = defineStore('ServerEdit', {
 
     setEmpty () {
       this.model = {
+        port: 25565,
+        rcon_port: 25575,
+        enable_ftp: true,
+        enable_ssh: true,
         users: [
           useUserStore().user,
         ],

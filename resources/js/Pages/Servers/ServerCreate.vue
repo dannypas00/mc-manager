@@ -62,6 +62,9 @@ export default defineComponent({
 
   mounted () {
     this.serverStore.setEmpty();
+
+    // TODO: Remove because debugging
+    this.serverStore.model.type = 2;
   },
 });
 </script>
