@@ -51,6 +51,9 @@ export const useServerEditStore = defineStore('ServerEdit', {
       this.model = {
         port: 25565,
         rcon_port: 25575,
+        ssh_port: 22,
+        ftp_port: 21,
+        ftp_username: 'mc-manager',
         enable_ftp: true,
         enable_ssh: true,
         users: [

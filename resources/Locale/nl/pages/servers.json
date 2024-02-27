@@ -51,7 +51,11 @@
         "name": {
             "label": "Server naam",
             "placeholder": "Mijn favorite server"
-        }
+        },
+        "ssh_port": {
+            "label": "SSH poort"
+        },
+        "ssh_test_button": "Test SSH verbinding"
     },
     "index": {
         "add_button_text`": "Nieuwe server",
