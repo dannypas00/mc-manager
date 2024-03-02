@@ -15,14 +15,14 @@ This project is currently a work-in-progress and is not yet intended for actual 
 
 > ⚠️ **Always ensure all your servers are up-to-date and use secure passwords or SSH keys where available**  
 > Never use the root user to run services that are exposed to the network, always create users with the minimum required
-> access.
+> access. ([Principle of least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege))
 
 Ensure the required ports are opened to a network available to the manager.  
 These ports default to:
 
 - Minecraft / Minecraft query: `25565`
 - Minecraft RCON: `25575`
-- SFTP: `22` or FTP (not recommended): `20` and `21`
+- SFTP: `22` or FTP (not recommended because of security concerns): `20` and `21`
 - SSH: `22`
 
 #### Set up server.properties
@@ -152,7 +152,7 @@ A couple services are run from the Docker Compose configuration:
 If for some reason you want to manually build the production Docker image, it can be done through the following command:
 
 ```bash
-docker build -f .docker/production/Dockerfile .
+docker build -f .docker/production/Dockerfile -t mc-manager .
 ```
 
 # Licensing
