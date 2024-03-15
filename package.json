@@ -19,6 +19,9 @@
         "vue": "^3.3.13"
     },
     "dependencies": {
+        "laravel-echo": "^1.16.0",
+        "lodash": "^4.17.21",
+        "pusher-js": "^8.4.0-rc2",
         "ziggy-js": "^2.0.4"
     }
 }

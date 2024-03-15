@@ -3,33 +3,16 @@ import { uniq } from 'lodash';
 
 type QueryBuilderData = {
   filter?: Record<string, string | number>;
-  page?: number;
-  per_page?: number;
   include?: string[];
   sort?: string[];
   fields?: string[];
 }
 
 export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends Request<T, D & QueryBuilderData> {
-  private page = 1;
-  private perPage = 25;
   private filter: Record<string, string | number> = {};
   private sort: string[] = [];
   private include: string[] = [];
   private fields: string[] = ['*'];
-
-  // Pagination:
-  public setPage (page: number): this {
-    this.page = page;
-    this.data.page = this.page;
-    return this;
-  }
-
-  public setPerPage (perPage: number): this {
-    this.perPage = perPage;
-    this.data.per_page = this.perPage;
-    return this;
-  }
 
   // Includes
   public setInclude (include: string[]): this {
