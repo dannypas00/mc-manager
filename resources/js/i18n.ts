@@ -2,7 +2,7 @@ import { createI18n, I18nOptions } from 'vue-i18n';
 
 import _ from 'lodash';
 
-const translationFiles = import.meta.globEager('../Locale/**/*.json');
+const translationFiles = import.meta.glob('../Locale/**/*.json', { eager: true });
 
 const languages = {};
 
