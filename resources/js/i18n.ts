@@ -18,6 +18,8 @@ _.each(
   },
 );
 
+console.log(languages);
+
 const isProduction = import.meta.env.NODE_ENV === 'production';
 
 export default createI18n({

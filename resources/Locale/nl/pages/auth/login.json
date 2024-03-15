@@ -1,0 +1,14 @@
+{
+  "email": {
+    "label": "E-Mail"
+  },
+  "forgot_password": "Wachtwoord vergeten?",
+  "header": "Log in op je account",
+  "password": {
+    "label": "Wachtwoord"
+  },
+  "remember_me": {
+    "label": "Onthoud mij"
+  },
+  "submit_button": "Log in"
+}

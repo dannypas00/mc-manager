@@ -1,0 +1,14 @@
+{
+  "email": {
+    "label": "Email"
+  },
+  "forgot_password": "Forgot password?",
+  "header": "Sign in to your account",
+  "password": {
+    "label": "Password"
+  },
+  "remember_me": {
+    "label": "Remember me"
+  },
+  "submit_button": "Sign in"
+}
