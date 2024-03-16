@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-ide-helper": "^3.0",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
         "laravel/jetstream": "^5.0",
@@ -53,6 +54,16 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "ide-helper": [
+            "@php artisan ide-helper:generate"
+        ],
+        "models": [
+            "@php artisan ide-helper:models -WRMp",
+            "@php vendor/bin/pint app/Models"
+        ],
+        "pint": [
+            "@php vendor/bin/pint"
         ]
     },
     "extra": {
