@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Actions\Jetstream\DeleteUser;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
+use Laravel\Fortify\Features;
+use Laravel\Fortify\Fortify;
 use Laravel\Jetstream\Jetstream;
 
 class JetstreamServiceProvider extends ServiceProvider
@@ -21,6 +24,11 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Fortify::loginView(static fn () => Inertia::render('Auth/Login', ['can_register' => Features::registration()]));
+        if (Features::registration()) {
+            Fortify::registerView(static fn () => Inertia::render('Auth/Login', ['mode' => 'register']));
+        }
+
         $this->configurePermissions();
 
         Jetstream::deleteUsersUsing(DeleteUser::class);

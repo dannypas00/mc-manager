@@ -9,7 +9,40 @@
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
       <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <form class="space-y-6" @submit.prevent="login">
+        <div>
+          <div class="sm:hidden">
+            <label for="tabs" class="sr-only">Select an auth mode</label>
+            <select
+              id="tabs"
+              name="tabs"
+              class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-brand-hover focus:outline-none focus:ring-brand-hover sm:text-sm"
+            >
+              <option v-for="(tab, mode) in tabs" :key="tab.name" :selected="selectedMode === mode">{{
+                  tab.name
+                                                                                                    }}
+              </option>
+            </select>
+          </div>
+
+          <div class="hidden sm:block">
+            <div class="border-b border-gray-200">
+              <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <a
+                  v-for="(tab, mode) in tabs"
+                  class="cursor-pointer select-none"
+                  :key="tab.name"
+                  :class="[selectedMode === mode ? 'border-brand-hover text-brand' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']"
+                  :aria-current="selectedMode === mode ? 'page' : undefined"
+                  @click="() => changeMode(mode)"
+                >
+                  {{ tab.name }}
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <form class="space-y-6 mt-4" @submit.prevent="login">
           <div>
             <label
               for="email"
@@ -24,7 +57,7 @@
                 type="email"
                 autocomplete="email"
                 required
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6"
               />
               <span class="text-red-500 text-sm" v-if="$page.props.errors?.email">{{ $page.props.errors?.email }}</span>
             </div>
@@ -40,23 +73,42 @@
               <input
                 v-model="form.password"
                 id="password"
+                :autocomplete="selectedMode === 'login' ? 'current-password' : 'none'"
                 name="password"
                 type="password"
-                autocomplete="current-password"
                 required
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6"
               />
             </div>
           </div>
 
-          <div class="flex items-center justify-between">
+          <div v-if="selectedMode === 'register'">
+            <label
+              for="password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              v-t="'pages.auth.login.confirm_password.label'"
+            />
+            <div class="mt-2">
+              <input
+                v-model="form.confirmPassword"
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                autocomplete="none"
+                required
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div v-else class="flex items-center justify-between">
             <div class="flex items-center">
               <input
                 v-model="form.rememberMe"
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                class="h-4 w-4 rounded border-gray-300 text-brand focus:ring-brand"
               />
               <label
                 for="remember-me"
@@ -67,7 +119,7 @@
 
             <div class="text-sm leading-6">
               <a
-                class="font-semibold text-indigo-600 hover:text-indigo-500 text"
+                class="font-semibold text-brand hover:text-brand-hover text"
                 @click="forgotPassword"
               >
                 {{ $t('pages.auth.login.forgot_password') }}
@@ -75,12 +127,21 @@
             </div>
           </div>
 
-          <div>
+          <div v-if="selectedMode === 'login'">
             <button
               type="submit"
-              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              class="flex w-full justify-center rounded-md bg-brand px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
               {{ $t('pages.auth.login.submit_button') }}
+            </button>
+          </div>
+
+          <div v-else>
+            <button
+              class="flex w-full justify-center rounded-md bg-brand px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              @click="register"
+            >
+              {{ $t('pages.auth.login.register_button') }}
             </button>
           </div>
         </form>
@@ -92,8 +153,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import AuthLayout from '../../Layouts/AuthLayout.vue';
-import { router, useForm } from '@inertiajs/vue3';
-import { UserData } from '../../Types/generated';
+import { useForm } from '@inertiajs/vue3';
 
 export default defineComponent({
   layout: AuthLayout,
@@ -103,17 +163,36 @@ export default defineComponent({
       form: useForm({
         email: '',
         password: '',
+        confirmPassword: '',
         rememberMe: false,
       }),
+      tabs: {
+        login: { name: this.$t('pages.auth.login.login_tab') },
+        register: { name: this.$t('pages.auth.login.register_tab') },
+      },
+      selectedMode: 'login',
     };
   },
 
   methods: {
+    changeMode (mode: string) {
+      this.selectedMode = mode;
+    },
+
     login () {
       this.form.transform(data => ({
-        ...data,
+        email: data.email,
+        password: data.email,
         rememberMe: data.rememberMe ? 'on' : null,
       })).post(route('login'));
+    },
+
+    register () {
+      this.form.transform(data => ({
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      })).post(route('register'));
     },
 
     forgotPassword () {
@@ -121,5 +200,9 @@ export default defineComponent({
       console.log('To be implemented');
     },
   },
+
+  mounted () {
+    console.log(this.$page.props);
+  }
 });
 </script>
