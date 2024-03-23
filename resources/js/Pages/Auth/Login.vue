@@ -42,7 +42,27 @@
           </div>
         </div>
 
-        <form class="space-y-6 mt-4" @submit.prevent="login">
+        <form class="space-y-6 mt-4" @submit.prevent="() => selectedMode === 'login' ? login() : register()">
+          <div v-if="selectedMode === 'register'">
+            <label
+              for="name"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              v-t="'pages.auth.login.name.label'"
+            />
+            <div class="mt-2">
+              <input
+                v-model="form.name"
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="username"
+                required
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6"
+              />
+              <span class="text-red-500 text-sm" v-if="$page.props.errors?.name">{{ $page.props.errors?.name }}</span>
+            </div>
+          </div>
+
           <div>
             <label
               for="email"
@@ -79,20 +99,21 @@
                 required
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6"
               />
+              <span class="text-red-500 text-sm" v-if="$page.props.errors?.password">{{ $page.props.errors?.password }}</span>
             </div>
           </div>
 
           <div v-if="selectedMode === 'register'">
             <label
-              for="password"
+              for="password_confirmation"
               class="block text-sm font-medium leading-6 text-gray-900"
-              v-t="'pages.auth.login.confirm_password.label'"
+              v-t="'pages.auth.login.password_confirmation.label'"
             />
             <div class="mt-2">
               <input
-                v-model="form.confirmPassword"
-                id="confirmPassword"
-                name="confirmPassword"
+                v-model="form.password_confirmation"
+                id="password_confirmation"
+                name="password_confirmation"
                 type="password"
                 autocomplete="none"
                 required
@@ -161,9 +182,10 @@ export default defineComponent({
   data () {
     return {
       form: useForm({
+        name: '',
         email: '',
         password: '',
-        confirmPassword: '',
+        password_confirmation: '',
         rememberMe: false,
       }),
       tabs: {
@@ -188,10 +210,12 @@ export default defineComponent({
     },
 
     register () {
+      console.log('Registering', this.form.data());
       this.form.transform(data => ({
+        name: data.name,
         email: data.email,
         password: data.password,
-        confirmPassword: data.confirmPassword,
+        password_confirmation: data.password_confirmation,
       })).post(route('register'));
     },
 
