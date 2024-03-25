@@ -33,7 +33,7 @@ createInertiaApp({
     );
     page.then(module => {
       // @ts-ignore
-      module.default.layout = module.default.layout ?? BrandedStackedLayout;
+      module.default.layout = module.default.layout ?? SidebarLayout;
     });
     return page;
   },

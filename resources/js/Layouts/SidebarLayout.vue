@@ -114,14 +114,32 @@
               </ul>
             </li>
             <li class="-mx-6 mt-auto">
-              <a
-                href="#"
-                class="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark"
-              >
-                <img class="h-8 w-8 rounded-full bg-brand-dark" :src="user.profile_photo_url" alt=""/>
-                <span class="sr-only">Your profile</span>
-                <span aria-hidden="true">{{ user.name }}</span>
-              </a>
+              <Menu as="div" class="w-100">
+                <MenuButton class="flex w-100 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark">
+                  <img class="h-8 w-8 rounded-full bg-brand-dark" :src="user.profile_photo_url" alt=""/>
+                  <span class="sr-only">Your profile</span>
+                  <span aria-hidden="true">{{ user.name }}</span>
+                </MenuButton>
+                <transition
+                  enter-active-class="transition ease-out duration-100"
+                  enter-from-class="transform opacity-0 scale-95"
+                  enter-to-class="transform opacity-100 scale-100"
+                  leave-active-class="transition ease-in duration-75"
+                  leave-from-class="transform opacity-100 scale-100"
+                  leave-to-class="transform opacity-0 scale-95"
+                >
+                  <MenuItems class="absolute right-0 z-10 -translate-y-full -mt-2.5 w-32 origin-bottom-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                    <MenuItem v-for="item in userNavigation" :key="item.name" v-slot="{ active }">
+                      <Link
+                        :href="$route(item.route)"
+                        :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']"
+                      >
+                        {{ item.name }}
+                      </Link>
+                    </MenuItem>
+                  </MenuItems>
+                </transition>
+              </Menu>
             </li>
           </ul>
         </nav>
@@ -150,18 +168,27 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import {
+  Dialog,
+  DialogPanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue';
 import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
-import { appLogo, appName, layoutNavigationItems } from '../LayoutConfig';
-import { usePage } from '@inertiajs/vue3';
+import { appLogo, appName, layoutNavigationItems, userNavigationItems } from '../LayoutConfig';
+import { Link, usePage } from '@inertiajs/vue3';
 import { UserData } from '../Types/generated';
 import SidebarNavEntry from './Partials/SidebarNavEntry.vue';
 
 const navigation = layoutNavigationItems;
+const userNavigation = userNavigationItems;
 const teams: { id: number, name: string, href: string, initial: string, current: boolean }[] = [];
 
 const sidebarOpen = ref(false);
 
-const page = usePage();
-const user: UserData = page.props.user;
+const user: UserData = usePage().props.user;
 </script>
