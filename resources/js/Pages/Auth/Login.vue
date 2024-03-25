@@ -9,37 +9,19 @@
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
       <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-        <div>
-          <div class="sm:hidden">
-            <label for="tabs" class="sr-only">Select an auth mode</label>
-            <select
-              id="tabs"
-              name="tabs"
-              class="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-brand-hover focus:outline-none focus:ring-brand-hover sm:text-sm"
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <a
+              v-for="(tab, mode) in tabs"
+              class="cursor-pointer select-none"
+              :key="tab.name"
+              :class="[selectedMode === mode ? 'border-brand-hover text-brand' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']"
+              :aria-current="selectedMode === mode ? 'page' : undefined"
+              @click="() => changeMode(mode)"
             >
-              <option v-for="(tab, mode) in tabs" :key="tab.name" :selected="selectedMode === mode">{{
-                  tab.name
-                                                                                                    }}
-              </option>
-            </select>
-          </div>
-
-          <div class="hidden sm:block">
-            <div class="border-b border-gray-200">
-              <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <a
-                  v-for="(tab, mode) in tabs"
-                  class="cursor-pointer select-none"
-                  :key="tab.name"
-                  :class="[selectedMode === mode ? 'border-brand-hover text-brand' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700', 'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium']"
-                  :aria-current="selectedMode === mode ? 'page' : undefined"
-                  @click="() => changeMode(mode)"
-                >
-                  {{ tab.name }}
-                </a>
-              </nav>
-            </div>
-          </div>
+              {{ tab.name }}
+            </a>
+          </nav>
         </div>
 
         <form class="space-y-6 mt-4" @submit.prevent="() => selectedMode === 'login' ? login() : register()">
@@ -99,7 +81,9 @@
                 required
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-brand sm:text-sm sm:leading-6"
               />
-              <span class="text-red-500 text-sm" v-if="$page.props.errors?.password">{{ $page.props.errors?.password }}</span>
+              <span class="text-red-500 text-sm" v-if="$page.props.errors?.password">{{
+                  $page.props.errors?.password
+                                                                                     }}</span>
             </div>
           </div>
 
@@ -204,7 +188,7 @@ export default defineComponent({
     login () {
       this.form.transform(data => ({
         email: data.email,
-        password: data.email,
+        password: data.password,
         rememberMe: data.rememberMe ? 'on' : null,
       })).post(route('login'));
     },
@@ -227,6 +211,6 @@ export default defineComponent({
 
   mounted () {
     console.log(this.$page.props);
-  }
+  },
 });
 </script>
