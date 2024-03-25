@@ -9,7 +9,7 @@
             </div>
             <div class="hidden md:block">
               <div class="ml-10 flex items-baseline space-x-4">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-brand-dark text-white' : 'text-white hover:bg-brand-hover hover:bg-opacity-75', 'rounded-md px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
+                <StackedNavEntry v-for="item in navigation" :item="item"/>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@
 
       <DisclosurePanel class="md:hidden">
         <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-          <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-brand-dark text-white' : 'text-white hover:bg-brand-hover hover:bg-opacity-75', 'block rounded-md px-3 py-2 text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
+          <StackedDisclosureNavEntry v-for="item in navigation" :item="item" @select="open = false"/>
         </div>
         <div class="border-t border-brand-dark pb-3 pt-4">
           <div class="flex items-center px-5">
@@ -95,6 +95,8 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import { layoutNavigationItems } from '../LayoutConfig';
+import StackedNavEntry from './Partials/StackedNavEntry.vue';
+import StackedDisclosureNavEntry from './Partials/StackedDisclosureNavEntry.vue';
 
 const user = {
   name: 'Tom Cook',

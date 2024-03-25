@@ -14,6 +14,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import SidebarLayout from './Layouts/SidebarLayout.vue';
+import BrandedStackedLayout from './Layouts/BrandedStackedLayout.vue';
 
 library.add(fas, fab, far);
 
@@ -32,7 +33,7 @@ createInertiaApp({
     );
     page.then(module => {
       // @ts-ignore
-      module.default.layout = module.default.layout ?? SidebarLayout;
+      module.default.layout = module.default.layout ?? BrandedStackedLayout;
     });
     return page;
   },
