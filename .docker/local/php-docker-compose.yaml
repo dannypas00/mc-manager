@@ -1,0 +1,18 @@
+services:
+  base-php:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    env_file:
+      - ../../.env
+    user: 1000:1000
+    depends_on:
+      - db
+      - redis
+    command:
+      - php
+      - artisan
+      - list
+    volumes:
+      - ./:/var/www
+      - ./tests/output:/opt/phpstorm-coverage

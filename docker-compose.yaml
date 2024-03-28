@@ -1,0 +1,85 @@
+services:
+  db:
+    container_name: ${APP_NAME}-db
+    image: mariadb:latest
+    env_file:
+      - .env
+    ports:
+      - "${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}"
+    volumes:
+      - mysql:/var/lib/mysql/
+    command:
+      - mariadbd
+      - --port=${MARIADB_PORT:-3306}
+
+  redis:
+    container_name: ${APP_NAME}-redis
+    image: redis:latest
+    env_file:
+      - .env
+
+  php:
+    container_name: ${APP_NAME}-php
+    extends:
+      file: .docker/local/php-docker-compose.yaml
+      service: base-php
+    command:
+      - php-fpm
+
+  horizon:
+    container_name: ${APP_NAME}-horizon
+    extends:
+      file: .docker/local/php-docker-compose.yaml
+      service: base-php
+    command:
+      - php
+      - artisan
+      - horizon
+
+  schedule:
+    container_name: ${APP_NAME}-schedule
+    extends:
+      file: .docker/local/php-docker-compose.yaml
+      service: base-php
+    command:
+      - php
+      - artisan
+      - schedule:work
+
+  websockets:
+    container_name: ${APP_NAME}-websockets
+    image: dannypas00/laravel-fpm:8.2
+    extends:
+      file: .docker/local/php-docker-compose.yaml
+      service: base-php
+    command:
+      - php
+      - artisan
+      - websockets:serve
+    ports:
+      - "6001:6001"
+
+  nginx:
+    container_name: ${APP_NAME}-nginx
+    image: nginx:latest
+    env_file:
+      - .env
+    depends_on:
+      - php
+    ports:
+      - "80:80"
+    volumes:
+      - .docker/local/nginx-includes:/etc/nginx/conf.d
+      - ./:/var/www
+
+  mailhog:
+    container_name: ${APP_NAME}-mailhog
+    image: mailhog/mailhog:latest
+    env_file:
+      - .env
+    ports:
+      - "8003:1025"
+      - "8100:8025"
+
+volumes:
+    mysql:
