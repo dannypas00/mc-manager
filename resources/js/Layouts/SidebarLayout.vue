@@ -117,7 +117,7 @@
               <Menu as="div" class="w-100">
                 <MenuButton class="flex w-100 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark">
                   <img class="h-8 w-8 rounded-full bg-brand-dark" :src="user.profile_photo_url" alt=""/>
-                  <span class="sr-only">Your profile</span>
+                  <span class="sr-only" v-t="'components.layout.your_profile'"/>
                   <span aria-hidden="true">{{ user.name }}</span>
                 </MenuButton>
                 <transition
