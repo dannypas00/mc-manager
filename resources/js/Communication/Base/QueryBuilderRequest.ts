@@ -8,7 +8,23 @@ type QueryBuilderData = {
   fields?: string[];
 }
 
-export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends Request<T, D & QueryBuilderData> {
+export type QueryBuilderIndexData<T extends Array<Record<string, any>>> = {
+  data: T,
+  // Don't use links
+  links: Array<any>
+  meta: {
+    current_page: number,
+    last_page: number,
+    from: number,
+    per_page: number,
+    to: number,
+    total: number,
+  }
+};
+
+type QueryBuilderResponseData<T> = T | QueryBuilderIndexData<T>;
+
+export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends Request<T & QueryBuilderResponseData<T>, D & QueryBuilderData> {
   private filter: Record<string, string | number> = {};
   private sort: string[] = [];
   private include: string[] = [];

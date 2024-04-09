@@ -1,4 +1,9 @@
 {
+  "datatable": {
+    "created_at_title": "Aangemaakt",
+    "id_title": "ID",
+    "updated_at_title": "Geüpdatet"
+  },
   "layout": {
     "open_main_menu": "Open hoofdmenu",
     "open_user_menu": "Open gebruiker menu",

@@ -1,4 +1,9 @@
 {
+  "datatable": {
+    "created_at_title": "Created",
+    "id_title": "ID",
+    "updated_at_title": "Updated"
+  },
   "layout": {
     "open_main_menu": "Open main menu",
     "open_user_menu": "Open user menu",

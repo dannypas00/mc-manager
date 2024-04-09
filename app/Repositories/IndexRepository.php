@@ -16,9 +16,9 @@ class IndexRepository
     public function getPaginator(SettingsInterface $settings): LengthAwarePaginator
     {
         return QueryBuilder::for($settings->getModelName())
+            ->allowedFields($settings->getAllowedFields())
             ->allowedIncludes($settings->getAllowedIncludes())
             ->allowedFilters($settings->getAllowedFilters())
-            ->allowedFields($settings->getAllowedFields())
             ->allowedSorts($settings->getAllowedSorts())
             ->paginate(request('per_page'))
             ->appends(request()?->query());

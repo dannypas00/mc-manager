@@ -24,6 +24,7 @@ export abstract class Request<T, D = Record<string, never>> {
       method,
       data: useParams ? [] : this.data,
       params: useParams ? this.data : [],
+      withCredentials: true,
     } as AxiosRequestConfig<D>)
       .catch((response: AxiosResponse<T & {errors?: ValidationError[] }>): AxiosResponse<T> => {
         switch (response.status) {
