@@ -6,8 +6,4 @@ USER 0
 RUN docker-php-ext-enable xdebug
 ADD xdebug.ini /usr/local/etc/php/conf.d/zz_xdebug.ini
 
-# Create phpstorm coverage directory
-RUN mkdir /opt/phpstorm-coverage
-RUN chown 1000:1000 /opt/phpstorm-coverage
-
 USER 1000

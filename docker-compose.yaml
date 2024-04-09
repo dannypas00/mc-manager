@@ -70,7 +70,7 @@ services:
       - "80:80"
     volumes:
       - .docker/local/nginx-includes:/etc/nginx/conf.d
-      - ./:/var/www
+      - ./:/var/www/project
 
   mailhog:
     container_name: ${APP_NAME}-mailhog

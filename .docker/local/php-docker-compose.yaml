@@ -14,5 +14,5 @@ services:
       - artisan
       - list
     volumes:
-      - ../../:/var/www
+      - ../../:/var/www/project
       - ./tests/output:/opt/phpstorm-coverage
