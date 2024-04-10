@@ -10,7 +10,6 @@ type QueryBuilderData = {
 
 export type QueryBuilderIndexData<T extends Array<Record<string, any>>> = {
   data: T,
-  // Don't use links
   links: Array<any>
   meta: {
     current_page: number,

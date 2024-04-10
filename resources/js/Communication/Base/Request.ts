@@ -1,9 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { ValidationError } from './ValidationError';
 
 export abstract class Request<T, D = Record<string, never>> {
   protected data: D = {} as D;
   protected validationErrors: ValidationError[] = [];
+  protected abortController: AbortController = new AbortController();
 
   private setValidationErrors (response: AxiosResponse<T & { errors?: ValidationError[] }>) {
     // TODO: Implement error store
@@ -25,6 +26,7 @@ export abstract class Request<T, D = Record<string, never>> {
       data: useParams ? [] : this.data,
       params: useParams ? this.data : [],
       withCredentials: true,
+      signal: this.abortController.signal
     } as AxiosRequestConfig<D>)
       .catch((response: AxiosResponse<T & {errors?: ValidationError[] }>): AxiosResponse<T> => {
         switch (response.status) {
@@ -37,5 +39,9 @@ export abstract class Request<T, D = Record<string, never>> {
 
         return response;
       });
+  }
+
+  public cancel (reason?: any) {
+    this.abortController.abort(reason);
   }
 }
