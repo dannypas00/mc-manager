@@ -1,6 +1,9 @@
 {
   "datatable": {
     "created_at_title": "Created",
+    "edit_button": {
+      "text": "Edit"
+    },
     "id_title": "ID",
     "updated_at_title": "Updated"
   },
@@ -9,5 +12,9 @@
     "open_user_menu": "Open user menu",
     "view_notifications": "View notifications",
     "your_profile": "Your profile"
+  },
+  "pagination": {
+    "next_button": "Next",
+    "previous_button": "Previous"
   }
 }

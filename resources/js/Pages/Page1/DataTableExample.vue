@@ -1,7 +1,13 @@
 <template>
   <PageHeader :title="$t('pages.page1.title')" :header="$t('pages.page1.title')"/>
 
-  <QueryBuilderTable :request="request" :headers="getTableHeaders()"/>
+  <QueryBuilderTable
+    :request="request"
+    :headers="getTableHeaders()"
+    :bulk-options="getBulkOptions"
+    v-model:selected="selected"
+    selectable
+  />
 </template>
 
 <script lang="ts">
@@ -9,8 +15,15 @@ import { defineComponent } from 'vue';
 import DataTable from '../../Components/DataTable/DataTable.vue';
 import QueryBuilderTable from '../../Components/DataTable/QueryBuilderTable.vue';
 import { UserIndexRequest } from '../../Communication/Users/UserIndexRequest';
-import { CreatedAtHeader, IdHeader, TableHeader, UpdatedAtHeader } from '../../Components/DataTable/DataTableTypes';
+import {
+  BulkOption,
+  CreatedAtHeader,
+  IdHeader,
+  TableHeader,
+  UpdatedAtHeader,
+} from '../../Components/DataTable/DataTableTypes';
 import PageHeader from '../../Components/Layout/PageHeader.vue';
+import { UserData } from '../../Types/generated';
 
 export default defineComponent({
   components: {
@@ -22,6 +35,7 @@ export default defineComponent({
   data () {
     return {
       request: new UserIndexRequest(),
+      selected: [],
     };
   },
 
@@ -40,6 +54,18 @@ export default defineComponent({
         CreatedAtHeader,
         UpdatedAtHeader,
       ];
+    },
+
+    getBulkOptions (): BulkOption<UserData>[] {
+      return [
+        {
+          title: 'Test',
+          onClick: (entries: UserData[]) => {
+            console.log('Clicked bulk!', entries);
+          },
+          unselectAfter: true,
+        },
+      ] as BulkOption<UserData>[];
     },
   },
 

@@ -1,6 +1,9 @@
 {
   "datatable": {
     "created_at_title": "Aangemaakt",
+    "edit_button": {
+      "text": "Bewerk"
+    },
     "id_title": "ID",
     "updated_at_title": "Geüpdatet"
   },
@@ -9,5 +12,9 @@
     "open_user_menu": "Open gebruiker menu",
     "view_notifications": "Bekijk notificaties",
     "your_profile": "Uw profiel"
+  },
+  "pagination": {
+    "next_button": "Volgende",
+    "previous_button": "Vorige"
   }
 }
