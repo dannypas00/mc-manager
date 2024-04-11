@@ -1,5 +1,15 @@
 {
+  "confirmation": {
+    "default_negative_button": "Cancel",
+    "default_positive_button": "Confirm"
+  },
   "datatable": {
+    "bulk_actions": {
+      "confirm_negative_button": "No",
+      "confirm_positive_button": "Yes",
+      "confirm_title": "Confirm bulk action",
+      "default_confirm_text": "Are you sure you want to execute this {action} action on all {count} selected items?"
+    },
     "created_at_title": "Created",
     "edit_button": {
       "text": "Edit"

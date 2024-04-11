@@ -24,6 +24,7 @@ import {
 } from '../../Components/DataTable/DataTableTypes';
 import PageHeader from '../../Components/Layout/PageHeader.vue';
 import { UserData } from '../../Types/generated';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default defineComponent({
   components: {
@@ -60,15 +61,21 @@ export default defineComponent({
       return [
         {
           title: 'Delete',
-          onClick: (entries: UserData[]) => {
-            console.log('Clicked bulk!', entries);
+          onClick: (selected: UserData[]) => {
+            console.log('Clicked bulk delete!', selected);
           },
           unselectAfter: true,
+          icon: {
+            icon: faTrash,
+          },
+          classes: 'bg-red-500 hover:bg-red-700 border-red-400 text-white',
+          confirmation: true,
+          confirmationText: (selected: UserData[]) => this.$t('pages.page1.table.delete_text', selected),
         },
         {
           title: 'Test',
           unselectAfter: false,
-        }
+        },
       ] as BulkOption<UserData>[];
     },
   },

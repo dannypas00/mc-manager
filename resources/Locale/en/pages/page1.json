@@ -1,5 +1,6 @@
 {
   "table": {
+    "delete_text": "Are you sure you want to delete these {n} users?",
     "email_title": "Email",
     "name_title": "Name"
   },

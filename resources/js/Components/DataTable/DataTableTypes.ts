@@ -1,4 +1,7 @@
 import i18n from '../../i18n';
+import { FontawesomeObject } from '@fortawesome/fontawesome-svg-core';
+import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIconProps } from '../Icons/FontAwesomeIconProps';
 
 export type TableHeader = {
   title: string,
@@ -12,6 +15,10 @@ export type BulkOption<T extends Record<string, any>> = {
   title: string,
   onClick: (selected: T[]) => void,
   unselectAfter?: boolean,
+  icon?: FontAwesomeIconProps,
+  classes?: string,
+  confirmation?: true,
+  confirmationText?: ((selected: T[]) => string)|string,
 }
 
 export const IdHeader: TableHeader = {

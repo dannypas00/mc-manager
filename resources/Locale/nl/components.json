@@ -1,5 +1,15 @@
 {
+  "confirmation": {
+    "default_negative_button": "Annuleer",
+    "default_positive_button": "Bevestig"
+  },
   "datatable": {
+    "bulk_actions": {
+      "confirm_negative_button": "Nee",
+      "confirm_positive_button": "Ja",
+      "confirm_title": "Bevestig bulk actie",
+      "default_confirm_text": "Weet je zeker dat je deze {action} actie uit wilt voeren op alle {count} geselecteerde items?"
+    },
     "created_at_title": "Aangemaakt",
     "edit_button": {
       "text": "Bewerk"
