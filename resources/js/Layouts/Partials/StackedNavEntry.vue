@@ -1,7 +1,12 @@
 <template>
   <Link
     :href="$route(item.route)"
-    :class="[isCurrent ? 'bg-brand-dark text-white' : 'text-white hover:bg-brand-hover hover:bg-opacity-75', 'rounded-md px-3 py-2 text-sm font-medium select-none']"
+    :class="[
+      isCurrent
+        ? 'bg-brand-dark text-white'
+        : 'text-white hover:bg-brand-hover hover:bg-opacity-75',
+      'select-none rounded-md px-3 py-2 text-sm font-medium',
+    ]"
     :aria-current="isCurrent ? 'page' : undefined"
   >
     {{ item.name }}
@@ -9,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { NavigationItem } from '../../LayoutConfig';
-import { Link, usePage } from '@inertiajs/vue3';
-import { computed, ComputedRef } from 'vue';
+import { NavigationItem } from "../../LayoutConfig";
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed, ComputedRef } from "vue";
 
 const props = defineProps<{
-  item: NavigationItem,
+  item: NavigationItem;
 }>();
 
 const isCurrent: ComputedRef<boolean> = computed((): boolean => {
@@ -24,5 +29,4 @@ const isCurrent: ComputedRef<boolean> = computed((): boolean => {
   }
   return false;
 });
-
 </script>

@@ -7,26 +7,26 @@
       rowClickable,
       bulkActions,
     }"
-    :data="data.data"
     v-model:selected="selected"
+    :data="data.data"
   />
 
-  <Pagination v-model="currentPage" :last-page="data.meta.last_page"/>
+  <WidePagination v-model="currentPage" :last-page="data.meta.last_page" />
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import DataTable from './DataTable.vue';
-import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
-import { BulkOption, TableHeader } from './DataTableTypes';
-import { computed, ModelRef, onMounted, PropType, Ref, ref, watch } from 'vue';
-import { AxiosResponse } from 'axios';
-import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequest';
-import { useDebounceFn } from '@vueuse/core';
-import Pagination from '../Pagination/Pagination.vue';
+import DataTable from "./DataTable.vue";
+import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
+import { BulkOption, TableHeader } from "./DataTableTypes";
+import { computed, ModelRef, onMounted, PropType, Ref, ref, watch } from "vue";
+import { AxiosResponse } from "axios";
+import { QueryBuilderIndexData } from "../../Communication/Base/QueryBuilderRequest";
+import { useDebounceFn } from "@vueuse/core";
+import WidePagination from "../Pagination/WidePagination.vue";
 
-const emit = defineEmits(['update:selected']);
+const emit = defineEmits(["update:selected"]);
 
-const selectedModel: ModelRef<Array<T>> = defineModel('selected', {
+const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
   type: Array<T>,
   required: false,
   default: undefined,
@@ -34,7 +34,7 @@ const selectedModel: ModelRef<Array<T>> = defineModel('selected', {
 
 const selected = computed({
   get: () => selectedModel.value,
-  set: (value) => emit('update:selected', value),
+  set: (value) => emit("update:selected", value),
 });
 
 const props = defineProps({
@@ -46,7 +46,7 @@ const props = defineProps({
   identifier: {
     type: String,
     required: false,
-    default: 'id',
+    default: "id",
   },
 
   selectable: {
@@ -64,7 +64,7 @@ const props = defineProps({
   bulkActions: {
     type: Array as PropType<BulkOption<T>[]>,
     required: false,
-    default: [],
+    default: () => [],
   },
 
   request: {
@@ -90,8 +90,8 @@ const currentPage: Ref<number> = ref(1);
 
 const requestData = useDebounceFn(getData);
 
-function getData () {
-  console.log('Getting data');
+function getData() {
+  console.log("Getting data");
   // TODO: Request cancelling
   // props.request.cancel('Changing filters during request');
   props.request

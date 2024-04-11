@@ -6,7 +6,9 @@
         class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
         :checked="indeterminate || selected.length === data.length"
         :indeterminate="indeterminate"
-        @change="selected = $event.target.checked ? data.map((p) => p[identifier]) : []"
+        @change="
+          selected = $event.target.checked ? data.map((p) => p[identifier]) : []
+        "
       />
     </th>
 
@@ -20,11 +22,11 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import DataTableHeader from './DataTableHeader.vue';
-import { computed, ComputedRef } from 'vue';
-import { TableHeader } from '../DataTableTypes';
+import DataTableHeader from "./DataTableHeader.vue";
+import { computed, ComputedRef } from "vue";
+import { TableHeader } from "../DataTableTypes";
 
-const selected = defineModel('selected', {
+const selected = defineModel("selected", {
   type: Array<T>,
   required: true,
 });
@@ -52,5 +54,7 @@ const props = defineProps({
   },
 });
 
-const indeterminate: ComputedRef<boolean> = computed(() => selected.value.length > 0 && selected.value.length < props.data.length);
+const indeterminate: ComputedRef<boolean> = computed(
+  () => selected.value.length > 0 && selected.value.length < props.data.length,
+);
 </script>

@@ -1,13 +1,13 @@
-import { QueryBuilderIndexRequest } from '../Base/QueryBuilderIndexRequest';
-import { UserData } from '../../Types/generated';
-import { Method } from 'axios';
+import { QueryBuilderIndexRequest } from "../Base/QueryBuilderIndexRequest";
+import { UserData } from "../../Types/generated";
+import { Method } from "axios";
 
 export class UserIndexRequest extends QueryBuilderIndexRequest<UserData> {
-  protected getEndPoint (): string {
-    return route('web.api.users.index');
+  protected getEndPoint(): string {
+    return route("web.api.users.index");
   }
 
-  protected getMethod (): Method {
-    return 'GET';
+  protected getMethod(): Method {
+    return "GET";
   }
 }

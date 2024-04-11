@@ -1,11 +1,16 @@
 <template>
   <button
     type="button"
-    class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
-    :class="action.classes"
+    :class="[
+      'inline-flex items-center',
+      'rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900',
+      'shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50',
+      'disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white',
+      action.classes,
+    ]"
     @click="onActionClick"
   >
-    <FontAwesomeIcon class="mr-1" v-if="action.icon" v-bind="action.icon"/>
+    <FontAwesomeIcon v-if="action.icon" class="mr-1" v-bind="action.icon" />
     {{ action.title }}
   </button>
 
@@ -13,21 +18,25 @@
     v-model:open="confirmationOpen"
     :title="$t('components.datatable.bulk_actions.confirm_title')"
     :message="confirmationText"
-    :positive-button-text="$t('components.datatable.bulk_actions.confirm_positive_button')"
-    :negative-button-text="$t('components.datatable.bulk_actions.confirm_negative_button')"
+    :positive-button-text="
+      $t('components.datatable.bulk_actions.confirm_positive_button')
+    "
+    :negative-button-text="
+      $t('components.datatable.bulk_actions.confirm_negative_button')
+    "
     @positive="onActionConfirm"
   />
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, PropType, ref } from 'vue';
-import { BulkOption } from '../DataTableTypes';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import ConfirmationDialog from '../../Dialogs/ConfirmationDialog.vue';
-import _ from 'lodash';
-import I18n from '../../../i18n';
+import { computed, PropType, ref } from "vue";
+import { BulkOption } from "../DataTableTypes";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ConfirmationDialog from "../../Dialogs/ConfirmationDialog.vue";
+import _ from "lodash";
+import I18n from "../../../i18n";
 
-const selected = defineModel('selected', {
+const selected = defineModel("selected", {
   type: Array<T>,
   required: true,
 });
@@ -41,7 +50,7 @@ const props = defineProps({
 
 const confirmationOpen = ref(false);
 
-function onActionClick () {
+function onActionClick() {
   if (props.action?.confirmation) {
     confirmationOpen.value = true;
     return;
@@ -49,7 +58,7 @@ function onActionClick () {
   onActionConfirm();
 }
 
-function onActionConfirm () {
+function onActionConfirm() {
   if (props.action?.unselectAfter) {
     selected.value = [];
   }
@@ -67,8 +76,8 @@ const confirmationText = computed(() => {
     return props.action?.confirmationText;
   }
   return I18n.global.t(
-    'components.datatable.bulk_actions.default_confirm_text',
-    { count: selected.length, action: props.action.title },
+    "components.datatable.bulk_actions.default_confirm_text",
+    { count: selected.value.length, action: props.action.title },
   );
 });
 </script>

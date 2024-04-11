@@ -9,8 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
-import { TableHeader } from '../DataTableTypes';
+import { PropType } from "vue";
+import { TableHeader } from "../DataTableTypes";
 
 defineProps({
   header: {

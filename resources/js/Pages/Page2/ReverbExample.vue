@@ -1,13 +1,18 @@
 <template>
+  <PageHeader
+    :title="$t('pages.page2.title')"
+    :header="$t('pages.page2.title')"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
+import PageHeader from "../../Components/Layout/PageHeader.vue";
 
 export default defineComponent({
-  components: {},
+  components: { PageHeader },
 
-  data () {
+  data() {
     return {};
   },
 

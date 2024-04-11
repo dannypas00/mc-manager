@@ -1,53 +1,53 @@
 <template>
-  <PageHeader :title="$t('pages.page1.title')" :header="$t('pages.page1.title')" :buttons="getHeaderButtons()"/>
+  <PageHeader
+    :title="$t('pages.page1.title')"
+    :header="$t('pages.page1.title')"
+    :buttons="getHeaderButtons()"
+  />
 
   <QueryBuilderTable
+    v-model:selected="selected"
     :request="request"
     :headers="getTableHeaders()"
     :bulk-actions="getBulkOptions()"
-    v-model:selected="selected"
     selectable
   />
 
-  <Modal
+  <ModalDialog
     v-model:open="createModalOpen"
     positive="Create"
     negative="Cancel"
     title="Create new user"
   >
-    <template #content>
-      Hi!
-    </template>
-  </Modal>
+    <template #content> Hi! </template>
+  </ModalDialog>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import DataTable from '../../Components/DataTable/DataTable.vue';
-import QueryBuilderTable from '../../Components/DataTable/QueryBuilderTable.vue';
-import { UserIndexRequest } from '../../Communication/Users/UserIndexRequest';
+import { defineComponent } from "vue";
+import QueryBuilderTable from "../../Components/DataTable/QueryBuilderTable.vue";
+import { UserIndexRequest } from "../../Communication/Users/UserIndexRequest";
 import {
   BulkOption,
   CreatedAtHeader,
   IdHeader,
   TableHeader,
   UpdatedAtHeader,
-} from '../../Components/DataTable/DataTableTypes';
-import PageHeader from '../../Components/Layout/PageHeader.vue';
-import { UserData } from '../../Types/generated';
-import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../../Components/Dialogs/Modal.vue';
-import { PageHeaderButton } from '../../Components/Layout/PageHeaderButton';
+} from "../../Components/DataTable/DataTableTypes";
+import PageHeader from "../../Components/Layout/PageHeader.vue";
+import { UserData } from "../../Types/generated";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { PageHeaderButton } from "../../Components/Layout/PageHeaderButton";
+import ModalDialog from '../../Components/Dialogs/ModalDialog.vue';
 
 export default defineComponent({
   components: {
-    Modal,
+    ModalDialog,
     QueryBuilderTable,
-    DataTable,
     PageHeader,
   },
 
-  data () {
+  data() {
     return {
       request: new UserIndexRequest(),
       selected: [],
@@ -56,59 +56,61 @@ export default defineComponent({
   },
 
   methods: {
-    getTableHeaders (): TableHeader[] {
+    getTableHeaders(): TableHeader[] {
       return [
         IdHeader,
         {
-          key: 'name',
-          title: this.$t('pages.page1.table.name_title'),
+          key: "name",
+          title: this.$t("pages.page1.table.name_title"),
         },
         {
-          key: 'email',
-          title: this.$t('pages.page1.table.email_title'),
+          key: "email",
+          title: this.$t("pages.page1.table.email_title"),
         },
         CreatedAtHeader,
         UpdatedAtHeader,
       ];
     },
 
-    getBulkOptions (): BulkOption<UserData>[] {
+    getBulkOptions(): BulkOption<UserData>[] {
       return [
         {
-          title: 'Delete',
+          title: "Delete",
           onClick: (selected: UserData[]) => {
-            console.log('Clicked bulk delete!', selected);
+            console.log("Clicked bulk delete!", selected);
           },
           unselectAfter: true,
           icon: {
             icon: faTrash,
           },
-          classes: 'bg-red-500 hover:bg-red-700 border-red-400 text-white',
+          classes: "bg-red-500 hover:bg-red-700 border-red-400 text-white",
           confirmation: true,
-          confirmationText: (selected: UserData[]) => this.$t('pages.page1.table.delete_text', selected),
+          confirmationText: (selected: UserData[]) =>
+            this.$t("pages.page1.table.delete_text", selected),
         },
         {
-          title: 'Test',
+          title: "Test",
           unselectAfter: false,
         },
       ] as BulkOption<UserData>[];
     },
 
-  getHeaderButtons (): PageHeaderButton[] {
+    getHeaderButtons(): PageHeaderButton[] {
       return [
         {
-          text: this.$t('pages.page1.header.new_button'),
+          text: this.$t("pages.page1.header.new_button"),
           icon: {
             icon: faPlus,
           },
-          additionalClasses: 'text-white bg-green-400 hover:bg-green-600 active:ring-green-600',
+          additionalClasses:
+            "text-white bg-green-400 hover:bg-green-600 active:ring-green-600",
           onClick: () => {
             this.createModalOpen = true;
           },
         },
         {
-          text: 'Test',
-          href: route('page2')
+          text: "Test",
+          href: route("page2"),
         },
       ];
     },

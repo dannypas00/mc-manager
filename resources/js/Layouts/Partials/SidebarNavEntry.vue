@@ -2,11 +2,19 @@
   <li class="select-none">
     <Link
       :href="$route(item.route)"
-      :class="[isCurrent ? 'bg-brand text-white' : 'text-brand-light hover:text-white hover:bg-brand', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']"
+      :class="[
+        isCurrent
+          ? 'bg-brand text-white'
+          : 'text-brand-light hover:bg-brand hover:text-white',
+        'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
+      ]"
     >
       <component
         :is="item.icon"
-        :class="[isCurrent ? 'text-white' : 'text-brand-light group-hover:text-white', 'h-6 w-6 shrink-0']"
+        :class="[
+          isCurrent ? 'text-white' : 'text-brand-light group-hover:text-white',
+          'h-6 w-6 shrink-0',
+        ]"
         aria-hidden="true"
       />
       {{ item.name }}
@@ -15,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { NavigationItem } from '../../LayoutConfig';
-import { Link, usePage } from '@inertiajs/vue3';
-import { computed, ComputedRef } from 'vue';
+import { NavigationItem } from "../../LayoutConfig";
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed, ComputedRef } from "vue";
 
 const props = defineProps<{
-  item: NavigationItem,
+  item: NavigationItem;
 }>();
 
 const isCurrent: ComputedRef<boolean> = computed((): boolean => {
@@ -30,5 +38,4 @@ const isCurrent: ComputedRef<boolean> = computed((): boolean => {
   }
   return false;
 });
-
 </script>

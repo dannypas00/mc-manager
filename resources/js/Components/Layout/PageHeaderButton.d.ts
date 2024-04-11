@@ -1,10 +1,10 @@
-import { FontAwesomeIconProps } from '../Icons/FontAwesomeIconProps';
+import { FontAwesomeIconProps } from "../Icons/FontAwesomeIconProps";
 
 export interface PageHeaderButton {
   text: string;
   onClick: () => void;
   additionalClasses?: string;
   disabled?: boolean;
-  icon?: FontAwesomeIconProps,
+  icon?: FontAwesomeIconProps;
   href?: string;
 }

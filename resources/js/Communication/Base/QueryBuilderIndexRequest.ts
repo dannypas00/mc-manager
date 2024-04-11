@@ -1,4 +1,4 @@
-import { Request } from './Request';
+import { Request } from "./Request";
 
 type QueryBuilderData = {
   filter?: Record<string, string | number>;
@@ -7,25 +7,28 @@ type QueryBuilderData = {
   include?: string[];
   sort?: string[];
   fields?: string[];
-}
+};
 
 type QueryBuilderIndexResponse<T> = {
   data: T[];
   total: number;
-}
+};
 
-export abstract class QueryBuilderIndexRequest<T, D = Record<string, never>> extends Request<QueryBuilderIndexResponse<T>, D & QueryBuilderData> {
+export abstract class QueryBuilderIndexRequest<
+  T,
+  D = Record<string, never>,
+> extends Request<QueryBuilderIndexResponse<T>, D & QueryBuilderData> {
   private page = 1;
   private perPage = 25;
 
   // Pagination:
-  public setPage (page: number): this {
+  public setPage(page: number): this {
     this.page = page;
     this.data.page = this.page;
     return this;
   }
 
-  public setPerPage (perPage: number): this {
+  public setPerPage(perPage: number): this {
     this.perPage = perPage;
     this.data.per_page = this.perPage;
     return this;

@@ -1,11 +1,13 @@
 <template>
-  <Link
-    :href="$route(item.route)"
-    as="a"
-  >
+  <Link :href="$route(item.route)" as="a">
     <DisclosureButton
       as="a"
-      :class="[isCurrent ? 'bg-brand-dark text-white' : 'text-white hover:bg-brand-hover hover:bg-opacity-75', 'block rounded-md px-3 py-2 text-base font-medium cursor-pointer select-none']"
+      :class="[
+        isCurrent
+          ? 'bg-brand-dark text-white'
+          : 'text-white hover:bg-brand-hover hover:bg-opacity-75',
+        'block cursor-pointer select-none rounded-md px-3 py-2 text-base font-medium',
+      ]"
       :aria-current="isCurrent ? 'page' : undefined"
       @click="$emit('select')"
     >
@@ -15,13 +17,15 @@
 </template>
 
 <script setup lang="ts">
-import { NavigationItem } from '../../LayoutConfig';
-import { Link, usePage } from '@inertiajs/vue3';
-import { computed, ComputedRef } from 'vue';
-import { DisclosureButton } from '@headlessui/vue';
+import { NavigationItem } from "../../LayoutConfig";
+import { Link, usePage } from "@inertiajs/vue3";
+import { computed, ComputedRef } from "vue";
+import { DisclosureButton } from "@headlessui/vue";
+
+defineEmits(["select"]);
 
 const props = defineProps<{
-  item: NavigationItem,
+  item: NavigationItem;
 }>();
 
 const isCurrent: ComputedRef<boolean> = computed((): boolean => {
@@ -31,5 +35,4 @@ const isCurrent: ComputedRef<boolean> = computed((): boolean => {
   }
   return false;
 });
-
 </script>

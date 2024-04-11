@@ -1,12 +1,12 @@
-import axios from 'axios';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
+import axios from "axios";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
 
 declare global {
   interface Window {
-    axios: typeof axios,
-    Pusher: typeof Pusher,
-    Echo: Echo,
+    axios: typeof axios;
+    Pusher: typeof Pusher;
+    Echo: Echo;
   }
 }
 
@@ -17,7 +17,7 @@ declare global {
  */
 window.axios = axios;
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 // window.Pusher = Pusher;
 //
