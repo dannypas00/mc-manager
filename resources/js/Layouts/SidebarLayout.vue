@@ -146,15 +146,17 @@
       </div>
     </div>
 
-    <div class="py-4">
-    <PortalTarget name="layout-header"/>
-    </div>
-
-    <main class="pb-4 lg:pl-72">
-      <div class="px-4 sm:px-6 lg:px-8">
-        <slot/>
+    <div class="pb-4 lg:pl-72">
+      <div class="py-4">
+        <PortalTarget name="layout-header"/>
       </div>
-    </main>
+
+      <main>
+        <div class="px-4 sm:px-6 lg:px-8">
+          <slot/>
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -170,7 +172,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue';
-import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import { appLogo, appName, layoutNavigationItems, userNavigationItems } from '../LayoutConfig';
 import { Link, usePage } from '@inertiajs/vue3';
 import { UserData } from '../Types/generated';
