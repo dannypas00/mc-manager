@@ -8,54 +8,62 @@
     </div>
   </div>
 
-  <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+  <div
+  class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8"
+  :class="{ 'pt-8': bulkActions.length > 0 }"
+  >
     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
       <div class="relative">
         <div
           v-if="selected.length > 0"
-          class="absolute left-14 top-0 flex h-12 items-center space-x-3 sm:left-12"
+          class="absolute left-3 -top-9 flex h-12 items-center space-x-3"
         >
-          <TableBulkAction v-for="action in bulkActions"/>
+          <TableBulkAction
+            v-for="action in bulkActions"
+            :key="action.title"
+            v-model:selected="selected"
+            :action="action"
+          />
         </div>
         <table class="min-w-full table-fixed divide-y divide-gray-300">
           <thead>
-          <TableHead
-            v-bind="{
-                  headers,
-                  identifier,
-                  data,
-                  selectable,
-                }"
-            v-model:selected="selected"
-          />
+            <TableHead
+              v-bind="{
+                headers,
+                identifier,
+                data,
+                selectable,
+              }"
+              v-model:selected="selected"
+            />
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
-          <tr
-            v-for="entry in data"
-            :key="entry.email"
-            :class="[selected.includes(entry[identifier]) && 'bg-gray-50']"
-          >
-            <td class="relative px-7 sm:w-12 sm:px-6">
-              <div
-                v-if="selected.includes(entry.email)"
-                class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"
-              ></div>
-              <input
-                type="checkbox"
-                class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                :value="entry[identifier]"
-                v-model="selected"
+            <tr
+              v-for="entry in data"
+              :key="entry.email"
+              :class="[selected.includes(entry[identifier]) && 'bg-gray-50']"
+            >
+              <td class="relative px-7 sm:w-12 sm:px-6">
+                <div
+                  v-if="selected.includes(entry.email)"
+                  class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"
+                ></div>
+                <input
+                  type="checkbox"
+                  class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  :value="entry[identifier]"
+                  v-model="selected"
+                />
+              </td>
+              <DataTableCell
+                v-for="header in headers"
+                :key="header.key"
+                :header="header"
+                :entry="entry"
+                :selected="selected?.includes(entry[identifier])"
               />
-            </td>
-            <DataTableCell
-              v-for="header in headers"
-              :key="header.key"
-              :header="header"
-              :entry="entry"
-              :selected="selected?.includes(entry[identifier])"
-            />
-            <EditButton/>
-          </tr>
+              <EditButton/>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -64,7 +72,7 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { ref, computed, PropType, ModelRef } from 'vue';
+import { computed, ModelRef, PropType } from 'vue';
 import { BulkOption, TableHeader } from './DataTableTypes';
 import DataTableCell from './Partials/DataTableCell.vue';
 import EditButton from './Partials/EditButton.vue';

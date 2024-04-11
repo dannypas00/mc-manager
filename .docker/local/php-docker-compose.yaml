@@ -13,4 +13,5 @@ services:
       - list
     volumes:
       - ../../:/var/www/project
+      - ~/.config:/var/www/.config
       - ./tests/output:/opt/phpstorm-coverage

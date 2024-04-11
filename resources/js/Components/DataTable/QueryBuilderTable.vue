@@ -1,12 +1,12 @@
 <template>
   <DataTable
     v-bind="{
-        headers,
-        identifier,
-        selectable,
-        rowClickable,
-        bulkOptions,
-      }"
+      headers,
+      identifier,
+      selectable,
+      rowClickable,
+      bulkActions,
+    }"
     :data="data.data"
     v-model:selected="selected"
   />
@@ -61,7 +61,7 @@ const props = defineProps({
     default: false,
   },
 
-  bulkOptions: {
+  bulkActions: {
     type: Array as PropType<BulkOption<T>[]>,
     required: false,
     default: [],

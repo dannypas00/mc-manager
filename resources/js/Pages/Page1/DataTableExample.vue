@@ -4,7 +4,7 @@
   <QueryBuilderTable
     :request="request"
     :headers="getTableHeaders()"
-    :bulk-options="getBulkOptions"
+    :bulk-actions="getBulkOptions()"
     v-model:selected="selected"
     selectable
   />
@@ -59,12 +59,16 @@ export default defineComponent({
     getBulkOptions (): BulkOption<UserData>[] {
       return [
         {
-          title: 'Test',
+          title: 'Delete',
           onClick: (entries: UserData[]) => {
             console.log('Clicked bulk!', entries);
           },
           unselectAfter: true,
         },
+        {
+          title: 'Test',
+          unselectAfter: false,
+        }
       ] as BulkOption<UserData>[];
     },
   },
