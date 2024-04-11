@@ -12,6 +12,7 @@ use Spatie\LaravelData\Data;
 class UserData extends Data
 {
     public function __construct(
+        public int $id,
         public string $name,
         public string $email,
         public string $profile_photo_url,
@@ -22,6 +23,7 @@ class UserData extends Data
     public static function fromModel(User $model): UserData
     {
         return new self(
+            $model->id,
             $model->name,
             $model->email,
             $model->profile_photo_url,

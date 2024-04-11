@@ -146,19 +146,11 @@
       </div>
     </div>
 
-    <div class="sticky top-0 z-40 flex items-center gap-x-6 bg-brand-hover px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-      <button type="button" class="-m-2.5 p-2.5 text-brand-light lg:hidden" @click="sidebarOpen = true">
-        <span class="sr-only">Open sidebar</span>
-        <Bars3Icon class="h-6 w-6" aria-hidden="true"/>
-      </button>
-      <div class="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
-      <a href="#">
-        <span class="sr-only">{{ user.name }}</span>
-        <img class="h-8 w-8 rounded-full bg-brand-dark" :src="user.profile_photo_url" alt=""/>
-      </a>
+    <div class="py-4">
+    <PortalTarget name="layout-header"/>
     </div>
 
-    <main class="py-10 lg:pl-72">
+    <main class="pb-4 lg:pl-72">
       <div class="px-4 sm:px-6 lg:px-8">
         <slot/>
       </div>
@@ -183,6 +175,7 @@ import { appLogo, appName, layoutNavigationItems, userNavigationItems } from '..
 import { Link, usePage } from '@inertiajs/vue3';
 import { UserData } from '../Types/generated';
 import SidebarNavEntry from './Partials/SidebarNavEntry.vue';
+import { PortalTarget } from 'portal-vue';
 
 const navigation = layoutNavigationItems;
 const userNavigation = userNavigationItems;

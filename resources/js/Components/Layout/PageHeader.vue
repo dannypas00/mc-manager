@@ -1,6 +1,6 @@
 <template>
   <Portal to="layout-header">
-    <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl">
       <h1 class="text-lg font-semibold leading-6 text-gray-900">{{ header }}</h1>
     </div>
   </Portal>

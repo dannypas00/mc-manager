@@ -1,27 +1,24 @@
 <template>
-  <div class="px-4 sm:px-6 lg:px-8">
-    <DataTable
-      v-bind="{
+  <DataTable
+    v-bind="{
         headers,
         identifier,
         selectable,
         rowClickable,
         bulkOptions,
       }"
-      :data="data.data"
-      v-model:selected="selected"
-    />
+    :data="data.data"
+    v-model:selected="selected"
+  />
 
-    <Pagination v-model="currentPage" :last-page="data.meta.last_page"/>
-  </div>
+  <Pagination v-model="currentPage" :last-page="data.meta.last_page"/>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { PropType } from 'vue/dist/vue';
 import DataTable from './DataTable.vue';
 import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
 import { BulkOption, TableHeader } from './DataTableTypes';
-import { computed, ModelRef, onMounted, Ref, ref, watch } from 'vue';
+import { computed, ModelRef, onMounted, PropType, Ref, ref, watch } from 'vue';
 import { AxiosResponse } from 'axios';
 import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequest';
 import { useDebounceFn } from '@vueuse/core';
