@@ -19,10 +19,7 @@
     selectable
   />
 
-  <ModalDialog
-    v-model:open="createModalOpen"
-    title="Create new user"
-  >
+  <ModalDialog v-model:open="createModalOpen" title="Create new user">
     <template #content>
       <UserCreateForm @submit="onUserCreate" />
     </template>
@@ -44,7 +41,6 @@ import PageHeader from "../../Components/Layout/PageHeader.vue";
 import { UserData } from "../../Types/generated";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModalDialog from "../../Components/Dialogs/ModalDialog.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import IconButton from "../../Components/Buttons/IconButton.vue";
 import UserCreateForm from "./Partials/UserCreateForm.vue";
 
@@ -52,7 +48,6 @@ export default defineComponent({
   components: {
     UserCreateForm,
     IconButton,
-    FontAwesomeIcon,
     ModalDialog,
     QueryBuilderTable,
     PageHeader,
@@ -126,7 +121,7 @@ export default defineComponent({
       ];
     },
 
-    onUserCreate(user: UserData) {
+    onUserCreate() {
       this.createModalOpen = false;
     },
   },
