@@ -7,5 +7,11 @@
     "email_title": "E-Mail",
     "name_title": "Naam"
   },
-  "title": "DataTable voorbeeld"
+  "title": "DataTable voorbeeld",
+  "user_form": {
+    "email": "E-Mail",
+    "name": "Gebruiker naam",
+    "password": "Wachtwoord",
+    "submit": "Maak gebruiker"
+  }
 }

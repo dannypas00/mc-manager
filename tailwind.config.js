@@ -12,6 +12,10 @@ export default {
         './resources/js/**/*.vue',
     ],
 
+    safelist: [
+        'bg-green-400',
+    ],
+
     theme: {
         extend: {
             fontFamily: {

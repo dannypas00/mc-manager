@@ -2,8 +2,14 @@
   <PageHeader
     :title="$t('pages.page1.title')"
     :header="$t('pages.page1.title')"
-    :buttons="getHeaderButtons()"
-  />
+  >
+    <IconButton
+      :text="$t('pages.page1.header.new_button')"
+      :icon="{ icon: 'fas fa-plus' }"
+      class="bg-green-600 text-white hover:bg-green-500 focus-visible:outline-green-600"
+      @click="createModalOpen = true"
+    />
+  </PageHeader>
 
   <QueryBuilderTable
     v-model:selected="selected"
@@ -15,11 +21,11 @@
 
   <ModalDialog
     v-model:open="createModalOpen"
-    positive="Create"
-    negative="Cancel"
     title="Create new user"
   >
-    <template #content> Hi! </template>
+    <template #content>
+      <UserCreateForm @submit="onUserCreate" />
+    </template>
   </ModalDialog>
 </template>
 
@@ -37,11 +43,16 @@ import {
 import PageHeader from "../../Components/Layout/PageHeader.vue";
 import { UserData } from "../../Types/generated";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { PageHeaderButton } from "../../Components/Layout/PageHeaderButton";
-import ModalDialog from '../../Components/Dialogs/ModalDialog.vue';
+import ModalDialog from "../../Components/Dialogs/ModalDialog.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import IconButton from "../../Components/Buttons/IconButton.vue";
+import UserCreateForm from "./Partials/UserCreateForm.vue";
 
 export default defineComponent({
   components: {
+    UserCreateForm,
+    IconButton,
+    FontAwesomeIcon,
     ModalDialog,
     QueryBuilderTable,
     PageHeader,
@@ -110,9 +121,13 @@ export default defineComponent({
         },
         {
           text: "Test",
-          href: route("page2"),
+          href: route("page2") as string,
         },
       ];
+    },
+
+    onUserCreate(user: UserData) {
+      this.createModalOpen = false;
     },
   },
 
