@@ -1,12 +1,40 @@
 import i18n from "../../i18n";
 import { FontAwesomeIconProps } from "../Icons/FontAwesomeIconProps";
+import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
 
-export type TableHeader = {
+type BaseFilterOption = {
+  // Name of the filter to set on request
+  filter: string;
+}
+
+export type SearchFilterOption = BaseFilterOption & {
+  // Placeholder for input box
+  placeholder?: string;
+};
+
+export type SelectFilterOption<T extends Record<string, never>> = BaseFilterOption & {
+  options?: T[],
+  label?: (option: T) => string,
+  value?: (option: T) => string,
+}
+
+export type RemoteSelectFilterOptions<T extends Record<string, never>> = {
+  request: QueryBuilderIndexRequest<T>,
+}
+
+export type DateFilterOption<T extends Record<string, never>> = {
+  transformDate?: (date: Date, entry: T) => Date|string|number
+}
+
+export type FilterOption<T extends Record<string, never> = Record<string, never>> = boolean | SearchFilterOption | SelectFilterOption<T> | RemoteSelectFilterOptions<T> | DateFilterOption;
+
+export type TableHeader<T extends Record<string, never>> = {
   title: string;
   key: string;
   width?: number;
   bodySlot?: string;
   headerSlot?: string;
+  filter?: FilterOption<T>;
 };
 
 export type BulkOption<T extends Record<string, unknown>> = {
