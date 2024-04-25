@@ -105,4 +105,7 @@ function getData() {
 watch(currentPage, requestData);
 
 onMounted(getData);
+
+// Explicitly expose the getData function so that parent components can refresh the data
+defineExpose({ getData });
 </script>

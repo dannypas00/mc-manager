@@ -12,6 +12,7 @@
   </PageHeader>
 
   <QueryBuilderTable
+    ref="table"
     v-model:selected="selected"
     :request="request"
     :headers="getTableHeaders()"
@@ -21,7 +22,7 @@
 
   <ModalDialog v-model:open="createModalOpen" title="Create new user">
     <template #content>
-      <UserCreateForm @submit="onUserCreate" />
+      <UserCreateForm @submit="onUserSubmit" />
     </template>
   </ModalDialog>
 </template>
@@ -43,6 +44,10 @@ import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModalDialog from "../../Components/Dialogs/ModalDialog.vue";
 import IconButton from "../../Components/Buttons/IconButton.vue";
 import UserCreateForm from "./Partials/UserCreateForm.vue";
+import {
+  UserCreateData,
+  UserCreateRequest,
+} from "../../Communication/Users/UserCreateRequest";
 
 export default defineComponent({
   components: {
@@ -56,6 +61,7 @@ export default defineComponent({
   data() {
     return {
       request: new UserIndexRequest(),
+      userCreateRequest: new UserCreateRequest(),
       selected: [],
       createModalOpen: true,
     };
@@ -101,28 +107,10 @@ export default defineComponent({
       ] as BulkOption<UserData>[];
     },
 
-    getHeaderButtons(): PageHeaderButton[] {
-      return [
-        {
-          text: this.$t("pages.page1.header.new_button"),
-          icon: {
-            icon: faPlus,
-          },
-          additionalClasses:
-            "text-white bg-green-400 hover:bg-green-600 active:ring-green-600",
-          onClick: () => {
-            this.createModalOpen = true;
-          },
-        },
-        {
-          text: "Test",
-          href: route("page2") as string,
-        },
-      ];
-    },
-
-    onUserCreate() {
+    onUserSubmit(data: UserCreateData) {
       this.createModalOpen = false;
+      this.userCreateRequest.setData(data).getResponse();
+      this.$refs.table.getData();
     },
   },
 

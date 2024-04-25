@@ -44,24 +44,6 @@
 
         <div class="col-span-6">
           <label
-            v-t="'pages.page1.user_form.password_confirmation'"
-            for="password_confirmation"
-            class="block text-sm font-medium leading-6 text-gray-900"
-          />
-          <div class="mt-2">
-            <input
-              v-model="form.password"
-              type="password"
-              name="password_confirmation"
-              id="password_confirmation"
-              autocomplete="none"
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-
-        <div class="col-span-6">
-          <label
             v-t="'pages.page1.user_form.password'"
             for="password"
             class="block text-sm font-medium leading-6 text-gray-900"
@@ -73,6 +55,24 @@
               name="password"
               id="password"
               autocomplete="password"
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-6">
+          <label
+            v-t="'pages.page1.user_form.password_confirmation'"
+            for="password_confirmation"
+            class="block text-sm font-medium leading-6 text-gray-900"
+          />
+          <div class="mt-2">
+            <input
+              v-model="form.password_confirmation"
+              type="password"
+              name="password_confirmation"
+              id="password_confirmation"
+              autocomplete="none"
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
             <span
@@ -98,7 +98,7 @@
         v-t="'general.cancel'"
         type="button"
         class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-        @click="emit('cancel')"
+        @click="() => emit('cancel')"
       />
     </div>
   </form>
@@ -106,6 +106,7 @@
 
 <script setup lang="ts">
 import { useForm } from "@inertiajs/vue3";
+import { UserCreateData, UserCreateRequest } from '../../../Communication/Users/UserCreateRequest';
 
 const emit = defineEmits(["submit", "cancel"]);
 
@@ -113,12 +114,11 @@ const form = useForm({
   name: "",
   email: "",
   password: "",
+  password_confirmation: "",
   terms: true,
-});
+} as UserCreateData);
 
 function onSubmit() {
-  form.post(route("web.api.users.create") as string, {
-    onSuccess: () => emit("submit", form.data()),
-  });
+  emit("submit", form.data());
 }
 </script>

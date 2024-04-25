@@ -12,6 +12,7 @@
     "email": "E-Mail",
     "name": "Gebruiker naam",
     "password": "Wachtwoord",
+    "password_confirmation": "Bevestig wachtwoord",
     "submit": "Maak gebruiker"
   }
 }
