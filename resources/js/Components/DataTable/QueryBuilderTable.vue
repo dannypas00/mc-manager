@@ -91,7 +91,6 @@ const currentPage: Ref<number> = ref(1);
 const requestData = useDebounceFn(getData);
 
 function getData() {
-  console.log("Getting data");
   // TODO: Request cancelling
   // props.request.cancel('Changing filters during request');
   props.request
