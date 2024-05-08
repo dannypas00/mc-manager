@@ -46,7 +46,7 @@
         >
           <Link
             class="cursor-pointer hover:underline active:text-indigo-400"
-            :href="$route('servers.files', { id: store.model.id, path: entry.path })"
+            :href="$route('servers.files', { id: store.model.id, path: current + '/' + entry.path })"
           >
             {{ entry.path + (entry.type === 'dir' ? '/' : '') }}
           </Link>
@@ -93,6 +93,12 @@ export default defineComponent({
     isRoot: {
       type: Boolean,
       required: true,
+    },
+
+    current: {
+      type: String,
+      required: false,
+      default: '/',
     },
   },
 

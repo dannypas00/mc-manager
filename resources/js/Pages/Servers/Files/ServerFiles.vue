@@ -14,16 +14,11 @@
           <template v-for="(directory, index) in splitPath" :key="index">
             /
             <Link
-              v-if="!openedFile"
               class="cursor-pointer hover:underline active:text-indigo-400"
               :href="$route('servers.files', {id: serverStore.model.id, path: take(splitPath, index + 1).join('/') })"
             >
               {{ directory }}
             </Link>
-
-            <span v-else>
-              {{ directory }}
-            </span>
           </template>
         </h1>
       </div>
@@ -91,6 +86,7 @@
                 v-model:selected-files="selectedFiles"
                 :entries="directories"
                 :is-root="['', '/'].includes(path)"
+                :current="path"
                 @go-up="goUp"
               />
             </template>
