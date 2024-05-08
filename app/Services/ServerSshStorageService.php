@@ -96,16 +96,18 @@ class ServerSshStorageService implements ServerStorageServiceInterface
             return ['file' => $path];
         }
 
-        $du = collect(explode(PHP_EOL, $this->executeSsh($server, "du --max-depth=1 $path")->getOutput()));
+        $du = collect(explode(PHP_EOL, $this->executeSsh($server, "du --max-depth=1 $path")->output()));
         try {
-            $mimes = collect(explode(PHP_EOL, $this->executeSsh($server, "file --mime-type $path/*")->getOutput()));
+            $mimes = collect(explode(PHP_EOL, $this->executeSsh($server, "file --mime-type $path/*")->output()));
         } catch (SshException $e) {
             // When file can't be executed (because it is not a GNU command and so not present on all systems), we stop trying to understand the mimetype
             // Instead we tell the user that every file is an application/octet-stream, because "The "octet-stream" subtype is used to indicate that a body contains arbitrary binary data."
             $mimes = collect();
         }
 
-        $dirs = $ls->filter(static fn (string $line) => $line[0] === 'd' || $line[0] === '-')
+        $dirs = $ls
+            ->filter()
+            ->filter(static fn (string $line) => str_split($line)[0] === 'd' || str_split($line)[0] === '-')
             ->map(fn (string $line) => $this->mapLsToStorageAttributes($server, $line, $du, $mimes))
             ->toArray();
 
@@ -115,7 +117,7 @@ class ServerSshStorageService implements ServerStorageServiceInterface
     private function mapLsToStorageAttributes(Server $server, string $line, Collection $du, Collection $mimes): StorageAttributes
     {
         $line = preg_replace('/\s+/', ' ', $line);
-        $type = $line[0] === 'd' ? StorageAttributes::TYPE_DIRECTORY : StorageAttributes::TYPE_FILE;
+        $type = str_split($line)[0] === 'd' ? StorageAttributes::TYPE_DIRECTORY : StorageAttributes::TYPE_FILE;
         [, , $user, $group, $size, $date, $time, $permissions, $name] = explode(' ', $line);
 
         if ($type === StorageAttributes::TYPE_DIRECTORY) {
