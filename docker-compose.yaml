@@ -48,6 +48,7 @@ services:
   horizon:
     container_name: mcm-horizon
     image: dannypas00/laravel-fpm:8.2
+    user: 1000:1000
     depends_on:
       - db
       - redis
@@ -61,6 +62,7 @@ services:
   schedule:
     container_name: mcm-schedule
     image: dannypas00/laravel-fpm:8.2
+    user: 1000:1000
     depends_on:
       - db
       - redis
@@ -74,6 +76,7 @@ services:
   websockets:
     container_name: mcm-websockets
     image: dannypas00/laravel-fpm:8.2
+    user: 1000:1000
     depends_on:
       - db
       - redis
