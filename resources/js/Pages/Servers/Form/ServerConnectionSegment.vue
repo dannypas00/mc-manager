@@ -1,5 +1,14 @@
 <template>
   <FormInput
+    id="public-ip"
+    v-model="serverStore.model.public_ip"
+    placeholder="x.x.x.x or minecraft.example.com"
+    :label="$t('pages.servers.form.public_ip.label')"
+    :explanation="$t('pages.servers.form.public_ip.explanation')"
+    warning="test"
+  />
+
+  <FormInput
     id="connection-ip"
     v-model="serverStore.model.local_ip"
     placeholder="x.x.x.x"

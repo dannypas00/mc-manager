@@ -1,96 +1,100 @@
 {
-    "create": {
-        "title": "Create new server",
-        "type_selector": {
-            "description": {
-                "1": "Manual servers are fully managed by you. You choose on what server to run, you install all required programs, and you make sure minecraft gets installed and runs.",
-                "2": "When you choose for an installed server, you are only responsible for providing an SSH connection to a server environment (only debian based is supported at the moment). When the connection is established, MC-Manager will install all required software and make sure the server stays up and running.",
-                "3": "[Not yet available]\nManaged servers are created and maintained by MC-Manager. This ensures optimal compatability, better support, and no hassle to install. Just click install and let us handle the rest."
-            },
-            "names": {
-                "1": "Manual",
-                "2": "Bring-your-own-VM",
-                "3": "Managed by MC-Manager"
-            },
-            "next_title": "Start creating server with type {type}",
-            "title": "Choose a server type"
-        }
-    },
-    "form": {
-        "connection_segment": {
-            "description": "Settings for connecting MC-Manager to your server",
-            "title": "Connection settings"
-        },
-        "description": {
-            "description": "Visible in minecraft server list",
-            "label": "Server description",
-            "placeholder": "My awesome server!"
-        },
-        "icon_upload": {
-            "label": "Server icon"
-        },
-        "info_segment": {
-            "description": "Mostly non-technical information used for displaying the server",
-            "title": "General information"
-        },
-        "installed_segment": {
-            "title": "Installed server settings"
-        },
-        "local_ip": {
-            "explanation": "The IP address the MC-Manager server can reach the minecraft host on. It is recommended to host the minecraft server on the same network as MC-Manager, in which case this should be a local IP.",
-            "label": "Connection IP"
-        },
-        "managed_segment": {
-            "description": "Settings that control the managed server instance",
-            "title": "Managed server settings"
-        },
-        "minecraft_segment": {
-            "description": "Settings for the minecraft server installation",
-            "title": "Minecraft settings"
-        },
-        "name": {
-            "label": "Server name",
-            "placeholder": "My favourite server"
-        },
-        "ssh_port": {
-            "label": "SSH port"
-        },
-        "ssh_test_button": "Test SSH connection"
-    },
-    "index": {
-        "add_button_text`": "New server",
-        "title": "Your servers"
-    },
-    "listing": {
-        "player_list": "Players online:\n"
-    },
-    "menu_title": "Servers",
-    "show": {
-        "console": {
-            "nav_title": "Console"
-        },
-        "eula_message": {
-            "button": "Go to eula.txt",
-            "text": "EULA needs to be accepted to start the server."
-        },
-        "files": {
-            "bulk_delete": "Delete file | Delete {n} files",
-            "bulk_delete_confirm": {
-                "message": "The files you have selected for deletion include directories.\nPlease make sure you intend to delete these, since this will delete all files in the directory with no way to retrieve them again.",
-                "positive": "Confirm deletion",
-                "title": "Confirm recursive deletion of directory"
-            },
-            "bulk_delete_success_toast": "Successfully deleted file | Successfully deleted {n} files",
-            "nav_title": "Files",
-            "new_file": "New file",
-            "save": "Save"
-        },
-        "settings": {
-            "nav_title": "Settings"
-        },
-        "title": "Server - {name}"
-    },
-    "test": {
-        "test2": "New test"
+  "create": {
+    "title": "Create new server",
+    "type_selector": {
+      "description": {
+        "1": "Manual servers are fully managed by you. You choose on what server to run, you install all required programs, and you make sure minecraft gets installed and runs.",
+        "2": "When you choose for an installed server, you are only responsible for providing an SSH connection to a server environment (only debian based is supported at the moment). When the connection is established, MC-Manager will install all required software and make sure the server stays up and running.",
+        "3": "[Not yet available]\nManaged servers are created and maintained by MC-Manager. This ensures optimal compatability, better support, and no hassle to install. Just click install and let us handle the rest."
+      },
+      "names": {
+        "1": "Manual",
+        "2": "Bring-your-own-VM",
+        "3": "Managed by MC-Manager"
+      },
+      "next_title": "Start creating server with type {type}",
+      "title": "Choose a server type"
     }
+  },
+  "form": {
+    "connection_segment": {
+      "description": "Settings for connecting MC-Manager to your server",
+      "title": "Connection settings"
+    },
+    "description": {
+      "description": "Visible in minecraft server list",
+      "label": "Server description",
+      "placeholder": "My awesome server!"
+    },
+    "icon_upload": {
+      "label": "Server icon"
+    },
+    "info_segment": {
+      "description": "Mostly non-technical information used for displaying the server",
+      "title": "General information"
+    },
+    "installed_segment": {
+      "title": "Installed server settings"
+    },
+    "local_ip": {
+      "explanation": "The IP address the MC-Manager server can reach the minecraft host on. It is recommended to host the minecraft server on the same network as MC-Manager, in which case this should be a local IP.",
+      "label": "Connection IP"
+    },
+    "managed_segment": {
+      "description": "Settings that control the managed server instance",
+      "title": "Managed server settings"
+    },
+    "minecraft_segment": {
+      "description": "Settings for the minecraft server installation",
+      "title": "Minecraft settings"
+    },
+    "name": {
+      "label": "Server name",
+      "placeholder": "My favourite server"
+    },
+    "public_ip": {
+      "explanation": "The public IP or hostname that people will use to connect to the Minecraft server.",
+      "label": "Public IP"
+    },
+    "ssh_port": {
+      "label": "SSH port"
+    },
+    "ssh_test_button": "Test SSH connection"
+  },
+  "index": {
+    "add_button_text`": "New server",
+    "title": "Your servers"
+  },
+  "listing": {
+    "player_list": "Players online:\n"
+  },
+  "menu_title": "Servers",
+  "show": {
+    "console": {
+      "nav_title": "Console"
+    },
+    "eula_message": {
+      "button": "Go to eula.txt",
+      "text": "EULA needs to be accepted to start the server."
+    },
+    "files": {
+      "bulk_delete": "Delete file | Delete {n} files",
+      "bulk_delete_confirm": {
+        "message": "The files you have selected for deletion include directories.\nPlease make sure you intend to delete these, since this will delete all files in the directory with no way to retrieve them again.",
+        "positive": "Confirm deletion",
+        "title": "Confirm recursive deletion of directory"
+      },
+      "bulk_delete_success_toast": "Successfully deleted file | Successfully deleted {n} files",
+      "nav_title": "Files",
+      "new_file": "New file",
+      "save": "Save"
+    },
+    "settings": {
+      "nav_title": "Settings"
+    },
+    "title": "Server - {name}"
+  },
+  "test": {
+    "test2": "New test"
+  }
 }

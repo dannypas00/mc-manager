@@ -1,11 +1,11 @@
 {
-    "menu": {
-        "open": "Open menu"
-    },
-    "notifications": {
-        "view": "Toon notificaties"
-    },
-    "user": {
-        "view": "Open gebruiker menu"
-    }
+  "menu": {
+    "open": "Open menu"
+  },
+  "notifications": {
+    "view": "Toon notificaties"
+  },
+  "user": {
+    "view": "Open gebruiker menu"
+  }
 }
