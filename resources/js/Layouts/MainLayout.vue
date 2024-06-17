@@ -189,11 +189,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
 import ApplicationLogo from '../../images/icons/MCM-logo.webp';
 import { useUserStore } from '../Stores/UserStore';
+import User = App.Models.User;
 
 export default defineComponent({
   components: {
@@ -210,6 +211,13 @@ export default defineComponent({
   },
 
   inheritAttrs: true,
+
+  props: {
+    auth: {
+      type: Object as PropType<{ user: User }>,
+      required: true,
+    },
+  },
 
   data () {
     return {
@@ -240,8 +248,8 @@ export default defineComponent({
     };
   },
 
-  async beforeMount () {
-    await useUserStore().setCurrentUser(this.$attrs.auth?.user.id);
+  beforeMount () {
+    useUserStore().user = this.auth.user;
   },
 });
 </script>

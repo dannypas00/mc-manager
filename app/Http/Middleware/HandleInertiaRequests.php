@@ -16,7 +16,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth.user'        => fn () => $request->user()
-                ? $request->user()->only('id', 'name', 'email', 'icon')
+                ? $request->user()->with(['servers'])->sole()
                 : null,
             'route_parameters' => fn () => $request->route()->parameters,
         ]);

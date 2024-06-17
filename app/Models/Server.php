@@ -131,6 +131,24 @@ class Server extends Model
         'type' => ServerType::class,
     ];
 
+    protected $hidden = [
+        // Connection info
+        'rcon_password',
+        // Cached info
+        'current_players',
+        'maximum_players',
+        'player_list',
+        'status',
+        // FTP settings
+        'enable_ftp',
+        'is_sftp',
+        'use_ssh_auth',
+        'ftp_port',
+        'ftp_host',
+        'ftp_username',
+        'ssh_key',
+    ];
+
     // Attributes
 
     public function rconPassword(): Attribute
