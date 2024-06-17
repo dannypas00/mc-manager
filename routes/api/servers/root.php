@@ -5,6 +5,7 @@ use App\Http\Controllers\Servers\ServerIndexController;
 use App\Http\Controllers\Servers\ServerLogStreamController;
 use App\Http\Controllers\Servers\ServerRconCommandController;
 use App\Http\Controllers\Servers\ServerShowController;
+use App\Http\Controllers\Servers\ServerStoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', ServerIndexController::class)->name('index');

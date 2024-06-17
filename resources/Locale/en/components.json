@@ -1,18 +1,18 @@
 {
-    "confirmation": {
-        "default_negative_button": "Cancel",
-        "default_positive_button": "Confirm"
-    },
-    "file_editor": {
-        "confirm_unsaved_changes": "You have unsaved changes. Are you sure you want to leave the page?",
-        "nothing_to_save": "No changes to save",
-        "save_sucessful": "Successfully saved {name}",
-        "uploaded_alt": "User uploaded image"
-    },
-    "flash": {
-        "dismiss": "Dismiss"
-    },
-    "profile_upload": {
-        "default_button_text": "Change"
-    }
+  "confirmation": {
+    "default_negative_button": "Cancel",
+    "default_positive_button": "Confirm"
+  },
+  "file_editor": {
+    "confirm_unsaved_changes": "You have unsaved changes. Are you sure you want to leave the page?",
+    "nothing_to_save": "No changes to save",
+    "save_sucessful": "Successfully saved {name}",
+    "uploaded_alt": "User uploaded image"
+  },
+  "flash": {
+    "dismiss": "Dismiss"
+  },
+  "profile_upload": {
+    "default_button_text": "Change"
+  }
 }

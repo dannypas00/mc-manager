@@ -9,9 +9,7 @@
     </NeutralButton>
   </PageTitle>
 
-  <ServerForm v-if="serverStore.model.type" :type="FormType.Create"/>
-
-  <ServerTypeSelector v-else @save="onTypeSelect"/>
+  <ServerTypeSelector @save="onTypeSelect"/>
 </template>
 
 <script lang="ts">
@@ -23,7 +21,9 @@ import ServerForm from './Form/ServerForm.vue';
 import { FormType } from '../../Enums/FormType';
 import { useServerEditStore } from '../../Stores/Servers/ServerEditStore';
 import ServerTypeSelector from './Form/ServerTypeSelector.vue';
+import { router } from '@inertiajs/vue3';
 import ServerType = App.Models.ServerType;
+import { useUserStore } from '../../Stores/UserStore';
 
 /**
  * TODO:
@@ -36,7 +36,6 @@ import ServerType = App.Models.ServerType;
 export default defineComponent({
   components: {
     ServerTypeSelector,
-    ServerForm,
     PageTitle,
     ArrowLeftIcon,
     NeutralButton,
@@ -45,12 +44,13 @@ export default defineComponent({
   data () {
     return {
       serverStore: useServerEditStore(),
+      userStore: useUserStore(),
     };
   },
 
   methods: {
     onTypeSelect (type: ServerType) {
-      this.serverStore.model.type = type;
+      router.post(route('servers.create'), { name: `${this.userStore.user.name}'s server`, type });
     },
   },
 
@@ -64,7 +64,8 @@ export default defineComponent({
     this.serverStore.setEmpty();
 
     // TODO: Remove because debugging
-    // this.serverStore.model.type = 2;
+    this.serverStore.model.type = 2;
+    this.onTypeSelect(2);
   },
 });
 </script>

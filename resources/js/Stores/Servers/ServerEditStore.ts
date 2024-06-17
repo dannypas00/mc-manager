@@ -28,7 +28,8 @@ export const useServerEditStore = defineStore('ServerEdit', {
 
     requestData (state): FormData {
       const filtered = _.pick(state.model, [
-        // Array of allowed keys
+        'type',
+        'name',
       ]);
 
       return {
@@ -38,6 +39,13 @@ export const useServerEditStore = defineStore('ServerEdit', {
   },
 
   actions: {
+    retrieve (id: number) {
+      this.showRequest
+        .setId(id)
+        .getResponse()
+        .then(this.setFromModel)
+    },
+
     setFromRequest (response: AxiosResponse<Server>) {
       this.setFromModel(response.data);
     },
