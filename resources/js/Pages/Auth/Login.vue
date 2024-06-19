@@ -1,7 +1,11 @@
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
+  <div
+    class="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8"
+  >
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+      <h2
+        class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+      >
         Sign in to your
       </h2>
     </div>
@@ -10,7 +14,11 @@
       <div class="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
         <form class="space-y-6" @submit.prevent="login">
           <div>
-            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+            <label
+              for="email"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Email address</label
+            >
             <div class="mt-2">
               <input
                 id="email"
@@ -20,13 +28,21 @@
                 autocomplete="email"
                 required
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              <span
+                v-if="$page.props.errors?.email"
+                class="text-sm text-red-500"
+                >{{ $page.props.errors?.email }}</span
               >
-              <span v-if="$page.props.errors?.email" class="text-red-500 text-sm">{{ $page.props.errors?.email }}</span>
             </div>
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+            <label
+              for="password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >Password</label
+            >
             <div class="mt-2">
               <input
                 id="password"
@@ -36,7 +52,7 @@
                 autocomplete="current-password"
                 required
                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
+              />
             </div>
           </div>
 
@@ -48,13 +64,20 @@
                 name="remember-me"
                 type="checkbox"
                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+              />
+              <label
+                for="remember-me"
+                class="ml-3 block text-sm leading-6 text-gray-900"
+                >Remember me</label
               >
-              <label for="remember-me" class="ml-3 block text-sm leading-6 text-gray-900">Remember me</label>
             </div>
 
             <div class="text-sm leading-6">
-              <a class="font-semibold text-indigo-600 hover:text-indigo-500 text" @click="forgotPassword">Forgot
-                password?</a>
+              <a
+                class="text font-semibold text-indigo-600 hover:text-indigo-500"
+                @click="forgotPassword"
+                >Forgot password?</a
+              >
             </div>
           </div>
 
@@ -80,7 +103,7 @@ import { router } from '@inertiajs/vue3';
 export default defineComponent({
   layout: AuthLayout,
 
-  data () {
+  data() {
     return {
       email: '',
       password: '',
@@ -89,7 +112,7 @@ export default defineComponent({
   },
 
   methods: {
-    login () {
+    login() {
       router.post(route('auth.authenticate'), {
         email: this.email,
         password: this.password,
@@ -97,7 +120,7 @@ export default defineComponent({
       });
     },
 
-    forgotPassword () {
+    forgotPassword() {
       // TODO
       console.log('To be implemented');
     },

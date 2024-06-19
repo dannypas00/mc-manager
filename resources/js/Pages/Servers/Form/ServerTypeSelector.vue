@@ -14,26 +14,31 @@
       >
         <div
           :class="[
-            active ? 'border-emerald-400 ring-2 ring-emerald-500' : 'border-gray-300',
-            'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none'
+            active
+              ? 'border-emerald-400 ring-2 ring-emerald-500'
+              : 'border-gray-300',
+            'relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none',
           ]"
         >
           <span class="flex flex-1">
             <span class="flex flex-col">
-              <RadioGroupLabel as="span" class="block text-sm font-medium text-gray-900">
+              <RadioGroupLabel
+                as="span"
+                class="block text-sm font-medium text-gray-900"
+              >
                 {{ option.name }}
               </RadioGroupLabel>
-              <RadioGroupDescription as="p" class="mt-1 flex items-center text-sm text-gray-500 whitespace-pre-line">
+              <RadioGroupDescription
+                as="p"
+                class="mt-1 flex items-center whitespace-pre-line text-sm text-gray-500"
+              >
                 {{ option.description }}
               </RadioGroupDescription>
             </span>
           </span>
 
           <CheckCircleIcon
-            :class="[
-              !checked ? 'invisible' : '',
-              'h-5 w-5 text-emerald-600'
-            ]"
+            :class="[!checked ? 'invisible' : '', 'h-5 w-5 text-emerald-600']"
             aria-hidden="true"
           />
 
@@ -41,7 +46,7 @@
             :class="[
               active ? 'border' : 'border-2',
               checked ? 'border-emerald-600' : 'border-transparent',
-              'pointer-events-none absolute -inset-px rounded-lg'
+              'pointer-events-none absolute -inset-px rounded-lg',
             ]"
             aria-hidden="true"
           />
@@ -52,29 +57,35 @@
 
   <PositiveButton
     v-if="selectedOption"
-    :title="$t(
-      'pages.servers.create.type_selector.next_title',
-      { type: selectedOption?.name ?? '-' }
-    )"
-    class="h-8 w-10 justify-center float-right mt-2 mb-6 sm:mb-0"
+    :title="
+      $t('pages.servers.create.type_selector.next_title', {
+        type: selectedOption?.name ?? '-',
+      })
+    "
+    class="float-right mb-6 mt-2 h-8 w-10 justify-center sm:mb-0"
     @click="save"
   >
-    <FontAwesomeIcon icon="arrow-right"/>
+    <FontAwesomeIcon icon="arrow-right" />
   </PositiveButton>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { RadioGroup, RadioGroupDescription, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
+import {
+  RadioGroup,
+  RadioGroupDescription,
+  RadioGroupLabel,
+  RadioGroupOption,
+} from '@headlessui/vue';
 import { CheckCircleIcon } from '@heroicons/vue/20/solid';
 import PositiveButton from '../../../Components/Buttons/PositiveButton.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ServerType = App.Models.ServerType;
 
 interface ServerOption {
-  value: ServerType,
-  name: string,
-  description: string,
+  value: ServerType;
+  name: string;
+  description: string;
 }
 
 export default defineComponent({
@@ -90,23 +101,29 @@ export default defineComponent({
     CheckCircleIcon,
   },
 
-  data () {
+  data() {
     return {
       options: [
         {
           value: 1,
           name: this.$t('pages.servers.create.type_selector.names.1'),
-          description: this.$t('pages.servers.create.type_selector.description.1'),
+          description: this.$t(
+            'pages.servers.create.type_selector.description.1'
+          ),
         },
         {
           value: 2,
           name: this.$t('pages.servers.create.type_selector.names.2'),
-          description: this.$t('pages.servers.create.type_selector.description.2'),
+          description: this.$t(
+            'pages.servers.create.type_selector.description.2'
+          ),
         },
         {
           value: 3,
           name: this.$t('pages.servers.create.type_selector.names.3'),
-          description: this.$t('pages.servers.create.type_selector.description.3'),
+          description: this.$t(
+            'pages.servers.create.type_selector.description.3'
+          ),
         },
       ] as ServerOption[],
 
@@ -115,7 +132,7 @@ export default defineComponent({
   },
 
   methods: {
-    save () {
+    save() {
       this.$emit('save', this.selectedOption?.value);
     },
   },

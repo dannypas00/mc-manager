@@ -3,7 +3,7 @@
     <span
       v-for="(line, index) in output"
       :key="index"
-      class="hover:border-y-2 hover:-my-[2px] border-slate-500 box-border px-1 flex gap-2"
+      class="box-border flex gap-2 border-slate-500 px-1 hover:-my-[2px] hover:border-y-2"
       style="overflow-anchor: none"
     >
       <template v-if="isObject(line)">
@@ -15,7 +15,7 @@
           {{ line.message }}
         </span>
 
-        <span class="text-slate-400/50 text-xs">
+        <span class="text-xs text-slate-400/50">
           {{ line.caller }}
         </span>
       </template>
@@ -35,10 +35,10 @@ import moment, { Moment } from 'moment';
 type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 
 interface LogLine {
-  time: Moment,
-  caller: string,
-  level: LogLevel,
-  message: string
+  time: Moment;
+  caller: string;
+  level: LogLevel;
+  message: string;
 }
 
 export default defineComponent({
@@ -51,7 +51,7 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {};
   },
 
@@ -60,8 +60,11 @@ export default defineComponent({
 
     isObject,
 
-    transformLine (line: string): LogLine | string {
-      const match = /^\[(\d{2}:\d{2}:\d{2})\] \[(.*)\/(DEBUG|INFO|WARN|ERROR|COMMAND|RESPONSE)\]: (.*)$/g.exec(line);
+    transformLine(line: string): LogLine | string {
+      const match =
+        /^\[(\d{2}:\d{2}:\d{2})\] \[(.*)\/(DEBUG|INFO|WARN|ERROR|COMMAND|RESPONSE)\]: (.*)$/g.exec(
+          line
+        );
       if (!match) {
         return line;
       }
@@ -82,7 +85,7 @@ export default defineComponent({
       return logLine;
     },
 
-    logLevelText (level: LogLevel) {
+    logLevelText(level: LogLevel) {
       switch (level) {
         case 'DEBUG':
           return 'text-slate-600';
@@ -97,7 +100,7 @@ export default defineComponent({
   },
 
   computed: {
-    output () {
+    output() {
       const lines: string[] = this.log.split('\n');
       return lines.map(this.transformLine);
     },

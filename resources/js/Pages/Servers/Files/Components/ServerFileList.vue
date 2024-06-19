@@ -4,11 +4,13 @@
       <!-- Directory up -->
       <tr v-if="!isRoot">
         <td class="relative px-7 sm:w-12 sm:px-6">
-          <div
-            class="-mt-2 h-4 w-4"
-          />
+          <div class="-mt-2 h-4 w-4" />
         </td>
-        <td :class="['whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900']">
+        <td
+          :class="[
+            'whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900',
+          ]"
+        >
           <a
             class="cursor-pointer hover:underline active:text-indigo-400"
             @click="$emit('go-up')"
@@ -34,26 +36,33 @@
             type="checkbox"
             class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
             :value="entry"
-          >
+          />
         </td>
 
         <!-- Name -->
         <td
           :class="[
             'whitespace-nowrap py-4 pr-3 text-sm font-medium',
-            selected.includes(entry.path) ? 'text-indigo-600' : 'text-gray-900'
+            selected.includes(entry.path) ? 'text-indigo-600' : 'text-gray-900',
           ]"
         >
           <Link
             class="cursor-pointer hover:underline active:text-indigo-400"
-            :href="$route('servers.files', { id: store.model.id, path: current + '/' + entry.path })"
+            :href="
+              $route('servers.files', {
+                id: store.model.id,
+                path: current + '/' + entry.path,
+              })
+            "
           >
             {{ entry.path + (entry.type === 'dir' ? '/' : '') }}
           </Link>
         </td>
 
         <!-- Filesize -->
-        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-400 text-right">
+        <td
+          class="whitespace-nowrap px-3 py-4 text-right text-sm text-gray-400"
+        >
           {{ entry.file_size > 0 ? humanFileSize(entry.file_size) : '' }}
         </td>
       </tr>
@@ -70,10 +79,7 @@ import { useServerShowStore } from '../../../../Stores/Servers/ServerShowStore';
 import { Link } from '@inertiajs/vue3';
 
 export default defineComponent({
-  emits: [
-    'update:selected-files',
-    'go-up',
-  ],
+  emits: ['update:selected-files', 'go-up'],
 
   components: {
     Link,
@@ -102,7 +108,7 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {
       store: useServerShowStore(),
     };
@@ -113,23 +119,29 @@ export default defineComponent({
   },
 
   computed: {
-    sortedEntries (): FileEntry[] {
+    sortedEntries(): FileEntry[] {
       return _.concat(this.sortedDirectories, this.sortedFiles);
     },
 
-    sortedDirectories (): FileEntry[] {
-      return _.sortBy(_.filter(this.entries, entry => entry.type === 'dir'), 'path');
+    sortedDirectories(): FileEntry[] {
+      return _.sortBy(
+        _.filter(this.entries, entry => entry.type === 'dir'),
+        'path'
+      );
     },
 
-    sortedFiles () {
-      return _.sortBy(_.filter(this.entries, entry => entry.type === 'file'), 'path');
+    sortedFiles() {
+      return _.sortBy(
+        _.filter(this.entries, entry => entry.type === 'file'),
+        'path'
+      );
     },
 
     selected: {
-      get () {
+      get() {
         return this.selectedFiles;
       },
-      set (value: string[]) {
+      set(value: string[]) {
         this.$emit('update:selected-files', value);
       },
     },

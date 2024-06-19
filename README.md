@@ -49,15 +49,15 @@ server-port = 25565
 #### For running minecraft
 
 - Java version required for the planned minecraft server
-    - Versions 1.12 - 1.17 require Java 8:
-    ```bash
-    apt install -y openjdk-8-jre-headless
-    ```
-    - Versions 1.18 and above require Java 17+, newer versions provide better performance and
-      security:
-    ```bash
-    apt install -y openjdk-23-jre
-    ```
+  - Versions 1.12 - 1.17 require Java 8:
+  ```bash
+  apt install -y openjdk-8-jre-headless
+  ```
+  - Versions 1.18 and above require Java 17+, newer versions provide better performance and
+    security:
+  ```bash
+  apt install -y openjdk-23-jre
+  ```
 
 #### For FTP connectivity
 
@@ -67,16 +67,16 @@ server-port = 25565
 
 - [An SSH server](https://ubuntu.com/server/docs/service-openssh)
 - [The file utility](https://www.darwinsys.com/file/)
-    ```bash
-    apt install -y file
-    ```
+  ```bash
+  apt install -y file
+  ```
 - [Curl](https://curl.se/) or [GNU WGet](https://www.gnu.org/software/wget/)
-    ```bash
-    apt install -y curl
-    ```
-    ```bash
-    apt install -y wget
-    ```
+  ```bash
+  apt install -y curl
+  ```
+  ```bash
+  apt install -y wget
+  ```
 
 </details>
 
@@ -107,9 +107,9 @@ TODO, needs testing
 #### For running minecraft
 
 - Java version required for the planned minecraft server
-    - Versions 1.12 - 1.17 require Java 8:
-    - Versions 1.18 and above require Java 17+, newer versions provide better performance and
-      security:
+  - Versions 1.12 - 1.17 require Java 8:
+  - Versions 1.18 and above require Java 17+, newer versions provide better performance and
+    security:
 
 #### For FTP connectivity
 

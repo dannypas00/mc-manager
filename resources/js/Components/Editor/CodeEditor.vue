@@ -1,5 +1,5 @@
 <template>
-  <div ref="editor" class="overflow-hidden w-full h-[40vw]"/>
+  <div ref="editor" class="h-[40vw] w-full overflow-hidden" />
 </template>
 
 <script lang="ts">
@@ -26,25 +26,28 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {
       editor: null as null | IStandaloneCodeEditor,
     };
   },
 
   methods: {
-    getValue (): string {
+    getValue(): string {
       return this.editor?.getValue() as string;
     },
   },
 
-  mounted () {
-    this.editor = monaco.editor.create(this.$refs.editor as HTMLElement, {
-      value: 'test',
-      // TODO: Dynamic language detection
-      language: 'typescript',
-      theme: 'vs-dark',
-    } as IStandaloneEditorConstructionOptions);
+  mounted() {
+    this.editor = monaco.editor.create(
+      this.$refs.editor as HTMLElement,
+      {
+        value: 'test',
+        // TODO: Dynamic language detection
+        language: 'typescript',
+        theme: 'vs-dark',
+      } as IStandaloneEditorConstructionOptions
+    );
   },
 });
 </script>

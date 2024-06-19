@@ -26,18 +26,28 @@
 
   <!-- TODO: Test ssh connection button -->
   <div class="block">
-    <NeutralButton class="inline-block" :text="$t('pages.servers.form.ssh_test_button')" @click="testSsh"/>
-    <span v-if="sshConnectionStatus === true" class="inline-block text-green-400">
+    <NeutralButton
+      class="inline-block"
+      :text="$t('pages.servers.form.ssh_test_button')"
+      @click="testSsh"
+    />
+    <span
+      v-if="sshConnectionStatus === true"
+      class="inline-block text-green-400"
+    >
       <!-- Successful connection -->
-      <FontAwesomeIcon icon="check"/>
+      <FontAwesomeIcon icon="check" />
     </span>
-    <span v-else-if="sshConnectionStatus === false" class="inline-block text-red-500">
+    <span
+      v-else-if="sshConnectionStatus === false"
+      class="inline-block text-red-500"
+    >
       <!-- Failed connection -->
-      <FontAwesomeIcon icon="x"/>
+      <FontAwesomeIcon icon="x" />
     </span>
     <span v-else class="inline-block text-yellow-500">
       <!-- Unknown connection -->
-      <FontAwesomeIcon icon="question-circle"/>
+      <FontAwesomeIcon icon="question-circle" />
     </span>
   </div>
 </template>
@@ -52,15 +62,15 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 export default defineComponent({
   components: { FontAwesomeIcon, NeutralButton, FormInput },
 
-  data () {
+  data() {
     return {
       serverStore: useServerEditStore(),
-      sshConnectionStatus: null as null|boolean,
+      sshConnectionStatus: null as null | boolean,
     };
   },
 
   methods: {
-    testSsh () {
+    testSsh() {
       // TODO
       console.log('Test ssh!');
     },

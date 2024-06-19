@@ -6,18 +6,18 @@
       is-link
       class="h-full"
     >
-      <PlusIcon class="h-full"/>
+      <PlusIcon class="h-full" />
     </PositiveButton>
   </PageTitle>
 
-  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
     <Link
       v-for="server in userStore.user.servers"
       :key="server.id"
       :href="$route('servers.show', { id: server.id })"
       as="a"
     >
-      <ServerListing :initial-server="server"/>
+      <ServerListing :initial-server="server" />
     </Link>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default defineComponent({
     PlusIcon,
   },
 
-  data () {
+  data() {
     return {
       userStore: useUserStore(),
     };

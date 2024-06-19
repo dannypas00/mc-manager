@@ -31,16 +31,13 @@ const toastOptions: PluginOptions = {
 
 createInertiaApp({
   resolve: name => {
-    const page = resolvePageComponent(
-      `./Pages/${name}.vue`,
-      import.meta.glob('./Pages/**/*.vue'),
-    );
+    const page = resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue'));
     page.then(module => {
       module.default.layout = module.default.layout ?? MainLayout;
     });
     return page;
   },
-  setup ({ el, App, props, plugin }) {
+  setup({ el, App, props, plugin }) {
     const vue = createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(i18n)

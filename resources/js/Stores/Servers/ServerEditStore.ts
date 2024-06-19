@@ -15,22 +15,16 @@ export const useServerEditStore = defineStore('ServerEdit', {
   }),
 
   getters: {
-    isChanged (state): boolean {
-      return !_.isEqual(
-        state.dereferenced,
-        state.original,
-      );
+    isChanged(state): boolean {
+      return !_.isEqual(state.dereferenced, state.original);
     },
 
-    dereferenced (state): FormData {
+    dereferenced(state): FormData {
       return JSON.parse(JSON.stringify(state.requestData));
     },
 
-    requestData (state): FormData {
-      const filtered = _.pick(state.model, [
-        'type',
-        'name',
-      ]);
+    requestData(state): FormData {
+      const filtered = _.pick(state.model, ['type', 'name']);
 
       return {
         ...filtered,
@@ -39,23 +33,20 @@ export const useServerEditStore = defineStore('ServerEdit', {
   },
 
   actions: {
-    retrieve (id: number) {
-      this.showRequest
-        .setId(id)
-        .getResponse()
-        .then(this.setFromModel)
+    retrieve(id: number) {
+      this.showRequest.setId(id).getResponse().then(this.setFromModel);
     },
 
-    setFromRequest (response: AxiosResponse<Server>) {
+    setFromRequest(response: AxiosResponse<Server>) {
       this.setFromModel(response.data);
     },
 
-    setFromModel (model: Server) {
+    setFromModel(model: Server) {
       this.model = model;
       this.original = this.dereferenced;
     },
 
-    setEmpty () {
+    setEmpty() {
       this.model = {
         port: 25565,
         rcon_port: 25575,
@@ -64,9 +55,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
         ftp_username: 'mc-manager',
         enable_ftp: true,
         enable_ssh: true,
-        users: [
-          useUserStore().user,
-        ],
+        users: [useUserStore().user],
       } as Server;
       this.original = this.dereferenced;
     },

@@ -1,6 +1,5 @@
 <template>
-  <PageTitle :title="$t('pages.dashboard.title')"/>
-
+  <PageTitle :title="$t('pages.dashboard.title')" />
 </template>
 
 <script lang="ts">
@@ -17,7 +16,7 @@ export default defineComponent({
     Link,
   },
 
-  data () {
+  data() {
     return {
       userStore: useUserStore(),
     };

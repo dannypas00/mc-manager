@@ -18,7 +18,7 @@
     id="icon"
     :label="$t('pages.servers.form.icon_upload.label')"
     :default-image-url="ApplicationLogo"
-    @change="event => serverStore.icon = event"
+    @change="event => (serverStore.icon = event)"
   />
 </template>
 
@@ -37,7 +37,7 @@ export default defineComponent({
     FormTextArea,
   },
 
-  data () {
+  data() {
     return {
       serverStore: useServerEditStore(),
       ApplicationLogo,

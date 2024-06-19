@@ -6,17 +6,11 @@ const translationFiles = import.meta.globEager('../Locale/**/*.json');
 
 const languages = {};
 
-_.each(
-  translationFiles,
-  (file: { default: Record<string, string> }, path: string) => {
-    const translationPath = path
-      .replace('../Locale/', '')
-      .replace('.json', '')
-      .replaceAll('/', '.');
+_.each(translationFiles, (file: { default: Record<string, string> }, path: string) => {
+  const translationPath = path.replace('../Locale/', '').replace('.json', '').replaceAll('/', '.');
 
-    _.set(languages, translationPath, file.default);
-  },
-);
+  _.set(languages, translationPath, file.default);
+});
 
 const isProduction = import.meta.env.NODE_ENV === 'production';
 
@@ -41,8 +35,6 @@ export default createI18n({
       return;
     }
 
-    throw new Error(
-      `Missing translation! Language: '${locale}' | Key/Path: '${path}'`,
-    );
+    throw new Error(`Missing translation! Language: '${locale}' | Key/Path: '${path}'`);
   },
 } as I18nOptions);

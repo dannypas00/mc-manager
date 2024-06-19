@@ -1,21 +1,23 @@
 <template>
-  <div class="w-[90%] w-max-[90%] bg-slate-900 text-white mx-auto fs-12">
+  <div class="w-max-[90%] fs-12 mx-auto w-[90%] bg-slate-900 text-white">
     <!-- Terminal -->
     <div class="h-[50em] overflow-y-auto" ref="log">
       <!-- Text render -->
       <code v-if="!useFancyLog" class="whitespace-pre-line">{{ log }}</code>
-      <FancyLog v-else :log="log"/>
+      <FancyLog v-else :log="log" />
 
-      <div style="overflow-anchor: auto; height: 1px"/>
-
+      <div style="overflow-anchor: auto; height: 1px" />
     </div>
     <!-- Inputbox -->
-    <form class="h-7 border-t-2 border-slate-300 px-1 flex" @submit.prevent="onCommandSubmit">
-      <CodeBracketIcon class="inline-block h-6 w-6"/>
+    <form
+      class="flex h-7 border-t-2 border-slate-300 px-1"
+      @submit.prevent="onCommandSubmit"
+    >
+      <CodeBracketIcon class="inline-block h-6 w-6" />
       <input
         v-model="command"
-        class="inline-block bg-transparent border-0 focus:border-0 focus:ring-0 p-0 px-2 outline-0 h-6 grow"
-      >
+        class="inline-block h-6 grow border-0 bg-transparent p-0 px-2 outline-0 focus:border-0 focus:ring-0"
+      />
     </form>
   </div>
 </template>
@@ -37,7 +39,7 @@ export default defineComponent({
 
   layout: ServerShowTemplate,
 
-  data () {
+  data() {
     return {
       store: useServerShowStore(),
       log: '',
@@ -48,7 +50,7 @@ export default defineComponent({
   },
 
   methods: {
-    onCommandSubmit () {
+    onCommandSubmit() {
       this.rconRequest
         .setId(this.store.model.id)
         .setCommand(this.command)
@@ -57,8 +59,10 @@ export default defineComponent({
       this.command = '';
     },
 
-    stream (start?: number) {
-      const stream = new EventSource(route('api.servers.logs', { id: this.store.model.id, start }));
+    stream(start?: number) {
+      const stream = new EventSource(
+        route('api.servers.logs', { id: this.store.model.id, start })
+      );
 
       stream.addEventListener('ping', event => {
         // Decode data from base64 to plain
@@ -76,7 +80,7 @@ export default defineComponent({
   },
 
   watch: {
-    log (newLog, oldLog) {
+    log(newLog, oldLog) {
       if (oldLog === '') {
         this.$nextTick(() => {
           this.$refs.log.scrollTop = this.$refs.log.scrollHeight;
@@ -85,7 +89,7 @@ export default defineComponent({
     },
   },
 
-  mounted () {
+  mounted() {
     this.stream();
   },
 });

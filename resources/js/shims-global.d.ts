@@ -8,10 +8,10 @@ declare global {
   let route: typeof routeFn;
   let $route: typeof routeFn;
   let $toast: {
-    info: typeof ToastFunction,
-    success: typeof ToastFunction,
-    warning: typeof ToastFunction,
-    error: typeof ToastFunction
-  }
+    info: typeof ToastFunction;
+    success: typeof ToastFunction;
+    warning: typeof ToastFunction;
+    error: typeof ToastFunction;
+  };
   let $t: (key: string, named?: unknown, options?: TranslateOptions) => string;
 }

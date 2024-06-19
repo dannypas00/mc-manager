@@ -2,25 +2,25 @@
   <SegmentedPanel :segments="getSegments()">
     <template #segment-info>
       <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8">
-        <ServerInfoSegment/>
+        <ServerInfoSegment />
       </div>
     </template>
 
     <template #segment-managed>
       <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8">
-        <ServerManagedSegment/>
+        <ServerManagedSegment />
       </div>
     </template>
 
     <template #segment-connection>
       <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8">
-        <ServerConnectionSegment/>
+        <ServerConnectionSegment />
       </div>
     </template>
 
     <template #segment-minecraft>
       <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8">
-        <ServerMinecraftSegment/>
+        <ServerMinecraftSegment />
       </div>
     </template>
   </SegmentedPanel>
@@ -53,14 +53,14 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {
       serverStore: useServerEditStore(),
     };
   },
 
   methods: {
-    getSegments (): PanelSegment[] {
+    getSegments(): PanelSegment[] {
       // Info segment
       const infoSegment = {
         title: this.$t('pages.servers.form.info_segment.title'),
@@ -79,7 +79,9 @@ export default defineComponent({
       // TODO: IP address, host, SSH key, ftp creds
       const connectionSegment = {
         title: this.$t('pages.servers.form.connection_segment.title'),
-        description: this.$t('pages.servers.form.connection_segment.description'),
+        description: this.$t(
+          'pages.servers.form.connection_segment.description'
+        ),
         slotName: 'connection',
       };
 
@@ -87,7 +89,9 @@ export default defineComponent({
       // TODO: Version, modpack / server type
       const minecraftSegment = {
         title: this.$t('pages.servers.form.minecraft_segment.title'),
-        description: this.$t('pages.servers.form.minecraft_segment.description'),
+        description: this.$t(
+          'pages.servers.form.minecraft_segment.description'
+        ),
         slotName: 'minecraft',
       };
 

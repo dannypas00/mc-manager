@@ -1,5 +1,5 @@
 <template>
-  <ServerForm v-if="serverStore.model" :type="serverStore.model.type"/>
+  <ServerForm v-if="serverStore.model" :type="serverStore.model.type" />
 </template>
 
 <script lang="ts">
@@ -20,13 +20,13 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {
       serverStore: useServerEditStore(),
     };
   },
 
-  mounted () {
+  mounted() {
     this.serverStore.model = this.server;
   },
 });

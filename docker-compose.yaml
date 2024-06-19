@@ -4,7 +4,7 @@ services:
     container_name: mcm-db
     image: mariadb:latest
     ports:
-      - "${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}"
+      - '${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}'
     env_file:
       - .env
     volumes:
@@ -30,7 +30,7 @@ services:
       - sh
       - -c
       - |
-          composer install -q;
+        composer install -q;
 
   php:
     container_name: mcm-php
@@ -85,7 +85,7 @@ services:
       - artisan
       - websockets:serve
     ports:
-      - "6001:6001"
+      - '6001:6001'
     volumes:
       - ./:/var/www
 
@@ -95,7 +95,7 @@ services:
     depends_on:
       - php
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
       - .docker/local/nginx-includes:/etc/nginx/conf.d
       - ./:/var/www
@@ -104,8 +104,8 @@ services:
     container_name: mcm-minecraft
     image: openjdk:22-slim
     ports:
-      - "25565:25565"
-      - "25575:25575"
+      - '25565:25565'
+      - '25575:25575'
     user: 1000:1000
     volumes:
       - .docker/local/minecraft:/minecraft
@@ -123,10 +123,10 @@ services:
     container_name: mcm-ftp
     image: delfer/alpine-ftp-server:latest
     ports:
-      - "21:21"
-      - "21000-21010:21000-21010"
+      - '21:21'
+      - '21000-21010:21000-21010'
     environment:
-      - "USERS=mcm-test|mcm-test|/minecraft|1000"
+      - 'USERS=mcm-test|mcm-test|/minecraft|1000'
     volumes:
       - .docker/local/minecraft:/minecraft
 
@@ -134,9 +134,9 @@ services:
     container_name: mcm-sftp
     image: atmoz/sftp:alpine
     ports:
-      - "23:22"
+      - '23:22'
     environment:
-      - "SFTP_USERS=mcm-test:mcm-test:::/minecraft"
+      - 'SFTP_USERS=mcm-test:mcm-test:::/minecraft'
     volumes:
       - .docker/local/minecraft:/minecraft
 
@@ -146,17 +146,17 @@ services:
       dockerfile: .docker/local/ssh/Dockerfile
       context: .
     ports:
-      - "2222:2222"
+      - '2222:2222'
     environment:
-      - "PUID=1000"
-      - "PGID=1000"
-      - "TZ=Etc/UTC"
-      - "USER_NAME=mcm-test"
-      - "PUBLIC_KEY_FILE=/public_key"
-      - "LOG_STDOUT=true"
+      - 'PUID=1000'
+      - 'PGID=1000'
+      - 'TZ=Etc/UTC'
+      - 'USER_NAME=mcm-test'
+      - 'PUBLIC_KEY_FILE=/public_key'
+      - 'LOG_STDOUT=true'
     volumes:
       - .docker/local/minecraft:/minecraft
       - .docker/local/public_key:/public_key
 
 volumes:
-    mysql:
+  mysql:

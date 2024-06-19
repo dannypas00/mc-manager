@@ -5,11 +5,11 @@
       :href="$route('servers.index')"
       class="h-full"
     >
-      <ArrowLeftIcon class="h-full"/>
+      <ArrowLeftIcon class="h-full" />
     </NeutralButton>
   </PageTitle>
 
-  <ServerTypeSelector @save="onTypeSelect"/>
+  <ServerTypeSelector @save="onTypeSelect" />
 </template>
 
 <script lang="ts">
@@ -41,7 +41,7 @@ export default defineComponent({
     NeutralButton,
   },
 
-  data () {
+  data() {
     return {
       serverStore: useServerEditStore(),
       userStore: useUserStore(),
@@ -49,18 +49,21 @@ export default defineComponent({
   },
 
   methods: {
-    onTypeSelect (type: ServerType) {
-      router.post(route('servers.create'), { name: `${this.userStore.user.name}'s server`, type });
+    onTypeSelect(type: ServerType) {
+      router.post(route('servers.create'), {
+        name: `${this.userStore.user.name}'s server`,
+        type,
+      });
     },
   },
 
   computed: {
-    FormType () {
+    FormType() {
       return FormType;
     },
   },
 
-  mounted () {
+  mounted() {
     this.serverStore.setEmpty();
 
     // TODO: Remove because debugging
