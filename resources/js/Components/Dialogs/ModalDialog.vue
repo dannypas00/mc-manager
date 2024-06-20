@@ -51,7 +51,10 @@
                   v-if="positive"
                   type="button"
                   class="inline-flex w-full justify-center rounded-md bg-brand px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:col-start-2"
-                  @click="open = false"
+                  @click="
+                    open = false;
+                    $emit('positive');
+                  "
                 >
                   {{ positive }}
                 </button>
@@ -59,7 +62,10 @@
                   v-if="negative"
                   type="button"
                   class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
-                  @click="open = false"
+                  @click="
+                    open = false;
+                    $emit('negative');
+                  "
                 >
                   {{ negative }}
                 </button>
@@ -80,6 +86,8 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
+
+defineEmits(["positive", "negative"]);
 
 const open = defineModel("open", {
   type: Boolean,

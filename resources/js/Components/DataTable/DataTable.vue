@@ -99,7 +99,7 @@ const selected = computed({
 
 defineProps({
   headers: {
-    type: Array as PropType<TableHeader[]>,
+    type: Array as PropType<TableHeader<T>[]>,
     required: true,
   },
 

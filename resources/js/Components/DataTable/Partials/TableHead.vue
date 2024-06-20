@@ -33,7 +33,7 @@ const selected = defineModel("selected", {
 
 const props = defineProps({
   headers: {
-    type: Array<TableHeader>,
+    type: Array<TableHeader<T>>,
     required: true,
   },
 

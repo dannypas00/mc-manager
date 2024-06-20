@@ -34,13 +34,14 @@ import { UserIndexRequest } from "../../Communication/Users/UserIndexRequest";
 import {
   BulkOption,
   CreatedAtHeader,
+  FilterType,
   IdHeader,
   TableHeader,
   UpdatedAtHeader,
 } from "../../Components/DataTable/DataTableTypes";
 import PageHeader from "../../Components/Layout/PageHeader.vue";
 import { UserData } from "../../Types/generated";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModalDialog from "../../Components/Dialogs/ModalDialog.vue";
 import IconButton from "../../Components/Buttons/IconButton.vue";
 import UserCreateForm from "./Partials/UserCreateForm.vue";
@@ -63,21 +64,31 @@ export default defineComponent({
       request: new UserIndexRequest(),
       userCreateRequest: new UserCreateRequest(),
       selected: [],
-      createModalOpen: true,
+      createModalOpen: false,
     };
   },
 
   methods: {
-    getTableHeaders(): TableHeader[] {
+    getTableHeaders(): TableHeader<UserData>[] {
       return [
         IdHeader,
         {
           key: "name",
           title: this.$t("pages.page1.table.name_title"),
+          filter: {
+            type: FilterType.Search,
+            filter: "name",
+            placeholder: this.$t("pages.page1.table.name_placeholder"),
+          },
         },
         {
           key: "email",
           title: this.$t("pages.page1.table.email_title"),
+          filter: {
+            type: FilterType.Search,
+            filter: "email",
+            placeholder: this.$t("pages.page1.table.email_placeholder"),
+          },
         },
         CreatedAtHeader,
         UpdatedAtHeader,
@@ -107,9 +118,9 @@ export default defineComponent({
       ] as BulkOption<UserData>[];
     },
 
-    onUserSubmit(data: UserCreateData) {
+    async onUserSubmit(data: UserCreateData) {
       this.createModalOpen = false;
-      this.userCreateRequest.setData(data).getResponse();
+      await this.userCreateRequest.setData(data).getResponse();
       this.$refs.table.getData();
     },
   },

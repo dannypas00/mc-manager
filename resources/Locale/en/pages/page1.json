@@ -4,7 +4,9 @@
   },
   "table": {
     "delete_text": "Are you sure you want to delete these {n} users?",
+    "email_placeholder": "Search by email..",
     "email_title": "Email",
+    "name_placeholder": "Search by name..",
     "name_title": "Name"
   },
   "title": "DataTable example",

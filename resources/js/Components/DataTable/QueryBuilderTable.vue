@@ -39,7 +39,7 @@ const selected = computed({
 
 const props = defineProps({
   headers: {
-    type: Array as PropType<TableHeader[]>,
+    type: Array as PropType<TableHeader<T>[]>,
     required: true,
   },
 
@@ -68,7 +68,9 @@ const props = defineProps({
   },
 
   request: {
-    type: Object as PropType<QueryBuilderIndexRequest<T>>,
+    type: Object as PropType<
+      QueryBuilderIndexRequest<T, Record<string, unknown>>
+    >,
     required: true,
   },
 });
