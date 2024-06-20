@@ -52,11 +52,13 @@ export type DateFilterOption<T extends Record<string, unknown>> =
 
 export type FilterOption<
   T extends Record<string, unknown> = Record<string, unknown>,
-> =
-  | SearchFilterOption
-  | SelectFilterOption<T>
-  | RemoteSelectFilterOptions<T>
-  | DateFilterOption<T>;
+> = BaseFilterOption &
+  (
+    | SearchFilterOption
+    | SelectFilterOption<T>
+    | RemoteSelectFilterOptions<T>
+    | DateFilterOption<T>
+  );
 
 export type TableHeader<T extends Record<string, unknown>> = {
   title: string;

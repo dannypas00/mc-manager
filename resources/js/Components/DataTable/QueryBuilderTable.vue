@@ -9,6 +9,7 @@
     }"
     v-model:selected="selected"
     :data="data.data"
+    @submit="onFilterSubmit"
   />
 
   <WidePagination v-model="currentPage" :last-page="data.meta.last_page" />
@@ -17,7 +18,7 @@
 <script setup lang="ts" generic="T extends Record<string, any>">
 import DataTable from "./DataTable.vue";
 import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
-import { BulkOption, TableHeader } from "./DataTableTypes";
+import { BulkOption, FilterOption, TableHeader } from './DataTableTypes';
 import { computed, ModelRef, onMounted, PropType, Ref, ref, watch } from "vue";
 import { AxiosResponse } from "axios";
 import { QueryBuilderIndexData } from "../../Communication/Base/QueryBuilderRequest";
@@ -103,10 +104,16 @@ function getData() {
     });
 }
 
+function onFilterSubmit({ filter, value }: {filter: FilterOption, value: unknown}) {
+  props.request.addFilter(filter.filter, value);
+  requestData();
+}
+
 watch(currentPage, requestData);
 
 onMounted(getData);
 
 // Explicitly expose the getData function so that parent components can refresh the data
 defineExpose({ getData });
+
 </script>

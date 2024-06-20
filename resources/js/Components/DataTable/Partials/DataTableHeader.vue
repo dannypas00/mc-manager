@@ -11,7 +11,7 @@
       v-if="header.filter && filterComponent"
       class="absolute left-0 top-0 hidden h-full w-full group-hover:inline has-[:focus]:inline"
     >
-      <Component :is="filterComponent" :filter="header.filter" />
+      <Component :is="filterComponent" :filter="header.filter" @submit="$emit('submit', $event)" />
     </div>
   </th>
 </template>
@@ -20,6 +20,8 @@
 import { computed, PropType } from "vue";
 import { FilterType, TableHeader } from "../DataTableTypes";
 import DataTableSearchFilter from "./DataTableSearchFilter.vue";
+
+defineEmits(["submit"]);
 
 const props = defineProps({
   header: {

@@ -1,4 +1,5 @@
 import { Request } from "./Request";
+import { QueryBuilderRequest } from './QueryBuilderRequest';
 
 type QueryBuilderData = {
   filter?: Record<string, string | number>;
@@ -17,7 +18,7 @@ type QueryBuilderIndexResponse<T> = {
 export abstract class QueryBuilderIndexRequest<
   T,
   D = Record<string, never>,
-> extends Request<QueryBuilderIndexResponse<T>, D & QueryBuilderData> {
+> extends QueryBuilderRequest<QueryBuilderIndexResponse<T>, D & QueryBuilderData> {
   private page = 1;
   private perPage = 25;
 

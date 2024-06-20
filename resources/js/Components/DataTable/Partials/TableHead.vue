@@ -16,6 +16,7 @@
       <DataTableHeader
         :hide-title="index === 0 && selected.length > 0"
         :header="header"
+        @submit="$emit('submit', $event)"
       />
     </template>
   </tr>
@@ -25,6 +26,8 @@
 import DataTableHeader from "./DataTableHeader.vue";
 import { computed, ComputedRef } from "vue";
 import { TableHeader } from "../DataTableTypes";
+
+defineEmits(["submit"]);
 
 const selected = defineModel("selected", {
   type: Array<T>,

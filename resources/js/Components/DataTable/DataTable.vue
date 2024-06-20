@@ -37,6 +37,7 @@
                 selectable,
               }"
               v-model:selected="selected"
+              @submit="$emit('submit', $event)"
             />
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
@@ -78,13 +79,13 @@
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { computed, ModelRef, PropType } from "vue";
-import { BulkOption, TableHeader } from "./DataTableTypes";
+import { BulkOption, FilterOption, TableHeader } from './DataTableTypes';
 import DataTableCell from "./Partials/DataTableCell.vue";
 import EditButton from "./Partials/EditButton.vue";
 import TableHead from "./Partials/TableHead.vue";
 import TableBulkAction from "./Partials/TableBulkAction.vue";
 
-const emit = defineEmits(["update:selected"]);
+const emit = defineEmits(["update:selected", 'submit']);
 
 const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
   type: Array<T>,

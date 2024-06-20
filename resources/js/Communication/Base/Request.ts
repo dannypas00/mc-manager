@@ -22,6 +22,8 @@ export abstract class Request<T, D = Record<string, never>> {
 
     const useParams = ["GET", "HEAD", "OPTION"].includes(method.toUpperCase());
 
+    console.log(useParams, this.data);
+
     return axios
       .request<T, AxiosResponse<T>, D>({
         url: this.getEndPoint(),
