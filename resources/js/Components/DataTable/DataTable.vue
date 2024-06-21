@@ -37,7 +37,6 @@
                 selectable,
               }"
               v-model:selected="selected"
-              @submit="$emit('submit', $event)"
             />
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
@@ -84,8 +83,9 @@ import DataTableCell from "./Partials/DataTableCell.vue";
 import EditButton from "./Partials/EditButton.vue";
 import TableHead from "./Partials/TableHead.vue";
 import TableBulkAction from "./Partials/TableBulkAction.vue";
+import { usePassthroughModel } from '../../Composables/PassthroughModelComposable';
 
-const emit = defineEmits(["update:selected", 'submit']);
+const emit = defineEmits(["update:selected"]);
 
 const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
   type: Array<T>,

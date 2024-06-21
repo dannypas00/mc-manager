@@ -18,6 +18,7 @@
     :headers="getTableHeaders()"
     :bulk-actions="getBulkOptions()"
     selectable
+    auto-search
   />
 
   <ModalDialog v-model:open="createModalOpen" title="Create new user">

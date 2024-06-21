@@ -2,14 +2,14 @@ import { Request } from "./Request";
 import { uniq } from "lodash";
 
 type QueryBuilderData = {
-  filter?: Record<string, string | number>;
+  filter?: Record<string, unknown>;
   include?: string[];
   sort?: string[];
   fields?: string[];
 };
 
-export type QueryBuilderIndexData<T extends Array<Record<string, unknown>>> = {
-  data: T;
+export type QueryBuilderIndexData<T extends Record<string, unknown>> = QueryBuilderData & {
+  data: T[];
   links: Array<unknown>;
   meta: {
     current_page: number;
@@ -21,13 +21,15 @@ export type QueryBuilderIndexData<T extends Array<Record<string, unknown>>> = {
   };
 };
 
-type QueryBuilderResponseData<T> = T | QueryBuilderIndexData<T>;
+type QueryBuilderResponseData<T extends Record<string, unknown>> =
+  | T
+  | QueryBuilderIndexData<T>;
 
 export abstract class QueryBuilderRequest<
-  T,
-  D = Record<string, never>,
-> extends Request<T & QueryBuilderResponseData<T>, D & QueryBuilderData> {
-  private filter: Record<string, string | number> = {};
+  T extends Record<string, unknown>,
+  D extends QueryBuilderData | QueryBuilderIndexData<T> = QueryBuilderData
+> extends Request<T & QueryBuilderResponseData<T>, D> {
+  private filter: Record<string, unknown> = {};
   private sort: string[] = [];
   private include: string[] = [];
   private fields: string[] = ["*"];
@@ -93,13 +95,13 @@ export abstract class QueryBuilderRequest<
   }
 
   // Filtering
-  public setFilters(filters: Record<string, string | number>): this {
+  public setFilters(filters: Record<string, unknown>): this {
     this.filter = filters;
     this.data.filter = this.filter;
     return this;
   }
 
-  public addFilter(filter: string, value: string | number): this {
+  public addFilter(filter: string, value: unknown): this {
     this.filter[filter] = value;
     this.data.filter = this.filter;
     return this;

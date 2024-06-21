@@ -1,24 +1,19 @@
-import { Request } from "./Request";
-import { QueryBuilderRequest } from './QueryBuilderRequest';
+import {
+  QueryBuilderIndexData,
+  QueryBuilderRequest,
+} from "./QueryBuilderRequest";
 
-type QueryBuilderData = {
-  filter?: Record<string, string | number>;
-  page?: number;
-  per_page?: number;
-  include?: string[];
-  sort?: string[];
-  fields?: string[];
-};
-
-type QueryBuilderIndexResponse<T> = {
+type QueryBuilderIndexResponse<T extends Record<string, unknown>> = {
   data: T[];
   total: number;
 };
 
 export abstract class QueryBuilderIndexRequest<
-  T,
-  D = Record<string, never>,
-> extends QueryBuilderRequest<QueryBuilderIndexResponse<T>, D & QueryBuilderData> {
+  T extends Record<string, unknown>,
+> extends QueryBuilderRequest<
+  QueryBuilderIndexResponse<T>,
+  QueryBuilderIndexData<T>
+> {
   private page = 1;
   private perPage = 25;
 

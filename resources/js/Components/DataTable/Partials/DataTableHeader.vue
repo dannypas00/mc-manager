@@ -9,19 +9,21 @@
     }}</span>
     <div
       v-if="header.filter && filterComponent"
-      class="absolute left-0 top-0 hidden h-full w-full group-hover:inline has-[:focus]:inline"
+      class="absolute left-0 top-0 hidden h-full w-full group-hover:inline has-[.has-input]:inline has-[:focus]:inline"
     >
-      <Component :is="filterComponent" :filter="header.filter" @submit="$emit('submit', $event)" />
+      <Component
+        :is="filterComponent"
+        :filter="header.filter"
+        v-model:value="filterValue"
+      />
     </div>
   </th>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, PropType } from "vue";
+import { computed, inject, PropType } from 'vue';
 import { FilterType, TableHeader } from "../DataTableTypes";
-import DataTableSearchFilter from "./DataTableSearchFilter.vue";
-
-defineEmits(["submit"]);
+import DataTableSearchFilter from "./Filters/DataTableSearchFilter.vue";
 
 const props = defineProps({
   header: {

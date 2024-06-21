@@ -9,21 +9,31 @@
     }"
     v-model:selected="selected"
     :data="data.data"
-    @submit="onFilterSubmit"
   />
 
   <WidePagination v-model="currentPage" :last-page="data.meta.last_page" />
 </template>
 
-<script setup lang="ts" generic="T extends Record<string, any>">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 import DataTable from "./DataTable.vue";
 import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
-import { BulkOption, FilterOption, TableHeader } from './DataTableTypes';
-import { computed, ModelRef, onMounted, PropType, Ref, ref, watch } from "vue";
+import { BulkOption, TableHeader } from "./DataTableTypes";
+import {
+  computed,
+  ModelRef,
+  onMounted,
+  PropType,
+  provide,
+  Ref,
+  ref,
+  unref,
+  watch,
+} from "vue";
 import { AxiosResponse } from "axios";
 import { QueryBuilderIndexData } from "../../Communication/Base/QueryBuilderRequest";
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, watchDeep } from "@vueuse/core";
 import WidePagination from "../Pagination/WidePagination.vue";
+import _ from "lodash";
 
 const emit = defineEmits(["update:selected"]);
 
@@ -69,14 +79,24 @@ const props = defineProps({
   },
 
   request: {
-    type: Object as PropType<
-      QueryBuilderIndexRequest<T, Record<string, unknown>>
-    >,
+    type: Object as PropType<QueryBuilderIndexRequest<T>>,
     required: true,
+  },
+
+  autoSearch: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+
+  requestDebounceMs: {
+    type: Number,
+    required: false,
+    default: 300,
   },
 });
 
-const data: Ref<QueryBuilderIndexData<T[]>> = ref({
+const data: Ref<QueryBuilderIndexData<T>> = ref({
   data: [],
   links: [],
   meta: {
@@ -91,12 +111,30 @@ const data: Ref<QueryBuilderIndexData<T[]>> = ref({
 
 const currentPage: Ref<number> = ref(1);
 
-const requestData = useDebounceFn(getData);
+const requestData = useDebounceFn(getData, props.requestDebounceMs);
+
+// Generate object with filters as keys and undefined as value to initialize filter values map
+const filterValues: Ref<Record<string, Ref<unknown>>> = ref(
+  _.mapValues(_.keyBy(_.filter(_.map(props.headers, "filter")), "filter"), () =>
+    ref(undefined),
+  ),
+);
+provide("filter-values", filterValues);
+
+watch(currentPage, requestData);
+if (props.autoSearch) {
+  watchDeep(filterValues, requestData);
+}
+
+onMounted(() => {
+  getData();
+});
 
 function getData() {
   // TODO: Request cancelling
   // props.request.cancel('Changing filters during request');
   props.request
+    .setFilters(_.mapValues(filterValues.value, unref))
     .setPage(currentPage.value)
     .getResponse()
     .then((response: AxiosResponse) => {
@@ -104,16 +142,6 @@ function getData() {
     });
 }
 
-function onFilterSubmit({ filter, value }: {filter: FilterOption, value: unknown}) {
-  props.request.addFilter(filter.filter, value);
-  requestData();
-}
-
-watch(currentPage, requestData);
-
-onMounted(getData);
-
 // Explicitly expose the getData function so that parent components can refresh the data
 defineExpose({ getData });
-
 </script>
