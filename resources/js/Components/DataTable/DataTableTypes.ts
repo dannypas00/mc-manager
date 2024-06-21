@@ -2,6 +2,11 @@ import i18n from "../../i18n";
 import { FontAwesomeIconProps } from "../Icons/FontAwesomeIconProps";
 import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
 
+export type DateRangeValue = {
+  start: string | undefined,
+  end: string | undefined,
+}
+
 export enum FilterType {
   Search,
   Select,

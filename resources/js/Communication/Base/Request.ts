@@ -22,7 +22,8 @@ export abstract class Request<T, D = Record<string, never>> {
 
     const useParams = ["GET", "HEAD", "OPTION"].includes(method.toUpperCase());
 
-    console.log(useParams, this.data);
+    // Completely kill all possible refs in data tree
+    const data = JSON.parse(JSON.stringify(this.data));
 
     return axios
       .request<T, AxiosResponse<T>, D>({
