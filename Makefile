@@ -1,7 +1,7 @@
 SHELL := bash
 
 ENV ?= local
-PROJECT_NAME ?= test12
+PROJECT_NAME ?= my-project
 TEMPLATE_PATTERN = laravel-template
 
 NO_DOCKER ?= false
