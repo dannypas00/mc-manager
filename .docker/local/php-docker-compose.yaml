@@ -15,4 +15,7 @@ services:
       - ../../:/var/www/project:rw
       - ./tests/output:/opt/phpstorm-coverage:rw
       - $HOME/.config:/var/www/.config:rw
-      - $HOME/.npm:/var/www/.npm:rw
+      - npm-cache:/var/www/.npm:rw
+
+volumes:
+  npm-cache:

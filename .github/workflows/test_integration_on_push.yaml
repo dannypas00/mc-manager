@@ -14,7 +14,7 @@ jobs:
       name: Checkout
     - uses: docker/setup-buildx-action@v3.4.0
       name: Setup buildx
-    - run: mkdir $HOME/.npm
+    - run: mkdir /tmp/.npm
     - run: docker compose pull --quiet
     - run: CUSTOM_USER=1001 make -B
       name: Run Make
