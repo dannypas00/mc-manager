@@ -94,7 +94,7 @@ endif
 
 .PHONY: test-integration
 test-integration: docker-compose.yaml
-	$(COMPOSER) run test-integration
+	$(PHP) artisan test --env=integration --testsuite=Integration
 
 .PHONY: app-key
 app-key:
