@@ -8,18 +8,19 @@ type QueryBuilderData = {
   fields?: string[];
 };
 
-export type QueryBuilderIndexData<T extends Record<string, unknown>> = QueryBuilderData & {
-  data: T[];
-  links: Array<unknown>;
-  meta: {
-    current_page: number;
-    last_page: number;
-    from: number;
-    per_page: number;
-    to: number;
-    total: number;
+export type QueryBuilderIndexData<T extends Record<string, unknown>> =
+  QueryBuilderData & {
+    data: T[];
+    links: Array<unknown>;
+    meta: {
+      current_page: number;
+      last_page: number;
+      from: number;
+      per_page: number;
+      to: number;
+      total: number;
+    };
   };
-};
 
 type QueryBuilderResponseData<T extends Record<string, unknown>> =
   | T
@@ -27,7 +28,7 @@ type QueryBuilderResponseData<T extends Record<string, unknown>> =
 
 export abstract class QueryBuilderRequest<
   T extends Record<string, unknown>,
-  D extends QueryBuilderData | QueryBuilderIndexData<T> = QueryBuilderData
+  D extends QueryBuilderData | QueryBuilderIndexData<T> = QueryBuilderData,
 > extends Request<T & QueryBuilderResponseData<T>, D> {
   private filter: Record<string, unknown> = {};
   private sort: string[] = [];

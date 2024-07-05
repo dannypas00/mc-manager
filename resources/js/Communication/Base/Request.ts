@@ -29,8 +29,8 @@ export abstract class Request<T, D = Record<string, never>> {
       .request<T, AxiosResponse<T>, D>({
         url: this.getEndPoint(),
         method,
-        data: useParams ? [] : this.data,
-        params: useParams ? this.data : [],
+        data: useParams ? [] : data,
+        params: useParams ? data : [],
         withCredentials: true,
         signal: this.abortController.signal,
       } as AxiosRequestConfig<D>)

@@ -20,7 +20,7 @@
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
-import { computed, inject, PropType, ref, Ref, WritableComputedRef } from 'vue';
+import { computed, inject, PropType, ref, Ref, WritableComputedRef } from "vue";
 import { SearchFilterOption } from "../../DataTableTypes";
 
 const props = defineProps({
@@ -33,7 +33,9 @@ const props = defineProps({
 const filterValuesMap: Ref<Record<string, Ref<unknown>>> | undefined =
   inject("filter-values");
 
-const internalValue: Ref<string> = ref(filterValuesMap?.value?.[props.filter.filter]?.value as string ?? '');
+const internalValue: Ref<string> = ref(
+  (filterValuesMap?.value?.[props.filter.filter]?.value as string) ?? "",
+);
 
 const filterValue: WritableComputedRef<string> = computed({
   get: () => internalValue.value,

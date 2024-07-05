@@ -78,12 +78,11 @@
 
 <script setup lang="ts" generic="T extends Record<string, any>">
 import { computed, ModelRef, PropType } from "vue";
-import { BulkOption, FilterOption, TableHeader } from './DataTableTypes';
+import { BulkOption, TableHeader } from "./DataTableTypes";
 import DataTableCell from "./Partials/DataTableCell.vue";
 import EditButton from "./Partials/EditButton.vue";
 import TableHead from "./Partials/TableHead.vue";
 import TableBulkAction from "./Partials/TableBulkAction.vue";
-import { usePassthroughModel } from '../../Composables/PassthroughModelComposable';
 
 const emit = defineEmits(["update:selected"]);
 

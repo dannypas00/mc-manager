@@ -1,9 +1,11 @@
 <template>
-  <div class="absolute inset-0 grid grid-flow-row align-bottom gap-6 min-w-max p-1">
+  <div
+    class="absolute inset-0 grid min-w-max grid-flow-row gap-6 p-1 align-bottom"
+  >
     <input
       v-model="start"
       type="date"
-      class="rounded-md text-gray-900 h-fit bg-none p-1"
+      class="h-fit rounded-md bg-none p-1 text-gray-900"
       :class="{ 'has-input': internalValue.start }"
       :max="internalValue.end"
       placeholder="From"
@@ -11,7 +13,7 @@
     <input
       v-model="end"
       type="date"
-      class="rounded-md text-gray-900 h-fit bg-none p-1"
+      class="h-fit rounded-md bg-none p-1 text-gray-900"
       :class="{ 'has-input': internalValue.end }"
       :min="internalValue.start"
       placeholder="To"
