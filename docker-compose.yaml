@@ -3,7 +3,10 @@ services:
     container_name: ${APP_NAME}-db
     image: mariadb:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
     ports:
       - "${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}"
     volumes:
@@ -16,7 +19,10 @@ services:
     container_name: ${APP_NAME}-redis
     image: redis:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
 
   php:
     container_name: ${APP_NAME}-php
@@ -68,7 +74,10 @@ services:
     container_name: ${APP_NAME}-nginx
     image: nginx:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
     depends_on:
       - php
     ports:
@@ -81,7 +90,10 @@ services:
     container_name: ${APP_NAME}-mailpit
     image: axllent/mailpit:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
     ports:
       - "${MAILPIT_PORT:-1025}:1025"
       - "${MAILPIT_INTERFACE_PORT:-8025}:8025"

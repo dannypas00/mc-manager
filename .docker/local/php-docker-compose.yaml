@@ -4,7 +4,10 @@ services:
       dockerfile: Dockerfile
       context: .
     env_file:
-      - ../../.env
+      - path: ../...env
+        required: false
+      - path: ../../.env.example
+        required: true
     user: 1000:1000
     working_dir: /var/www/project
     command:
