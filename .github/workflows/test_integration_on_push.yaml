@@ -9,7 +9,6 @@ jobs:
   Run-make-with-integration-tests:
     container:
       image: dannypas00/laravel-fpm:8.2
-      options: --user 1000:1000
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -32,5 +31,5 @@ jobs:
       with:
         cache: 'npm'
 
-    - run: make COMPOSER=composer NPM=npm -B
+    - run: CUSTOM_USER=1001 make COMPOSER=composer NPM=npm -B
       name: Run Make
