@@ -3,7 +3,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    env:
+    environment:
       APP_NAME: "laravel-template"
     user: 1000:1000
     working_dir: /var/www/project

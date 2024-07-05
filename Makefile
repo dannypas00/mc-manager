@@ -83,7 +83,7 @@ ifneq ($(NO_DOCKER), true)
 endif
 
 .PHONY: test-integration
-test-integration:
+test-integration: docker-compose.yaml
 	$(COMPOSER) run test-integration
 
 .PHONY: app-key

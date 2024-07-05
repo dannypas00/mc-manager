@@ -30,7 +30,7 @@ class EnvironmentRunningTest extends TestCase
     {
         DB::getPdo();
 
-        // Assert that getting db connection doesn't throw
+        // Assert that getting db connection doesn't throw an exception
         $this->addToAssertionCount(1);
     }
 
@@ -62,5 +62,8 @@ class EnvironmentRunningTest extends TestCase
     public function test_that_mail_can_be_sent(): void
     {
         Mail::raw('test', static fn (Message $message) => $message->to('test@example.com'));
+
+        // Assert that sending mail doesn't throw an exception
+        $this->addToAssertionCount(1);
     }
 }
