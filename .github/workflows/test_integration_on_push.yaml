@@ -18,5 +18,7 @@ jobs:
 
     - uses: actions/setup-node@v4
 
+    - run: mkdir $HOME/.npm
+
     - run: CUSTOM_USER=1001 make NPM=npm -B
       name: Run Make
