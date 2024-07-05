@@ -19,10 +19,10 @@ PHP ?= $(PHP_CONTAINER) php
 COMPOSER ?= $(PHP_CONTAINER) composer
 NPM ?= $(PHP_CONTAINER) npm
 
-.DEFAULT_TARGET: init
+.DEFAULT_TARGET: project-setup
 
-.PHONY: init
-init: $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+.PHONY: project-setup
+project-setup: $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
