@@ -12,8 +12,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       name: Checkout
+    - uses: actions/cache@v3
+      with:
+        path: composer_cache.tar.gz
+    - run: tar -xzf composer_cache.tar.gz composer-cache
     - uses: docker/setup-buildx-action@v3.4.0
       name: Setup buildx
     - run: mkdir /tmp/.npm
-    - run: CUSTOM_USER=1001 NPM_CACHE_DIR=/tmp/.npm make -B
+    - uses: actions/setup-node@v4
+      with:
+        cache: 'npm'
+    - run: CUSTOM_USER=1001 COMPOSER_CACHE=$HOME/composer-cache make NPM=npm -B
       name: Run Make
+    - run: tar -czf composer_cache.tar.gz composer-cache

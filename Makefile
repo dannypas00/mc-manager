@@ -15,9 +15,9 @@ ifeq ($(NO_DOCKER), true)
 PHP_CONTAINER =
 endif
 
-PHP = $(PHP_CONTAINER) php
-COMPOSER = $(PHP_CONTAINER) composer
-NPM = $(PHP_CONTAINER) npm
+PHP ?= $(PHP_CONTAINER) php
+COMPOSER ?= $(PHP_CONTAINER) composer
+NPM ?= $(PHP_CONTAINER) npm
 
 .DEFAULT_TARGET: init
 
@@ -44,6 +44,7 @@ ifeq ($(ENV), local)
 else
 	$(COMPOSER) install --prefer-dist --no-scripts --no-plugins --no-interaction --no-progress --no-dev --no-suggest --optimize-autoloader
 endif
+	$(COMPOSER) clear-cache --gc
 
 vendor/autoload.php:
 ifeq ($(ENV), local)
