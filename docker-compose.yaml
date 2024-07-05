@@ -3,7 +3,10 @@ services:
     container_name: ${APP_NAME}-db
     image: mariadb:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
     ports:
       - "${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}"
     volumes:
@@ -16,7 +19,10 @@ services:
     container_name: ${APP_NAME}-redis
     image: redis:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
 
   php:
     container_name: ${APP_NAME}-php
@@ -28,6 +34,9 @@ services:
 
   horizon:
     container_name: ${APP_NAME}-horizon
+    depends_on:
+      - redis
+      - db
     extends:
       file: .docker/local/php-docker-compose.yaml
       service: base-php
@@ -55,7 +64,9 @@ services:
     command:
       - php
       - artisan
-      - websockets:serve
+      - reverb:start
+      - --port=6001
+      - --host=0.0.0.0
     ports:
       - "6001:6001"
 
@@ -63,7 +74,10 @@ services:
     container_name: ${APP_NAME}-nginx
     image: nginx:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
     depends_on:
       - php
     ports:
@@ -72,14 +86,18 @@ services:
       - .docker/local/nginx-includes:/etc/nginx/conf.d
       - ./:/var/www/project
 
-  mailhog:
-    container_name: ${APP_NAME}-mailhog
-    image: mailhog/mailhog:latest
+  mailpit:
+    container_name: ${APP_NAME}-mailpit
+    image: axllent/mailpit:latest
     env_file:
-      - .env
+      - path: .env
+        required: false
+      - path: .env.example
+        required: true
     ports:
-      - "8003:1025"
-      - "8100:8025"
+      - "${MAILPIT_PORT:-1025}:1025"
+      - "${MAILPIT_INTERFACE_PORT:-8025}:8025"
 
 volumes:
     mysql:
+    npm-cache:
