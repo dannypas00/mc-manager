@@ -13,24 +13,8 @@ jobs:
     - uses: actions/checkout@v4
       name: Checkout
 
-    - uses: actions/cache@v3
-      name: Restore compose cache
-      with:
-        path: composer-cache
-        key: composer-integration-cache-${{ hashFiles('composer.json') }}
-
     - uses: docker/setup-buildx-action@v3.4.0
       name: Setup buildx
 
-    - run: mkdir -v $HOME/.npm
-
-    - run: make NPM=npm -B package.json
-      name: Create package-lock
-
-    - uses: actions/setup-node@v4
-      name: NPM cache
-      with:
-        cache: 'npm'
-
-    - run: CUSTOM_USER=1001 COMPOSER_CACHE=`pwd`/composer-cache make NPM=npm -B
+    - run: CUSTOM_USER=1001 make -B
       name: Run Make
