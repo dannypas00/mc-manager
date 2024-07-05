@@ -100,3 +100,4 @@ services:
 
 volumes:
     mysql:
+    npm-cache:
