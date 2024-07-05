@@ -11,7 +11,7 @@ services:
       - artisan
       - list
     volumes:
-      - ../../:/var/www/project
-      - ./tests/output:/opt/phpstorm-coverage
-      - $HOME/.config:/var/www/.config
-      - $HOME/.npm:/var/www/.npm
+      - ../../:/var/www/project:rw
+      - ./tests/output:/opt/phpstorm-coverage:rw
+      - $HOME/.config:/var/www/.config:rw
+      - $HOME/.npm:/var/www/.npm:rw
