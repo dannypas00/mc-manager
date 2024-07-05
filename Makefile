@@ -1,3 +1,5 @@
+SHELL := bash
+
 ENV ?= local
 PROJECT_NAME ?= test12
 TEMPLATE_PATTERN = laravel-template
