@@ -18,7 +18,7 @@ jobs:
         path: composer_cache.tar.gz
         key: composer-cache
 
-    - run: tar -xzf composer_cache.tar.gz composer-cache || true
+    - run: tar -xzf composer_cache.tar.gz composer-cache || mkdir composer-cache
 
     - uses: docker/setup-buildx-action@v3.4.0
       name: Setup buildx
@@ -31,7 +31,7 @@ jobs:
       with:
         cache: 'npm'
 
-    - run: CUSTOM_USER=1001 COMPOSER_CACHE=$HOME/composer-cache make NPM=npm -B
+    - run: CUSTOM_USER=1001 COMPOSER_CACHE=`pwd`/composer-cache make NPM=npm -B
       name: Run Make
 
     - run: tar -czf composer_cache.tar.gz composer-cache
