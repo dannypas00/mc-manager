@@ -18,7 +18,7 @@ jobs:
         path: composer_cache.tar.gz
         key: composer-cache
 
-    - run: [[ -f composer_cache.tar.gz ]] && tar -xzf composer_cache.tar.gz composer-cache
+    - run: bash -c [[ -f composer_cache.tar.gz ]] && tar -xzf composer_cache.tar.gz composer-cache
 
     - uses: docker/setup-buildx-action@v3.4.0
       name: Setup buildx
