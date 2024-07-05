@@ -5,17 +5,13 @@ on:
       - master
       - develop
       - install
+
 jobs:
   Run-make-with-integration-tests:
-    container:
-      image: dannypas00/laravel-fpm:8.2
-      options: --user=root:docker
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
       name: Checkout
-
-    - run: ls -lah && id
 
     - uses: actions/cache@v3
       name: Restore compose cache
@@ -34,7 +30,5 @@ jobs:
       with:
         cache: 'npm'
 
-    - run: composer install --ignore-platform-reqs
-
-    - run: CUSTOM_USER=1001 make NPM=npm -B
+    - run: CUSTOM_USER=1001 COMPOSER_CACHE=`pwd`/composer-cache make NPM=npm -B
       name: Run Make
