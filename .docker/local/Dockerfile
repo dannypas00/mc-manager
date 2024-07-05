@@ -6,6 +6,5 @@ USER 0
 RUN docker-php-ext-enable xdebug
 ADD xdebug.ini /usr/local/etc/php/conf.d/zz_xdebug.ini
 RUN npm config --global set cache=/var/www/.npm
-RUN composer config --global cache-dir /var/www/.cache/composer
 
 USER 1000

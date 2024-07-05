@@ -16,4 +16,4 @@ services:
       - ./tests/output:/opt/phpstorm-coverage:rw
       - $HOME/.config:/var/www/.config:rw
       - ${NPM_CACHE_DIR:-$HOME/.npm}:/var/www/.npm:rw
-      - ${COMPOSER_CACHE:-$HOME/.cache/composer}:/var/www/.cache/composer:rw
+      - ${COMPOSER_CACHE:-$HOME/.cache/composer}:/var/www/.cache:rw
