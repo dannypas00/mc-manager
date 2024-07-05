@@ -33,5 +33,7 @@ jobs:
       with:
         cache: 'npm'
 
-    - run: CUSTOM_USER=1001 make COMPOSER=composer NPM=npm -B
+    - run: composer install --ignore-platform-reqs
+
+    - run: CUSTOM_USER=1001 make NPM=npm -B
       name: Run Make
