@@ -6,7 +6,7 @@ services:
     environment:
       APP_NAME: "laravel-template"
     working_dir: /var/www/project
-    user: ${UID}
+    user: ${CUSTOM_USER:-1000}
     command:
       - php
       - artisan
