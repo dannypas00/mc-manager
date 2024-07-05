@@ -22,7 +22,7 @@ NPM = $(PHP_CONTAINER) npm
 .DEFAULT_TARGET: init
 
 .PHONY: init
-init: $(TEMPLATE_PATTERN) .env.example composer.json package.json docker-compose.yaml app-key init-db test-integration
+init: $(TEMPLATE_PATTERN) .env.example composer.json package.json docker-compose.yaml app-key init-db test-integration vendor/autoload.php
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
@@ -40,9 +40,16 @@ $(TEMPLATE_PATTERN):
 composer.json: composer.lock
 composer.lock:
 ifeq ($(ENV), local)
-	$(COMPOSER) install --prefer-dist --optimize-autoloader
+	$(COMPOSER) install --prefer-dist
 else
-	$(COMPOSER) install --prefer-dist --classmap-authoritative --optimize-autoloader --no-scripts --no-plugins --no-interaction --apcu-autoloader --no-progress --no-dev --no-suggest
+	$(COMPOSER) install --prefer-dist --no-scripts --no-plugins --no-interaction --no-progress --no-dev --no-suggest --optimize-autoloader
+endif
+
+vendor/autoload.php:
+ifeq ($(ENV), local)
+	$(COMPOSER) dump-autoload
+else
+	$(COMPOSER) dump-autoload --classmap-authoritative --apcu
 endif
 
 package.json:
