@@ -25,6 +25,8 @@ jobs:
 
     - run: mkdir /tmp/.npm
 
+    - run: make NPM=npm -B package.json
+
     - uses: actions/setup-node@v4
       with:
         cache: 'npm'
