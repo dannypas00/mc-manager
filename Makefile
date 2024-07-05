@@ -29,7 +29,7 @@ install: composer.lock package-lock.json docker-compose.yaml
 $(TEMPLATE_PATTERN):
 	# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
 	# This fails if no files are found (script has already run), hence the || true.
-	grep -rl $(TEMPLATE_PATTERN) . --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile | xargs sed -i 's/$(TEMPLATE_PATTERN)/$(PROJECT_NAME)/g' || true
+	grep -rl $(TEMPLATE_PATTERN) . --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(TEMPLATE_PATTERN)/$(PROJECT_NAME)/g' || true
 
 .env.example:
 	# Copy env.example file if env file doesn't exist yet
