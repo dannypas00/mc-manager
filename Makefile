@@ -22,7 +22,7 @@ NPM = $(PHP_CONTAINER) npm
 .DEFAULT_TARGET: init
 
 .PHONY: init
-init: $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db test-integration vendor/autoload.php docker-compose.yaml
+init: $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
@@ -99,3 +99,6 @@ test-integration: docker-compose.yaml
 app-key:
 	@# Only generate an app key if the .env doesn't have on yet
 	(grep "^APP_KEY=$$" .env && $(PHP) artisan key:generate) || true
+
+resources/js/: package-lock.json
+	$(NPM) run build
