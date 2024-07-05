@@ -13,5 +13,6 @@ services:
       - list
     volumes:
       - ../../:/var/www/project
-      - ~/.config:/var/www/.config
+      - $HOME/.config:/var/www/.config
       - ./tests/output:/opt/phpstorm-coverage
+      - ${NODE_CACHE_DIR:-$HOME/.npm}:/var/www/.npm

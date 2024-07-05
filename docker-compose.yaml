@@ -28,6 +28,9 @@ services:
 
   horizon:
     container_name: ${APP_NAME}-horizon
+    depends_on:
+      - redis
+      - db
     extends:
       file: .docker/local/php-docker-compose.yaml
       service: base-php
@@ -55,7 +58,9 @@ services:
     command:
       - php
       - artisan
-      - websockets:serve
+      - reverb:start
+      - --port=6001
+      - --host=0.0.0.0
     ports:
       - "6001:6001"
 
@@ -72,14 +77,14 @@ services:
       - .docker/local/nginx-includes:/etc/nginx/conf.d
       - ./:/var/www/project
 
-  mailhog:
-    container_name: ${APP_NAME}-mailhog
-    image: mailhog/mailhog:latest
+  mailpit:
+    container_name: ${APP_NAME}-mailpit
+    image: axllent/mailpit:latest
     env_file:
       - .env
     ports:
-      - "8003:1025"
-      - "8100:8025"
+      - "${MAILPIT_PORT:-1025}:1025"
+      - "${MAILPIT_INTERFACE_PORT:-8025}:8025"
 
 volumes:
     mysql:
