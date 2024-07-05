@@ -9,6 +9,7 @@ jobs:
   Run-make-with-integration-tests:
     container:
       image: dannypas00/laravel-fpm:8.2
+      options: --user=root:docker
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
