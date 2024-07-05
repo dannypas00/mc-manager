@@ -3,11 +3,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    env_file:
-      - path: ../...env
-        required: false
-      - path: ../../.env.example
-        required: true
+    env:
+      APP_NAME: "laravel-template"
     user: 1000:1000
     working_dir: /var/www/project
     command:
@@ -16,6 +13,6 @@ services:
       - list
     volumes:
       - ../../:/var/www/project
-      - $HOME/.config:/var/www/.config
       - ./tests/output:/opt/phpstorm-coverage
-      - ${NODE_CACHE_DIR:-$HOME/.npm}:/var/www/.npm
+      - $HOME/.config:/var/www/.config
+      - $HOME/.npm:/var/www/.npm
