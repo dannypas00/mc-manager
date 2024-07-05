@@ -56,7 +56,7 @@ class EnvironmentRunningTest extends TestCase
 
     public function test_that_mailpit_interface_is_up(): void
     {
-        $this->assertTrue(Http::get('http://mailpit:8025')->failed());
+        $this->assertTrue(Http::get('http://mailpit:8025')->successful());
     }
 
     public function test_that_mail_can_be_sent(): void
