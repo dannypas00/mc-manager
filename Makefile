@@ -22,7 +22,7 @@ NPM = $(PHP_CONTAINER) npm
 .DEFAULT_TARGET: init
 
 .PHONY: init
-init: $(TEMPLATE_PATTERN) .env.example composer.json package.json docker-compose.yaml app-key init-db test-integration vendor/autoload.php
+init: $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
