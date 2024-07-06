@@ -2,6 +2,7 @@
 
 namespace App\Settings;
 
+use App\Filters\FilterDateRange;
 use App\Interfaces\SettingsInterface;
 use App\Models\User;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -29,6 +30,7 @@ class UserSettings implements SettingsInterface
         return [
             AllowedFilter::partial('name'),
             AllowedFilter::partial('email'),
+            AllowedFilter::custom('created_at', new FilterDateRange()),
         ];
     }
 

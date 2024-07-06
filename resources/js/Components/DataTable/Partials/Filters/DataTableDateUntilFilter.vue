@@ -2,42 +2,31 @@
   <div class="absolute bottom-0 flex h-max w-full flex-col px-2">
     <div class="flex items-center justify-between">
       <label
-        :for="`${filter.filter}-start`"
-        v-t="'components.datatable.date_range_header.start'"
-      />
-      <input
-        v-model="start"
-        :id="`${filter.filter}-start`"
-        type="date"
-        class="w-3/4 rounded-sm bg-none text-gray-400"
-        :class="{ 'has-input': internalValue.start }"
-        :max="internalValue.end"
-      />
-    </div>
-    <div class="flex items-center justify-between">
-      <label
-        :for="`${filter.filter}-end`"
-        v-t="'components.datatable.date_range_header.end'"
+        :for="filter.filter"
+        v-t="'components.datatable.date_until_header.label'"
       />
       <input
         v-model="end"
-        :id="`${filter.filter}-end`"
+        :id="filter.filter"
         type="date"
         class="w-3/4 rounded-sm bg-none text-gray-400"
         :class="{ 'has-input': internalValue.end }"
-        :min="internalValue.start"
       />
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends Record<string, any>">
 import { computed, inject, PropType, ref, Ref, WritableComputedRef } from "vue";
-import { DateRangeValue, SearchFilterOption } from "../../DataTableTypes";
+import {
+  DateFilterOption,
+  DateRangeValue,
+  SearchFilterOption,
+} from "../../DataTableTypes";
 
 const props = defineProps({
   filter: {
-    type: Object as PropType<SearchFilterOption>,
+    type: Object as PropType<DateFilterOption<T>>,
     required: true,
   },
 });
@@ -47,19 +36,11 @@ const filterValuesMap: Ref<Record<string, Ref<unknown>>> | undefined =
 
 const internalValue: Ref<DateRangeValue> = ref(
   (filterValuesMap?.value?.[props.filter.filter]?.value as DateRangeValue) ??
-    {},
+  {},
 );
 
-const start: WritableComputedRef<string> = computed({
-  get: () => internalValue.value.start ?? "",
-  set: (value: string) => {
-    internalValue.value.start = value;
-    filterValue.value = internalValue.value;
-  },
-});
-
 const end: WritableComputedRef<string> = computed({
-  get: () => internalValue.value.end ?? "",
+  get: () => internalValue.value.start ?? "",
   set: (value: string) => {
     internalValue.value.end = value;
     filterValue.value = internalValue.value;

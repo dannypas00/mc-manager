@@ -80,7 +80,7 @@ endif
 database/migrations/: composer.lock docker-compose.yaml
 	$(PHP) artisan migrate -n
 
-database/seeders/: database/migrations/ database/factories/
+database/seeders/: drop-db database/migrations/ database/factories/
 ifeq ($(ENV), local)
 	$(PHP) artisan db:seed --class=Database\\Seeders\\DatabaseSeeder
 else

@@ -4,9 +4,14 @@
     class="group relative min-w-max py-3.5 pr-3 text-left text-sm font-semibold text-gray-900"
     :class="{ 'd-none': hideTitle }"
   >
-    <span :class="{ 'group-hover:text-transparent': header.filter }">{{
-      header.title
-    }}</span>
+    <span
+      :class="{
+        'group-hover:text-transparent group-has-[.has-input]:text-transparent group-has-[:focus]:text-transparent':
+          header.filter,
+      }"
+    >
+      {{ header.title }}
+    </span>
     <div
       v-if="header.filter && filterComponent"
       class="absolute inset-0 hidden h-full w-full min-w-max group-hover:inline has-[.has-input]:inline has-[:focus]:inline"
@@ -21,6 +26,9 @@ import { computed, PropType } from "vue";
 import { DateFilterType, FilterType, TableHeader } from "../DataTableTypes";
 import DataTableSearchFilter from "./Filters/DataTableSearchFilter.vue";
 import DataTableDateRangeFilter from "./Filters/DataTableDateRangeFilter.vue";
+import DataTableDateFromFilter from "./Filters/DataTableDateFromFilter.vue";
+import DataTableDateUntilFilter from "./Filters/DataTableDateUntilFilter.vue";
+import DataTableDateExactFilter from "./Filters/DataTableDateExactFilter.vue";
 
 const props = defineProps({
   header: {
@@ -46,6 +54,12 @@ const filterComponent = computed(() => {
       switch (props.header.filter.dateFilterType) {
         case DateFilterType.DateRange:
           return DataTableDateRangeFilter;
+        case DateFilterType.FromDate:
+          return DataTableDateFromFilter;
+        case DateFilterType.UntilDate:
+          return DataTableDateUntilFilter;
+        case DateFilterType.ExactDate:
+          return DataTableDateExactFilter;
         default:
           return undefined;
       }

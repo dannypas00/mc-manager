@@ -17,6 +17,8 @@ class UserData extends Data
         public string $email,
         public string $profile_photo_url,
         public ?Carbon $email_verified_at,
+        public ?Carbon $created_at,
+        public ?Carbon $updated_at,
     ) {
     }
 
@@ -28,6 +30,8 @@ class UserData extends Data
             $model->email,
             $model->profile_photo_url,
             $model->email_verified_at,
+            $model->created_at,
+            $model->updated_at,
         );
     }
 }

@@ -1,30 +1,43 @@
 {
-  "confirmation": {
-    "default_negative_button": "Cancel",
-    "default_positive_button": "Confirm"
-  },
-  "datatable": {
-    "bulk_actions": {
-      "confirm_negative_button": "No",
-      "confirm_positive_button": "Yes",
-      "confirm_title": "Confirm bulk action",
-      "default_confirm_text": "Are you sure you want to execute this {action} action on all {count} selected items?"
+    "confirmation": {
+        "default_negative_button": "Cancel",
+        "default_positive_button": "Confirm"
     },
-    "created_at_title": "Created",
-    "edit_button": {
-      "text": "Edit"
+    "datatable": {
+        "bulk_actions": {
+            "confirm_negative_button": "No",
+            "confirm_positive_button": "Yes",
+            "confirm_title": "Confirm bulk action",
+            "default_confirm_text": "Are you sure you want to execute this {action} action on all {count} selected items?"
+        },
+        "created_at_title": "Created",
+        "date_exact_header": {
+            "label": "On date"
+        },
+        "date_from_header": {
+            "label": "Since"
+        },
+        "date_range_header": {
+            "end": "End",
+            "start": "Start"
+        },
+        "date_until_header": {
+            "label": "Until"
+        },
+        "edit_button": {
+            "text": "Edit"
+        },
+        "id_title": "ID",
+        "updated_at_title": "Updated"
     },
-    "id_title": "ID",
-    "updated_at_title": "Updated"
-  },
-  "layout": {
-    "open_main_menu": "Open main menu",
-    "open_user_menu": "Open user menu",
-    "view_notifications": "View notifications",
-    "your_profile": "Your profile"
-  },
-  "pagination": {
-    "next_button": "Next",
-    "previous_button": "Previous"
-  }
+    "layout": {
+        "open_main_menu": "Open main menu",
+        "open_user_menu": "Open user menu",
+        "view_notifications": "View notifications",
+        "your_profile": "Your profile"
+    },
+    "pagination": {
+        "next_button": "Next",
+        "previous_button": "Previous"
+    }
 }
