@@ -1,7 +1,7 @@
 <template>
-  <div class="relative mt-2 mx-1 shadow-sm">
+  <div class="relative mx-1 mt-2 shadow-sm">
     <div
-      class="flex flex-row px-1 items-center rounded-md border-0 bg-white text-center text-gray-900 ring-1 ring-inset ring-gray-300 *:focus:ring-2 *:focus:ring-brand-light"
+      class="flex flex-row items-center rounded-md border-0 bg-white px-1 text-center text-gray-900 ring-1 ring-inset ring-gray-300 *:focus:ring-2 *:focus:ring-brand-light"
     >
       <FontAwesomeIcon
         :icon="{ prefix: 'fas', iconName: 'search' }"
@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { MagnifyingGlassIcon } from '@heroicons/vue/16/solid';
 import { computed, inject, PropType, ref, Ref, WritableComputedRef } from 'vue';
 import { SearchFilterOption } from '../../DataTableTypes';
 import ClearInputButton from '../ClearInputButton.vue';
