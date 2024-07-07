@@ -52,12 +52,11 @@ const filterComponent = computed(() => {
       return DataTableSearchFilter;
     case FilterType.Date:
       switch (props.header.filter.dateFilterType) {
+        // These use the prop type to disable one or the other component
+        case DateFilterType.FromDate:
+        case DateFilterType.UntilDate:
         case DateFilterType.DateRange:
           return DataTableDateRangeFilter;
-        case DateFilterType.FromDate:
-          return DataTableDateFromFilter;
-        case DateFilterType.UntilDate:
-          return DataTableDateUntilFilter;
         case DateFilterType.ExactDate:
           return DataTableDateExactFilter;
         default:

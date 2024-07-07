@@ -1,9 +1,9 @@
 <template>
   <div class="absolute bottom-0 flex h-max w-full flex-col px-2">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between" v-if="useFrom">
       <label
         :for="`${filter.filter}-start`"
-        v-t="'components.datatable.date_range_header.start'"
+        v-t="'components.datatable.date_from_header.label'"
       />
       <input
         v-model="start"
@@ -14,10 +14,10 @@
         :max="internalValue.end"
       />
     </div>
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between" v-if="useUntil">
       <label
         :for="`${filter.filter}-end`"
-        v-t="'components.datatable.date_range_header.end'"
+        v-t="'components.datatable.date_until_header.label'"
       />
       <input
         v-model="end"
@@ -31,16 +31,39 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { computed, inject, PropType, ref, Ref, WritableComputedRef } from "vue";
-import { DateRangeValue, SearchFilterOption } from "../../DataTableTypes";
+<script setup lang="ts" generic="T extends Record<string, any>">
+import {
+  computed,
+  ComputedRef,
+  inject,
+  PropType,
+  ref,
+  Ref,
+  WritableComputedRef,
+} from "vue";
+import {
+  DateFilterOption,
+  DateFilterType,
+  DateRangeValue,
+} from "../../DataTableTypes";
 
 const props = defineProps({
   filter: {
-    type: Object as PropType<SearchFilterOption>,
+    type: Object as PropType<DateFilterOption<T>>,
     required: true,
   },
 });
+
+const useFrom: ComputedRef<boolean> = computed(() =>
+  [DateFilterType.FromDate, DateFilterType.DateRange].includes(
+    props.filter?.dateFilterType,
+  ),
+);
+const useUntil: ComputedRef<boolean> = computed(() =>
+  [DateFilterType.UntilDate, DateFilterType.DateRange].includes(
+    props.filter?.dateFilterType,
+  ),
+);
 
 const filterValuesMap: Ref<Record<string, Ref<unknown>>> | undefined =
   inject("filter-values");
