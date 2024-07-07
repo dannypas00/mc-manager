@@ -1,5 +1,5 @@
-import { Method } from "axios";
-import { QueryBuilderRequest } from "./QueryBuilderRequest";
+import { Method } from 'axios';
+import { QueryBuilderRequest } from './QueryBuilderRequest';
 
 export abstract class QueryBuilderShowRequest<
   T,
@@ -7,7 +7,7 @@ export abstract class QueryBuilderShowRequest<
   private id?: number;
 
   protected getMethod(): Method {
-    return "GET";
+    return 'GET';
   }
 
   public setId(id: number): this {

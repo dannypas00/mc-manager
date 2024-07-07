@@ -35,5 +35,5 @@ const props = defineProps({
 });
 
 document.title =
-  (props.title ?? props.header) + " - " + import.meta.env.VITE_APP_NAME;
+  (props.title ?? props.header) + ' - ' + import.meta.env.VITE_APP_NAME;
 </script>

@@ -1,5 +1,5 @@
-import { Request } from "./Request";
-import { uniq } from "lodash";
+import { Request } from './Request';
+import { uniq } from 'lodash';
 
 type QueryBuilderData = {
   filter?: Record<string, unknown>;
@@ -33,7 +33,7 @@ export abstract class QueryBuilderRequest<
   private filter: Record<string, unknown> = {};
   private sort: string[] = [];
   private include: string[] = [];
-  private fields: string[] = ["*"];
+  private fields: string[] = ['*'];
 
   // Includes
   public setInclude(include: string[]): this {
@@ -50,7 +50,7 @@ export abstract class QueryBuilderRequest<
 
   public removeInclude(include: string): this {
     const index = this.include.findIndex(
-      (entry) => entry === include || entry === `-${include}`,
+      entry => entry === include || entry === `-${include}`
     );
     if (index > -1) {
       this.include.splice(index, 1);
@@ -80,7 +80,7 @@ export abstract class QueryBuilderRequest<
 
   public removeSort(sorting: string): this {
     const index = this.sort.findIndex(
-      (entry) => entry === sorting || entry === `-${sorting}`,
+      entry => entry === sorting || entry === `-${sorting}`
     );
     if (index > -1) {
       this.sort.splice(index, 1);
@@ -128,7 +128,7 @@ export abstract class QueryBuilderRequest<
   }
 
   public removeFields(fields: string): this {
-    this.fields.findIndex((value) => value === fields);
+    this.fields.findIndex(value => value === fields);
     return this;
   }
 

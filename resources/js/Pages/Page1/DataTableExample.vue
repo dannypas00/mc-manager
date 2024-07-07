@@ -29,9 +29,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import QueryBuilderTable from "../../Components/DataTable/QueryBuilderTable.vue";
-import { UserIndexRequest } from "../../Communication/Users/UserIndexRequest";
+import { defineComponent } from 'vue';
+import QueryBuilderTable from '../../Components/DataTable/QueryBuilderTable.vue';
+import { UserIndexRequest } from '../../Communication/Users/UserIndexRequest';
 import {
   BulkOption,
   CreatedAtHeader,
@@ -39,17 +39,17 @@ import {
   IdHeader,
   TableHeader,
   UpdatedAtHeader,
-} from "../../Components/DataTable/DataTableTypes";
-import PageHeader from "../../Components/Layout/PageHeader.vue";
-import { UserData } from "../../Types/generated";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import ModalDialog from "../../Components/Dialogs/ModalDialog.vue";
-import IconButton from "../../Components/Buttons/IconButton.vue";
-import UserCreateForm from "./Partials/UserCreateForm.vue";
+} from '../../Components/DataTable/DataTableTypes';
+import PageHeader from '../../Components/Layout/PageHeader.vue';
+import { UserData } from '../../Types/generated';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import ModalDialog from '../../Components/Dialogs/ModalDialog.vue';
+import IconButton from '../../Components/Buttons/IconButton.vue';
+import UserCreateForm from './Partials/UserCreateForm.vue';
 import {
   UserCreateData,
   UserCreateRequest,
-} from "../../Communication/Users/UserCreateRequest";
+} from '../../Communication/Users/UserCreateRequest';
 
 export default defineComponent({
   components: {
@@ -74,21 +74,21 @@ export default defineComponent({
       return [
         IdHeader,
         {
-          key: "name",
-          title: this.$t("pages.page1.table.name_title"),
+          key: 'name',
+          title: this.$t('pages.page1.table.name_title'),
           filter: {
             type: FilterType.Search,
-            filter: "name",
-            placeholder: this.$t("pages.page1.table.name_placeholder"),
+            filter: 'name',
+            placeholder: this.$t('pages.page1.table.name_placeholder'),
           },
         },
         {
-          key: "email",
-          title: this.$t("pages.page1.table.email_title"),
+          key: 'email',
+          title: this.$t('pages.page1.table.email_title'),
           filter: {
             type: FilterType.Search,
-            filter: "email",
-            placeholder: this.$t("pages.page1.table.email_placeholder"),
+            filter: 'email',
+            placeholder: this.$t('pages.page1.table.email_placeholder'),
           },
         },
         CreatedAtHeader,
@@ -99,21 +99,21 @@ export default defineComponent({
     getBulkOptions(): BulkOption<UserData>[] {
       return [
         {
-          title: "Delete",
+          title: 'Delete',
           onClick: (selected: UserData[]) => {
-            console.log("Clicked bulk delete!", selected);
+            console.log('Clicked bulk delete!', selected);
           },
           unselectAfter: true,
           icon: {
             icon: faTrash,
           },
-          classes: "bg-red-500 hover:bg-red-700 border-red-400 text-white",
+          classes: 'bg-red-500 hover:bg-red-700 border-red-400 text-white',
           confirmation: true,
           confirmationText: (selected: UserData[]) =>
-            this.$t("pages.page1.table.delete_text", selected),
+            this.$t('pages.page1.table.delete_text', selected),
         },
         {
-          title: "Test",
+          title: 'Test',
           unselectAfter: false,
         },
       ] as BulkOption<UserData>[];

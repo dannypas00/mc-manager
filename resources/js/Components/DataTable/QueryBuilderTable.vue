@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
-import DataTable from "./DataTable.vue";
-import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
-import { BulkOption, TableHeader } from "./DataTableTypes";
+import DataTable from './DataTable.vue';
+import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
+import { BulkOption, TableHeader } from './DataTableTypes';
 import {
   computed,
   ModelRef,
@@ -28,16 +28,16 @@ import {
   ref,
   unref,
   watch,
-} from "vue";
-import { AxiosResponse } from "axios";
-import { QueryBuilderIndexData } from "../../Communication/Base/QueryBuilderRequest";
-import { useDebounceFn, watchDeep } from "@vueuse/core";
-import WidePagination from "../Pagination/WidePagination.vue";
-import _ from "lodash";
+} from 'vue';
+import { AxiosResponse } from 'axios';
+import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequest';
+import { useDebounceFn, watchDeep } from '@vueuse/core';
+import WidePagination from '../Pagination/WidePagination.vue';
+import _ from 'lodash';
 
-const emit = defineEmits(["update:selected"]);
+const emit = defineEmits(['update:selected']);
 
-const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
+const selectedModel: ModelRef<Array<T>> = defineModel('selected', {
   type: Array<T>,
   required: false,
   default: undefined,
@@ -45,7 +45,7 @@ const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
 
 const selected = computed({
   get: () => selectedModel.value,
-  set: (value) => emit("update:selected", value),
+  set: value => emit('update:selected', value),
 });
 
 const props = defineProps({
@@ -57,7 +57,7 @@ const props = defineProps({
   identifier: {
     type: String,
     required: false,
-    default: "id",
+    default: 'id',
   },
 
   selectable: {
@@ -115,11 +115,11 @@ const requestData = useDebounceFn(getData, props.requestDebounceMs);
 
 // Generate object with filters as keys and undefined as value to initialize filter values map
 const filterValues: Ref<Record<string, Ref<unknown>>> = ref(
-  _.mapValues(_.keyBy(_.filter(_.map(props.headers, "filter")), "filter"), () =>
-    ref(undefined),
-  ),
+  _.mapValues(_.keyBy(_.filter(_.map(props.headers, 'filter')), 'filter'), () =>
+    ref(undefined)
+  )
 );
-provide("filter-values", filterValues);
+provide('filter-values', filterValues);
 
 watch(currentPage, requestData);
 if (props.autoSearch) {

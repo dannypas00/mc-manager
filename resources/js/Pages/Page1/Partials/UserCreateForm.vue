@@ -6,7 +6,7 @@
           for="name"
           class="block text-sm font-medium leading-6 text-gray-900"
         >
-          {{ $t("pages.page1.user_form.name") }}
+          {{ $t('pages.page1.user_form.name') }}
         </label>
         <div class="mt-2">
           <input
@@ -27,7 +27,7 @@
             for="email"
             class="block text-sm font-medium leading-6 text-gray-900"
           >
-            {{ $t("pages.page1.user_form.email") }}
+            {{ $t('pages.page1.user_form.email') }}
           </label>
           <div class="mt-2">
             <input
@@ -49,7 +49,7 @@
             for="password"
             class="block text-sm font-medium leading-6 text-gray-900"
           >
-            {{ $t("pages.page1.user_form.password") }}
+            {{ $t('pages.page1.user_form.password') }}
           </label>
           <div class="mt-2">
             <input
@@ -68,7 +68,7 @@
             for="password_confirmation"
             class="block text-sm font-medium leading-6 text-gray-900"
           >
-            {{ $t("pages.page1.user_form.password_confirmation") }}
+            {{ $t('pages.page1.user_form.password_confirmation') }}
           </label>
           <div class="mt-2">
             <input
@@ -109,20 +109,20 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from "@inertiajs/vue3";
-import { UserCreateData } from "../../../Communication/Users/UserCreateRequest";
+import { useForm } from '@inertiajs/vue3';
+import { UserCreateData } from '../../../Communication/Users/UserCreateRequest';
 
-const emit = defineEmits(["submit", "cancel"]);
+const emit = defineEmits(['submit', 'cancel']);
 
 const form = useForm({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
   terms: true,
 } as UserCreateData);
 
 function onSubmit() {
-  emit("submit", form.data());
+  emit('submit', form.data());
 }
 </script>

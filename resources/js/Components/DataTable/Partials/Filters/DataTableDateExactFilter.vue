@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, inject, PropType, ref, Ref, WritableComputedRef } from "vue";
+import { computed, inject, PropType, ref, Ref, WritableComputedRef } from 'vue';
 import {
   DateFilterOption,
   DateRangeValue,
   SearchFilterOption,
-} from "../../DataTableTypes";
+} from '../../DataTableTypes';
 
 const props = defineProps({
   filter: {
@@ -30,10 +30,10 @@ const props = defineProps({
 });
 
 const filterValuesMap: Ref<Record<string, Ref<unknown>>> | undefined =
-  inject("filter-values");
+  inject('filter-values');
 
 const internalValue: Ref<Date | null> = ref(
-  (filterValuesMap?.value?.[props.filter.filter]?.value as Date) ?? null,
+  (filterValuesMap?.value?.[props.filter.filter]?.value as Date) ?? null
 );
 
 const filterValue: WritableComputedRef<Date | null> = computed({
@@ -42,7 +42,7 @@ const filterValue: WritableComputedRef<Date | null> = computed({
     internalValue.value = value;
     if (!filterValuesMap?.value) {
       console.debug(
-        `Cant assign value ${value} to filter ${props.filter.filter}`,
+        `Cant assign value ${value} to filter ${props.filter.filter}`
       );
       return;
     }

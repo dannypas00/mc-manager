@@ -171,14 +171,14 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-} from "@headlessui/vue";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/vue/24/outline";
-import { layoutNavigationItems, userNavigationItems } from "../LayoutConfig";
-import StackedNavEntry from "./Partials/StackedNavEntry.vue";
-import StackedDisclosureNavEntry from "./Partials/StackedDisclosureNavEntry.vue";
-import { usePage } from "@inertiajs/vue3";
-import { UserData } from "../Types/generated";
-import { PortalTarget } from "portal-vue";
+} from '@headlessui/vue';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { layoutNavigationItems, userNavigationItems } from '../LayoutConfig';
+import StackedNavEntry from './Partials/StackedNavEntry.vue';
+import StackedDisclosureNavEntry from './Partials/StackedDisclosureNavEntry.vue';
+import { usePage } from '@inertiajs/vue3';
+import { UserData } from '../Types/generated';
+import { PortalTarget } from 'portal-vue';
 
 const user: UserData = usePage().props.user;
 const navigation = layoutNavigationItems;

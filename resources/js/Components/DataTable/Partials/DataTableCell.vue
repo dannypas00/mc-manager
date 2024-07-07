@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { PropType } from "vue";
-import { TableHeader } from "../DataTableTypes";
+import { PropType } from 'vue';
+import { TableHeader } from '../DataTableTypes';
 
 defineProps({
   header: {

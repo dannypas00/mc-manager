@@ -12,7 +12,7 @@
           class="mr-3 h-5 w-5 text-gray-400"
           aria-hidden="true"
         />
-        {{ $t("components.pagination.previous_button") }}
+        {{ $t('components.pagination.previous_button') }}
       </a>
     </div>
     <div class="hidden md:-mt-px md:flex">
@@ -56,7 +56,7 @@
         class="inline-flex cursor-pointer select-none items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 active:border-indigo-500 active:text-indigo-600"
         @click="nextPage"
       >
-        {{ $t("components.pagination.next_button") }}
+        {{ $t('components.pagination.next_button') }}
         <ArrowLongRightIcon
           class="ml-3 h-5 w-5 text-gray-400"
           aria-hidden="true"
@@ -67,10 +67,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, ModelRef } from "vue";
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from "@heroicons/vue/20/solid";
-import _ from "lodash";
-import PaginationEntry from "./Partials/PaginationEntry.vue";
+import { computed, ComputedRef, ModelRef } from 'vue';
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/vue/20/solid';
+import _ from 'lodash';
+import PaginationEntry from './Partials/PaginationEntry.vue';
 
 const currentPage: ModelRef<number> = defineModel({
   type: Number,
@@ -97,14 +97,14 @@ const props = defineProps({
 const leftPages: ComputedRef<number[]> = computed(() =>
   _.range(
     Math.max(1, currentPage.value - props.paginationLimitLeft),
-    currentPage.value,
-  ).filter((page: number) => page !== currentPage.value),
+    currentPage.value
+  ).filter((page: number) => page !== currentPage.value)
 );
 
 const rightPages: ComputedRef<number[]> = computed(() =>
   _.range(currentPage.value + 1, props.lastPage + 1).filter(
-    (page: number) => page !== currentPage.value,
-  ),
+    (page: number) => page !== currentPage.value
+  )
 );
 
 function nextPage() {

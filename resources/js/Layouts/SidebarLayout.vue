@@ -221,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 import {
   Dialog,
   DialogPanel,
@@ -231,18 +231,18 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
+} from '@headlessui/vue';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import {
   appLogo,
   appName,
   layoutNavigationItems,
   userNavigationItems,
-} from "../LayoutConfig";
-import { Link, usePage } from "@inertiajs/vue3";
-import { UserData } from "../Types/generated";
-import SidebarNavEntry from "./Partials/SidebarNavEntry.vue";
-import { PortalTarget } from "portal-vue";
+} from '../LayoutConfig';
+import { Link, usePage } from '@inertiajs/vue3';
+import { UserData } from '../Types/generated';
+import SidebarNavEntry from './Partials/SidebarNavEntry.vue';
+import { PortalTarget } from 'portal-vue';
 
 const navigation = layoutNavigationItems;
 const userNavigation = userNavigationItems;

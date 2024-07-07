@@ -29,14 +29,14 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, PropType, ref } from "vue";
-import { BulkOption } from "../DataTableTypes";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import ConfirmationDialog from "../../Dialogs/ConfirmationDialog.vue";
-import _ from "lodash";
-import I18n from "../../../i18n";
+import { computed, PropType, ref } from 'vue';
+import { BulkOption } from '../DataTableTypes';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import ConfirmationDialog from '../../Dialogs/ConfirmationDialog.vue';
+import _ from 'lodash';
+import I18n from '../../../i18n';
 
-const selected = defineModel("selected", {
+const selected = defineModel('selected', {
   type: Array<T>,
   required: true,
 });
@@ -76,8 +76,8 @@ const confirmationText = computed(() => {
     return props.action?.confirmationText;
   }
   return I18n.global.t(
-    "components.datatable.bulk_actions.default_confirm_text",
-    { count: selected.value.length, action: props.action.title },
+    'components.datatable.bulk_actions.default_confirm_text',
+    { count: selected.value.length, action: props.action.title }
   );
 });
 </script>

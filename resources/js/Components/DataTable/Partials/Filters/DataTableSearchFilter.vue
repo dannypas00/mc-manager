@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { MagnifyingGlassIcon } from "@heroicons/vue/16/solid";
-import { computed, inject, PropType, ref, Ref, WritableComputedRef } from "vue";
-import { SearchFilterOption } from "../../DataTableTypes";
+import { MagnifyingGlassIcon } from '@heroicons/vue/16/solid';
+import { computed, inject, PropType, ref, Ref, WritableComputedRef } from 'vue';
+import { SearchFilterOption } from '../../DataTableTypes';
 
 const props = defineProps({
   filter: {
@@ -31,10 +31,10 @@ const props = defineProps({
 });
 
 const filterValuesMap: Ref<Record<string, Ref<unknown>>> | undefined =
-  inject("filter-values");
+  inject('filter-values');
 
 const internalValue: Ref<string> = ref(
-  (filterValuesMap?.value?.[props.filter.filter]?.value as string) ?? "",
+  (filterValuesMap?.value?.[props.filter.filter]?.value as string) ?? ''
 );
 
 const filterValue: WritableComputedRef<string> = computed({
@@ -43,7 +43,7 @@ const filterValue: WritableComputedRef<string> = computed({
     internalValue.value = value;
     if (!filterValuesMap?.value) {
       console.debug(
-        `Cant assign value ${value} to filter ${props.filter.filter}`,
+        `Cant assign value ${value} to filter ${props.filter.filter}`
       );
       return;
     }

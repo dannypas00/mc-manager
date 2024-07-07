@@ -1,7 +1,7 @@
 import {
   QueryBuilderIndexData,
   QueryBuilderRequest,
-} from "./QueryBuilderRequest";
+} from './QueryBuilderRequest';
 
 type QueryBuilderIndexResponse<T extends Record<string, unknown>> = {
   data: T[];

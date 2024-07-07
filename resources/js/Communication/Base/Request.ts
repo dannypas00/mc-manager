@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from "axios";
-import { ValidationError } from "./ValidationError";
+import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import { ValidationError } from './ValidationError';
 
 export abstract class Request<T, D = Record<string, never>> {
   protected data: D = {} as D;
@@ -7,7 +7,7 @@ export abstract class Request<T, D = Record<string, never>> {
   protected abortController: AbortController = new AbortController();
 
   private setValidationErrors(
-    response: AxiosResponse<T & { errors?: ValidationError[] }>,
+    response: AxiosResponse<T & { errors?: ValidationError[] }>
   ) {
     // TODO: Implement error store
     this.validationErrors = response.data.errors ?? [];
@@ -20,7 +20,7 @@ export abstract class Request<T, D = Record<string, never>> {
   public getResponse(): Promise<AxiosResponse<T, D>> {
     const method = this.getMethod();
 
-    const useParams = ["GET", "HEAD", "OPTION"].includes(method.toUpperCase());
+    const useParams = ['GET', 'HEAD', 'OPTION'].includes(method.toUpperCase());
 
     // Completely kill all possible refs in data tree
     const data = JSON.parse(JSON.stringify(this.data));
@@ -36,7 +36,7 @@ export abstract class Request<T, D = Record<string, never>> {
       } as AxiosRequestConfig<D>)
       .catch(
         (
-          response: AxiosResponse<T & { errors?: ValidationError[] }>,
+          response: AxiosResponse<T & { errors?: ValidationError[] }>
         ): AxiosResponse<T> => {
           switch (response.status) {
             case 422:
@@ -47,7 +47,7 @@ export abstract class Request<T, D = Record<string, never>> {
           // TODO: Implement other default responses
 
           return response;
-        },
+        }
       );
   }
 

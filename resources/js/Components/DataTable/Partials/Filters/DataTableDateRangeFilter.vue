@@ -1,32 +1,32 @@
 <template>
   <div class="absolute bottom-0 flex h-max w-full flex-col px-2">
-    <div class="flex items-center justify-between" v-if="useFrom">
+    <div class="mb-1 flex items-center justify-between" v-if="useFrom">
       <label
         :for="`${filter.filter}-start`"
         v-t="'components.datatable.date_from_header.label'"
       />
-      <input
-        v-model="start"
-        :id="`${filter.filter}-start`"
-        type="date"
-        class="w-3/4 rounded-sm bg-none text-gray-400"
-        :class="{ 'has-input': internalValue.start }"
-        :max="internalValue.end"
-      />
+      <div class="flex w-3/4 flex-row items-center">
+        <ClearInputButton @click="() => (start = '')" />
+        <DateInput
+          v-model="start"
+          :id="`${filter.filter}-start`"
+          :min="internalValue.end"
+        />
+      </div>
     </div>
-    <div class="flex items-center justify-between" v-if="useUntil">
+    <div class="mb-1 flex items-center justify-between" v-if="useUntil">
       <label
         :for="`${filter.filter}-end`"
         v-t="'components.datatable.date_until_header.label'"
       />
-      <input
-        v-model="end"
-        :id="`${filter.filter}-end`"
-        type="date"
-        class="w-3/4 rounded-sm bg-none text-gray-400"
-        :class="{ 'has-input': internalValue.end }"
-        :min="internalValue.start"
-      />
+      <div class="flex w-3/4 flex-row items-center">
+        <ClearInputButton @click="() => (end = '')" />
+        <DateInput
+          v-model="end"
+          :id="`${filter.filter}-end`"
+          :min="internalValue.start"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -40,12 +40,14 @@ import {
   ref,
   Ref,
   WritableComputedRef,
-} from "vue";
+} from 'vue';
 import {
   DateFilterOption,
   DateFilterType,
   DateRangeValue,
-} from "../../DataTableTypes";
+} from '../../DataTableTypes';
+import DateInput from './DateInput.vue';
+import ClearInputButton from '../ClearInputButton.vue';
 
 const props = defineProps({
   filter: {
@@ -56,25 +58,24 @@ const props = defineProps({
 
 const useFrom: ComputedRef<boolean> = computed(() =>
   [DateFilterType.FromDate, DateFilterType.DateRange].includes(
-    props.filter?.dateFilterType,
-  ),
+    props.filter?.dateFilterType
+  )
 );
 const useUntil: ComputedRef<boolean> = computed(() =>
   [DateFilterType.UntilDate, DateFilterType.DateRange].includes(
-    props.filter?.dateFilterType,
-  ),
+    props.filter?.dateFilterType
+  )
 );
 
 const filterValuesMap: Ref<Record<string, Ref<unknown>>> | undefined =
-  inject("filter-values");
+  inject('filter-values');
 
 const internalValue: Ref<DateRangeValue> = ref(
-  (filterValuesMap?.value?.[props.filter.filter]?.value as DateRangeValue) ??
-    {},
+  (filterValuesMap?.value?.[props.filter.filter]?.value as DateRangeValue) ?? {}
 );
 
 const start: WritableComputedRef<string> = computed({
-  get: () => internalValue.value.start ?? "",
+  get: () => internalValue.value.start ?? '',
   set: (value: string) => {
     internalValue.value.start = value;
     filterValue.value = internalValue.value;
@@ -82,7 +83,7 @@ const start: WritableComputedRef<string> = computed({
 });
 
 const end: WritableComputedRef<string> = computed({
-  get: () => internalValue.value.end ?? "",
+  get: () => internalValue.value.end ?? '',
   set: (value: string) => {
     internalValue.value.end = value;
     filterValue.value = internalValue.value;
@@ -95,7 +96,7 @@ const filterValue: WritableComputedRef<DateRangeValue> = computed({
     internalValue.value = value;
     if (!filterValuesMap?.value) {
       console.debug(
-        `Cant assign value ${value} to filter ${props.filter.filter}`,
+        `Cant assign value ${value} to filter ${props.filter.filter}`
       );
       return;
     }

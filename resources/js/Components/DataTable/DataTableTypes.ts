@@ -1,8 +1,8 @@
-import i18n from "../../i18n";
-import { FontAwesomeIconProps } from "../Icons/FontAwesomeIconProps";
-import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
-import moment from "moment";
-import I18n from "../../i18n";
+import i18n from '../../i18n';
+import { FontAwesomeIconProps } from '../Icons/FontAwesomeIconProps';
+import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
+import moment from 'moment';
+import I18n from '../../i18n';
 
 export type DateRangeValue = {
   start: string | undefined;
@@ -92,28 +92,34 @@ export type BulkOption<T extends Record<string, unknown>> = {
 };
 
 export const IdHeader = {
-  key: "id",
-  title: i18n.global.t("components.datatable.id_title"),
+  key: 'id',
+  title: i18n.global.t('components.datatable.id_title'),
 };
 
-export const CreatedAtHeader: TableHeader<Record<string, unknown> & {created_at: string}> = {
-  key: "created_at",
-  title: i18n.global.t("components.datatable.created_at_title"),
-  renderBody: (entry) => moment(entry.created_at).locale(I18n.global.locale).format('lll'),
+export const CreatedAtHeader: TableHeader<
+  Record<string, unknown> & { created_at: string }
+> = {
+  key: 'created_at',
+  title: i18n.global.t('components.datatable.created_at_title'),
+  renderBody: entry =>
+    moment(entry.created_at).locale(I18n.global.locale).format('lll'),
   filter: {
     type: FilterType.Date,
-    filter: "created_at",
+    filter: 'created_at',
     dateFilterType: DateFilterType.FromDate,
   } as DateFilterOption<Record<string, unknown>>,
 };
 
-export const UpdatedAtHeader: TableHeader<Record<string, unknown> & {updated_at: string}> = {
-  key: "updated_at",
-  title: i18n.global.t("components.datatable.updated_at_title"),
-  renderBody: (entry) => moment(entry.updated_at).locale(I18n.global.locale).format('lll'),
+export const UpdatedAtHeader: TableHeader<
+  Record<string, unknown> & { updated_at: string }
+> = {
+  key: 'updated_at',
+  title: i18n.global.t('components.datatable.updated_at_title'),
+  renderBody: entry =>
+    moment(entry.updated_at).locale(I18n.global.locale).format('lll'),
   filter: {
     type: FilterType.Date,
-    filter: "updated_at",
+    filter: 'updated_at',
     dateFilterType: DateFilterType.DateRange,
   } as DateFilterOption<Record<string, unknown>>,
 };

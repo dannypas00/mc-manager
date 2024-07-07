@@ -31,6 +31,7 @@ class UserSettings implements SettingsInterface
             AllowedFilter::partial('name'),
             AllowedFilter::partial('email'),
             AllowedFilter::custom('created_at', new FilterDateRange()),
+            AllowedFilter::custom('updated_at', new FilterDateRange()),
         ];
     }
 
