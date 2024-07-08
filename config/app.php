@@ -123,6 +123,4 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'trusted_proxies' => explode(',', env('TRUSTED_PROXIES', '')),
-
 ];
