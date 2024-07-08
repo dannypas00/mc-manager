@@ -123,3 +123,19 @@ export const UpdatedAtHeader: TableHeader<
     dateFilterType: DateFilterType.DateRange,
   } as DateFilterOption<Record<string, unknown>>,
 };
+
+export class SortDirection {
+  public direction: 'asc' | 'desc' | null = null;
+
+  public next(): typeof this.direction {
+    console.log(this.direction);
+    switch (this.direction) {
+      case 'asc':
+        return 'desc';
+      case 'desc':
+        return null;
+      case null:
+        return 'asc';
+    }
+  }
+}
