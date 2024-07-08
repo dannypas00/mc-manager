@@ -1,7 +1,7 @@
 SHELL := bash
 
 ENV ?= local
-PROJECT_NAME ?= my-project
+PROJECT_NAME ?= laravel-template
 TEMPLATE_PATTERN = laravel-template
 
 NO_DOCKER ?= false
@@ -22,10 +22,16 @@ NPM ?= $(PHP_CONTAINER) npm
 .DEFAULT_TARGET: project-setup
 
 .PHONY: project-setup
-project-setup: $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+project-setup: dependencies $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
+
+.PHONY: dependencies
+dependencies:
+	@(command -v npm > /dev/null) || (echo "NPM not installed" && exit 127)
+	@(command -v docker > /dev/null) || (echo "Docker not installed" && exit 127)
+	@(docker compose > /dev/null) || (echo "Docker compose plugin not installed" && exit 127)
 
 .PHONY: $(TEMPLATE_PATTERN)
 $(TEMPLATE_PATTERN):
