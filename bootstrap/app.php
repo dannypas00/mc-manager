@@ -21,4 +21,5 @@ return Application::configure(basePath: dirname(__DIR__))
             ])
             ->trustProxies(explode(',', env('TRUSTED_PROXIES')));
     })
+    ->withExceptions()
     ->create();
