@@ -1,6 +1,6 @@
 export enum SortDirection {
-  Asc = "asc",
-  Desc = "desc",
+  Asc = 'asc',
+  Desc = 'desc',
   None = null,
 }
 
@@ -9,7 +9,7 @@ export function nextSortDirection(direction: SortDirection): SortDirection {
     case SortDirection.Asc:
       return SortDirection.Desc;
     case SortDirection.Desc:
-      return SortDirection.None
+      return SortDirection.None;
     case SortDirection.None:
       return SortDirection.Asc;
   }

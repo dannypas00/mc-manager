@@ -11,10 +11,20 @@
           prefix: 'fas',
           iconName: 'arrow-up',
         }"
-        :rotation="sortDirectionMap[header.key] === SortDirection.Desc ? 180 : undefined"
+        :rotation="
+          sortDirectionMap[header.key] === SortDirection.Desc ? 180 : undefined
+        "
         class="cursor-pointer"
-        :class="{ 'text-brand-light': sortDirectionMap[header.key] !== SortDirection.None }"
-        @click="() => (sortDirectionMap[header.key] = nextSortDirection(sortDirectionMap[header.key]))"
+        :class="{
+          'text-brand-light':
+            sortDirectionMap[header.key] !== SortDirection.None,
+        }"
+        @click="
+          () =>
+            (sortDirectionMap[header.key] = nextSortDirection(
+              sortDirectionMap[header.key]
+            ))
+        "
       />
       <div class="group relative h-full grow py-3.5 pr-3">
         <span

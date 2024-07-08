@@ -69,12 +69,15 @@ export abstract class QueryBuilderRequest<
   // Sorting
   public setSort(sorting: Record<string, SortDirection>): this {
     // If ascending, set key, if descending set -key
-    this.sort = _(sorting).map((value: SortDirection, key: string) => {
-      if (value === SortDirection.None) {
-        return null;
-      }
-      return value === SortDirection.Desc ? `-${key}` : key;
-    }).filter().value();
+    this.sort = _(sorting)
+      .map((value: SortDirection, key: string) => {
+        if (value === SortDirection.None) {
+          return null;
+        }
+        return value === SortDirection.Desc ? `-${key}` : key;
+      })
+      .filter()
+      .value();
     this.data.sort = this.sort;
     return this;
   }

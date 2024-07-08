@@ -11,18 +11,16 @@ export abstract class Request<T, D = Record<string, never>> {
   protected validationErrors: ValidationError[] = [];
   protected abortController: AbortController = new AbortController();
 
-  private setValidationErrors(
-    response: AxiosResponse<T & { errors?: ValidationError[] }>
-  ) {
+  private setValidationErrors(errors: ValidationError[]) {
     // TODO: Implement error store
-    this.validationErrors = response.data.errors ?? [];
+    this.validationErrors = errors ?? [];
   }
 
   protected abstract getEndPoint(): string;
 
   protected abstract getMethod(): Method;
 
-  public async getResponse(): AxiosResponse<T, D> {
+  public async getResponse(): Promise<AxiosResponse<T, D>> {
     const method = this.getMethod();
 
     const useParams = ['GET', 'HEAD', 'OPTION'].includes(method.toUpperCase());
@@ -39,13 +37,14 @@ export abstract class Request<T, D = Record<string, never>> {
         withCredentials: true,
         signal: this.abortController.signal,
       } as AxiosRequestConfig<D>);
-    } catch (error: AxiosError<T, D>) {
-      switch (error.status) {
-        case 422:
-          this.setValidationErrors(error);
-          break;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        switch (error.status) {
+          case 422:
+            this.setValidationErrors(error.response?.data.errors ?? []);
+            break;
+        }
       }
-      console.log(error);
       throw error;
     }
   }
