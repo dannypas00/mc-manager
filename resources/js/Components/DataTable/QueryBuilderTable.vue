@@ -125,7 +125,7 @@ const filterValues: Ref<Record<string, Ref<unknown>>> = ref(
 );
 provide('filter-values', filterValues);
 
-const sortValues: Ref<Record<string, Ref<SortDirection>>> = ref(
+const sortValues = ref(
   _(props.headers)
     .filter('sortable')
     .keyBy('key')
@@ -147,9 +147,6 @@ onMounted(() => {
 });
 
 async function getData() {
-  // TODO: Request cancelling
-  // props.request.cancel('Changing filters during request');
-
   props.request
     .setFilters(_.mapValues(filterValues.value, unref))
     .setSort(_.mapValues(sortValues.value, unref))
