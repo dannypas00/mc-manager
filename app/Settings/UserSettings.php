@@ -28,6 +28,7 @@ class UserSettings implements SettingsInterface
     public function getAllowedFilters(): array
     {
         return [
+            AllowedFilter::exact('id'),
             AllowedFilter::partial('name'),
             AllowedFilter::partial('email'),
             AllowedFilter::custom('created_at', new FilterDateRange()),
@@ -38,7 +39,11 @@ class UserSettings implements SettingsInterface
     public function getAllowedSorts(): array
     {
         return [
+            AllowedSort::field('id'),
             AllowedSort::field('name'),
+            AllowedSort::field('email'),
+            AllowedSort::field('created_at'),
+            AllowedSort::field('updated_at'),
         ];
     }
 }

@@ -4,21 +4,22 @@
     class="min-w-max text-left text-sm font-semibold text-gray-900"
     :class="{ 'd-none': hideTitle }"
   >
-    <div class="flex flex-row items-center gap-2 w-full">
+    <div class="flex w-full flex-row items-center gap-2">
       <FontAwesomeIcon
+        v-if="header.sortable"
         :icon="{
           prefix: 'fas',
           iconName: 'arrow-up',
         }"
-        :rotation="sortDirection.direction === 'asc' ? 180 : undefined"
+        :rotation="sortDirectionMap[header.key] === SortDirection.Desc ? 180 : undefined"
         class="cursor-pointer"
-        :class="{ 'text-brand-light': sortDirection.direction !== null }"
-        @click="() => (sortDirection.direction = sortDirection.next())"
+        :class="{ 'text-brand-light': sortDirectionMap[header.key] !== SortDirection.None }"
+        @click="() => (sortDirectionMap[header.key] = nextSortDirection(sortDirectionMap[header.key]))"
       />
-      <div class="group relative h-full py-3.5 pr-3 grow">
+      <div class="group relative h-full grow py-3.5 pr-3">
         <span
           :class="{
-            'group-hover:text-transparent group-has-[.has-input]:text-transparent group-has-[:focus]:text-transparent':
+            'select-none group-hover:text-transparent group-has-[.has-input]:text-transparent group-has-[:focus]:text-transparent':
               header.filter,
           }"
         >
@@ -26,7 +27,7 @@
         </span>
         <div
           v-if="header.filter && filterComponent"
-          class="absolute inset-0 hidden h-full w-full min-w-max select-none group-hover:select-auto has-[.has-input]:select-auto has-[:focus]:select-auto group-hover:inline has-[.has-input]:inline has-[:focus]:inline"
+          class="absolute inset-0 hidden h-full group-hover:inline has-[.has-input]:inline has-[:focus]:inline"
         >
           <Component :is="filterComponent" :filter="header.filter" />
         </div>
@@ -36,19 +37,16 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, PropType, ref } from 'vue';
-import {
-  DateFilterType,
-  FilterType,
-  SortDirection,
-  TableHeader,
-} from '../DataTableTypes';
+import { computed, inject, PropType, Ref, ref } from 'vue';
+import { DateFilterType, FilterType, TableHeader } from '../DataTableTypes';
 import DataTableSearchFilter from './Filters/DataTableSearchFilter.vue';
 import DataTableDateRangeFilter from './Filters/DataTableDateRangeFilter.vue';
-import DataTableDateFromFilter from './Filters/DataTableDateFromFilter.vue';
-import DataTableDateUntilFilter from './Filters/DataTableDateUntilFilter.vue';
 import DataTableDateExactFilter from './Filters/DataTableDateExactFilter.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {
+  nextSortDirection,
+  SortDirection,
+} from '../../../Utilities/SortDirection';
 
 const props = defineProps({
   header: {
@@ -63,7 +61,10 @@ const props = defineProps({
   },
 });
 
-const sortDirection = ref(new SortDirection());
+let sortDirectionMap: undefined | Ref<Record<string, SortDirection>>;
+if (props.header.sortable) {
+  sortDirectionMap = inject('sort-values');
+}
 
 const filterComponent = computed(() => {
   if (!props.header.filter) {

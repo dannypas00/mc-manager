@@ -76,6 +76,7 @@ export default defineComponent({
         {
           key: 'name',
           title: this.$t('pages.page1.table.name_title'),
+          sortable: true,
           filter: {
             type: FilterType.Search,
             filter: 'name',

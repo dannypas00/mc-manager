@@ -3,6 +3,7 @@ import { FontAwesomeIconProps } from '../Icons/FontAwesomeIconProps';
 import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
 import moment from 'moment';
 import I18n from '../../i18n';
+import { SortDirection } from '../../Utilities/SortDirection';
 
 export type DateRangeValue = {
   start: string | undefined;
@@ -78,6 +79,8 @@ export type TableHeader<T extends Record<string, unknown>> = {
   bodySlot?: string;
   headerSlot?: string;
   filter?: FilterOption<T>;
+  sortable?: boolean;
+  defaultSortDirection?: SortDirection;
   renderBody?: (entry: T) => string;
 };
 
@@ -91,9 +94,16 @@ export type BulkOption<T extends Record<string, unknown>> = {
   confirmationText?: ((selected: T[]) => string) | string;
 };
 
-export const IdHeader = {
+export const IdHeader: TableHeader<number> = {
   key: 'id',
   title: i18n.global.t('components.datatable.id_title'),
+  sortable: true,
+  // TODO: FilterType.Exact
+  filter: {
+    type: FilterType.Search,
+    filter: 'id',
+    placeholder: I18n.global.t('components.datatable.id_search_placeholder')
+  },
 };
 
 export const CreatedAtHeader: TableHeader<
@@ -101,6 +111,7 @@ export const CreatedAtHeader: TableHeader<
 > = {
   key: 'created_at',
   title: i18n.global.t('components.datatable.created_at_title'),
+  sortable: true,
   renderBody: entry =>
     moment(entry.created_at).locale(I18n.global.locale).format('lll'),
   filter: {
@@ -115,6 +126,7 @@ export const UpdatedAtHeader: TableHeader<
 > = {
   key: 'updated_at',
   title: i18n.global.t('components.datatable.updated_at_title'),
+  sortable: true,
   renderBody: entry =>
     moment(entry.updated_at).locale(I18n.global.locale).format('lll'),
   filter: {
@@ -123,19 +135,3 @@ export const UpdatedAtHeader: TableHeader<
     dateFilterType: DateFilterType.DateRange,
   } as DateFilterOption<Record<string, unknown>>,
 };
-
-export class SortDirection {
-  public direction: 'asc' | 'desc' | null = null;
-
-  public next(): typeof this.direction {
-    console.log(this.direction);
-    switch (this.direction) {
-      case 'asc':
-        return 'desc';
-      case 'desc':
-        return null;
-      case null:
-        return 'asc';
-    }
-  }
-}

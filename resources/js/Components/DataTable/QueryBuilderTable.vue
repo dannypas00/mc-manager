@@ -34,6 +34,7 @@ import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequ
 import { useDebounceFn, watchDeep } from '@vueuse/core';
 import WidePagination from '../Pagination/WidePagination.vue';
 import _ from 'lodash';
+import { SortDirection } from '../../Utilities/SortDirection';
 
 const emit = defineEmits(['update:selected']);
 
@@ -73,13 +74,13 @@ const props = defineProps({
   },
 
   bulkActions: {
-    type: Array as PropType<BulkOption<T>[]>,
+    type: Array<BulkOption<T>>,
     required: false,
     default: () => [],
   },
 
   request: {
-    type: Object as PropType<QueryBuilderIndexRequest<T>>,
+    type: QueryBuilderIndexRequest<T>,
     required: true,
   },
 
@@ -115,26 +116,43 @@ const requestData = useDebounceFn(getData, props.requestDebounceMs);
 
 // Generate object with filters as keys and undefined as value to initialize filter values map
 const filterValues: Ref<Record<string, Ref<unknown>>> = ref(
-  _.mapValues(_.keyBy(_.filter(_.map(props.headers, 'filter')), 'filter'), () =>
-    ref(undefined)
-  )
+  _(props.headers)
+    .map('filter')
+    .filter()
+    .keyBy('filter')
+    .mapValues(() => ref(undefined))
+    .value()
 );
 provide('filter-values', filterValues);
+
+const sortValues: Ref<Record<string, Ref<SortDirection>>> = ref(
+  _(props.headers)
+    .filter('sortable')
+    .keyBy('key')
+    .mapValues((header: TableHeader<T>) =>
+      ref(header.defaultSortDirection ?? SortDirection.None)
+    )
+    .value()
+);
+provide('sort-values', sortValues);
 
 watch(currentPage, requestData);
 if (props.autoSearch) {
   watchDeep(filterValues, requestData);
+  watchDeep(sortValues, requestData);
 }
 
 onMounted(() => {
   getData();
 });
 
-function getData() {
+async function getData() {
   // TODO: Request cancelling
   // props.request.cancel('Changing filters during request');
+
   props.request
     .setFilters(_.mapValues(filterValues.value, unref))
+    .setSort(_.mapValues(sortValues.value, unref))
     .setPage(currentPage.value)
     .getResponse()
     .then((response: AxiosResponse) => {
