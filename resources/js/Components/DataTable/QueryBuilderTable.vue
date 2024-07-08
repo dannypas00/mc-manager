@@ -11,7 +11,7 @@
     :data="data.data"
   />
 
-  <WidePagination v-model="currentPage" :last-page="data.meta.last_page" />
+  <WidePagination v-if="!!data.data.length" v-model="currentPage" :data="data" />
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
@@ -80,7 +80,7 @@ const props = defineProps({
   },
 
   request: {
-    type: QueryBuilderIndexRequest<T>,
+    type: Object as PropType<QueryBuilderIndexRequest<T>>,
     required: true,
   },
 

@@ -4,9 +4,9 @@
   >
     <div class="-mt-px flex w-0 flex-1">
       <a
-        v-if="currentPage > 1"
+        v-if="!isFirstPage"
         class="inline-flex cursor-pointer select-none items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 active:border-indigo-500 active:text-indigo-600"
-        @click="previousPage"
+        @click="prev"
       >
         <ArrowLongLeftIcon
           class="mr-3 h-5 w-5 text-gray-400"
@@ -16,45 +16,31 @@
       </a>
     </div>
     <div class="hidden md:-mt-px md:flex">
-      <template v-if="leftPages[0] !== 1 && currentPage !== 1">
-        <!-- Start -->
-        <PaginationEntry :index="1" @click="() => setPage(1)" />
+      <template v-if="pageCount <= 9">
+        <PaginationEntry
+          v-for="page in Math.min(7, pageCount)"
+          :index="page"
+          :is-current="currentPage === page"
+          :key="page"
+        />
       </template>
-
-      <!-- Left numbers -->
-      <PaginationEntry
-        v-for="index in leftPages ?? []"
-        :key="index"
-        :index="index"
-        @click="() => setPage(index)"
-      />
-
-      <!-- Current page -->
-      <PaginationEntry :index="currentPage" is-current />
-
-      <!-- Right numbers -->
-      <PaginationEntry
-        v-for="index in rightPages ?? []"
-        :key="index"
-        :index="index"
-        @click="() => setPage(index)"
-      />
-
-      <template
-        v-if="
-          rightPages[rightPages.length - 1] !== lastPage &&
-          currentPage !== lastPage
-        "
-      >
-        <!-- End -->
-        <PaginationEntry :index="lastPage" @click="() => setPage(lastPage)" />
+      <template v-else>
+        <template v-for="page in maxPageCount">
+          <PaginationEntry
+            v-if="offsetPage(page) > 0"
+            :index="offsetPage(page)"
+            :is-current="currentPage === offsetPage(page)"
+            :key="offsetPage(page)"
+            @click="currentPage = offsetPage(page)"
+          />
+        </template>
       </template>
     </div>
     <div class="-mt-px flex w-0 flex-1 justify-end">
       <a
-        v-if="currentPage < lastPage"
+        v-if="!isLastPage"
         class="inline-flex cursor-pointer select-none items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 active:border-indigo-500 active:text-indigo-600"
-        @click="nextPage"
+        @click="next"
       >
         {{ $t('components.pagination.next_button') }}
         <ArrowLongRightIcon
@@ -67,55 +53,43 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, ModelRef } from 'vue';
+import { computed, ComputedRef, ModelRef, PropType, watch } from 'vue';
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/vue/20/solid';
 import _ from 'lodash';
 import PaginationEntry from './Partials/PaginationEntry.vue';
+import { useOffsetPagination } from '@vueuse/core';
+import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequest';
 
-const currentPage: ModelRef<number> = defineModel({
+// Recommended to be an odd number, so the current page is the middle number
+const maxPageCount = 9;
+
+const currentPageModel: ModelRef<number> = defineModel({
   type: Number,
   required: true,
 });
 
 const props = defineProps({
-  paginationLimitLeft: {
-    type: Number,
-    required: false,
-    default: 3,
-  },
-  paginationLimitRight: {
-    type: Number,
-    required: false,
-    default: 3,
-  },
-  lastPage: {
-    type: Number,
+  data: {
+    type: Object as PropType<QueryBuilderIndexData<never>>,
     required: true,
   },
 });
 
-const leftPages: ComputedRef<number[]> = computed(() =>
-  _.range(
-    Math.max(1, currentPage.value - props.paginationLimitLeft),
-    currentPage.value
-  ).filter((page: number) => page !== currentPage.value)
-);
+const { currentPage, pageCount, isFirstPage, isLastPage, prev, next } =
+  useOffsetPagination({
+    total: props.data?.meta.total,
+    page: props.data?.meta.current_page,
+    pageSize: props.data?.meta.per_page,
+    onPageChange({ currentPage }) {
+      currentPageModel.value = currentPage;
+    },
+  });
 
-const rightPages: ComputedRef<number[]> = computed(() =>
-  _.range(currentPage.value + 1, props.lastPage + 1).filter(
-    (page: number) => page !== currentPage.value
-  )
-);
+watch(currentPageModel, newPage => {
+  currentPage.value = newPage;
+});
 
-function nextPage() {
-  setPage(currentPage.value + 1);
-}
-
-function previousPage() {
-  setPage(currentPage.value - 1);
-}
-
-function setPage(page: number) {
-  currentPage.value = Math.min(page, props.lastPage);
+function offsetPage(page: number): number {
+  return page - Math.ceil(maxPageCount / 2) + currentPage.value;
 }
 </script>
