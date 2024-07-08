@@ -220,7 +220,6 @@ export default defineComponent({
     },
 
     register() {
-      console.log('Registering', this.form.data());
       this.form
         .transform(data => ({
           name: data.name,
@@ -235,10 +234,6 @@ export default defineComponent({
       // TODO
       console.log('To be implemented');
     },
-  },
-
-  mounted() {
-    console.log(this.$page.props);
   },
 });
 </script>
