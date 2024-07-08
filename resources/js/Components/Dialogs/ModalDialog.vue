@@ -85,11 +85,11 @@ import {
   DialogTitle,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
+} from '@headlessui/vue';
 
-defineEmits(["positive", "negative"]);
+defineEmits(['positive', 'negative']);
 
-const open = defineModel("open", {
+const open = defineModel('open', {
   type: Boolean,
   required: true,
 });

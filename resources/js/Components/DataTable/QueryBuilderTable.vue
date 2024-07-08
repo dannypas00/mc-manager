@@ -11,13 +11,13 @@
     :data="data.data"
   />
 
-  <WidePagination v-model="currentPage" :last-page="data.meta.last_page" />
+  <WidePagination v-if="!!data.data.length" v-model="currentPage" :data="data" />
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
-import DataTable from "./DataTable.vue";
-import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
-import { BulkOption, TableHeader } from "./DataTableTypes";
+import DataTable from './DataTable.vue';
+import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
+import { BulkOption, TableHeader } from './DataTableTypes';
 import {
   computed,
   ModelRef,
@@ -28,16 +28,17 @@ import {
   ref,
   unref,
   watch,
-} from "vue";
-import { AxiosResponse } from "axios";
-import { QueryBuilderIndexData } from "../../Communication/Base/QueryBuilderRequest";
-import { useDebounceFn, watchDeep } from "@vueuse/core";
-import WidePagination from "../Pagination/WidePagination.vue";
-import _ from "lodash";
+} from 'vue';
+import { AxiosResponse } from 'axios';
+import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequest';
+import { useDebounceFn, watchDeep } from '@vueuse/core';
+import WidePagination from '../Pagination/WidePagination.vue';
+import _ from 'lodash';
+import { SortDirection } from '../../Utilities/SortDirection';
 
-const emit = defineEmits(["update:selected"]);
+const emit = defineEmits(['update:selected']);
 
-const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
+const selectedModel: ModelRef<Array<T>> = defineModel('selected', {
   type: Array<T>,
   required: false,
   default: undefined,
@@ -45,7 +46,7 @@ const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
 
 const selected = computed({
   get: () => selectedModel.value,
-  set: (value) => emit("update:selected", value),
+  set: value => emit('update:selected', value),
 });
 
 const props = defineProps({
@@ -57,7 +58,7 @@ const props = defineProps({
   identifier: {
     type: String,
     required: false,
-    default: "id",
+    default: 'id',
   },
 
   selectable: {
@@ -73,7 +74,7 @@ const props = defineProps({
   },
 
   bulkActions: {
-    type: Array as PropType<BulkOption<T>[]>,
+    type: Array<BulkOption<T>>,
     required: false,
     default: () => [],
   },
@@ -115,26 +116,40 @@ const requestData = useDebounceFn(getData, props.requestDebounceMs);
 
 // Generate object with filters as keys and undefined as value to initialize filter values map
 const filterValues: Ref<Record<string, Ref<unknown>>> = ref(
-  _.mapValues(_.keyBy(_.filter(_.map(props.headers, "filter")), "filter"), () =>
-    ref(undefined),
-  ),
+  _(props.headers)
+    .map('filter')
+    .filter()
+    .keyBy('filter')
+    .mapValues(() => ref(undefined))
+    .value()
 );
-provide("filter-values", filterValues);
+provide('filter-values', filterValues);
+
+const sortValues = ref(
+  _(props.headers)
+    .filter('sortable')
+    .keyBy('key')
+    .mapValues((header: TableHeader<T>) =>
+      ref(header.defaultSortDirection ?? SortDirection.None)
+    )
+    .value()
+);
+provide('sort-values', sortValues);
 
 watch(currentPage, requestData);
 if (props.autoSearch) {
   watchDeep(filterValues, requestData);
+  watchDeep(sortValues, requestData);
 }
 
 onMounted(() => {
   getData();
 });
 
-function getData() {
-  // TODO: Request cancelling
-  // props.request.cancel('Changing filters during request');
+async function getData() {
   props.request
     .setFilters(_.mapValues(filterValues.value, unref))
+    .setSort(_.mapValues(sortValues.value, unref))
     .setPage(currentPage.value)
     .getResponse()
     .then((response: AxiosResponse) => {

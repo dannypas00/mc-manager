@@ -7,7 +7,7 @@
         :checked="indeterminate || selected.length === data.length"
         :indeterminate
         @change="
-          selected = $event.target.checked ? data.map((p) => p[identifier]) : []
+          selected = $event.target.checked ? data.map(p => p[identifier]) : []
         "
       />
     </th>
@@ -22,11 +22,11 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import DataTableHeader from "./DataTableHeader.vue";
-import { computed, ComputedRef } from "vue";
-import { TableHeader } from "../DataTableTypes";
+import DataTableHeader from './DataTableHeader.vue';
+import { computed, ComputedRef } from 'vue';
+import { TableHeader } from '../DataTableTypes';
 
-const selected = defineModel("selected", {
+const selected = defineModel('selected', {
   type: Array<T>,
   required: true,
 });
@@ -55,6 +55,6 @@ const props = defineProps({
 });
 
 const indeterminate: ComputedRef<boolean> = computed(
-  () => selected.value.length > 0 && selected.value.length < props.data.length,
+  () => selected.value.length > 0 && selected.value.length < props.data.length
 );
 </script>

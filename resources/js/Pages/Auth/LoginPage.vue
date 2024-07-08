@@ -151,7 +151,7 @@
                 class="text font-semibold text-brand hover:text-brand-hover"
                 @click="forgotPassword"
               >
-                {{ $t("pages.auth.login.forgot_password") }}
+                {{ $t('pages.auth.login.forgot_password') }}
               </a>
             </div>
           </div>
@@ -161,7 +161,7 @@
               type="submit"
               class="flex w-full justify-center rounded-md bg-brand px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
             >
-              {{ $t("pages.auth.login.submit_button") }}
+              {{ $t('pages.auth.login.submit_button') }}
             </button>
           </div>
 
@@ -170,7 +170,7 @@
               class="flex w-full justify-center rounded-md bg-brand px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               @click="register"
             >
-              {{ $t("pages.auth.login.register_button") }}
+              {{ $t('pages.auth.login.register_button') }}
             </button>
           </div>
         </form>
@@ -180,9 +180,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import AuthLayout from "../../Layouts/AuthLayout.vue";
-import { useForm } from "@inertiajs/vue3";
+import { defineComponent } from 'vue';
+import AuthLayout from '../../Layouts/AuthLayout.vue';
+import { useForm } from '@inertiajs/vue3';
 
 export default defineComponent({
   layout: AuthLayout,
@@ -190,17 +190,17 @@ export default defineComponent({
   data() {
     return {
       form: useForm({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
         rememberMe: false,
       }),
       tabs: {
-        login: { name: this.$t("pages.auth.login.login_tab") },
-        register: { name: this.$t("pages.auth.login.register_tab") },
+        login: { name: this.$t('pages.auth.login.login_tab') },
+        register: { name: this.$t('pages.auth.login.register_tab') },
       },
-      selectedMode: "login",
+      selectedMode: 'login',
     };
   },
 
@@ -211,34 +211,29 @@ export default defineComponent({
 
     login() {
       this.form
-        .transform((data) => ({
+        .transform(data => ({
           email: data.email,
           password: data.password,
-          rememberMe: data.rememberMe ? "on" : null,
+          rememberMe: data.rememberMe ? 'on' : null,
         }))
-        .post(route("login"));
+        .post(route('login'));
     },
 
     register() {
-      console.log("Registering", this.form.data());
       this.form
-        .transform((data) => ({
+        .transform(data => ({
           name: data.name,
           email: data.email,
           password: data.password,
           password_confirmation: data.password_confirmation,
         }))
-        .post(route("register"));
+        .post(route('register'));
     },
 
     forgotPassword() {
       // TODO
-      console.log("To be implemented");
+      console.log('To be implemented');
     },
-  },
-
-  mounted() {
-    console.log(this.$page.props);
   },
 });
 </script>

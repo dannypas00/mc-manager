@@ -23,9 +23,9 @@
 </template>
 
 <script setup lang="ts">
-import { NavigationItem } from "../../LayoutConfig";
-import { Link, usePage } from "@inertiajs/vue3";
-import { computed, ComputedRef } from "vue";
+import { NavigationItem } from '../../LayoutConfig';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed, ComputedRef } from 'vue';
 
 const props = defineProps<{
   item: NavigationItem;

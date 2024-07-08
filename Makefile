@@ -27,6 +27,14 @@ project-setup: dependencies $(TEMPLATE_PATTERN) .env.example composer.json packa
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
 
+.PHONY: deploy
+deploy: clear-cache dependencies $(TEMPLATE_PATTERN) .env.example install resources/js/ migrate vendor/autoload.php
+	$(PHP) artisan optimize
+
+.PHONY: clear-cache
+clear-cache:
+	$(PHP) artisan optimize:clear
+
 .PHONY: dependencies
 dependencies:
 	@(command -v npm > /dev/null) || (echo "NPM not installed" && exit 127)
@@ -84,9 +92,13 @@ ifeq ($(ENV), local)
 endif
 
 database/migrations/: composer.lock docker-compose.yaml
+ifeq ($(ENV), production)
+	$(PHP) artisan migrate
+else
 	$(PHP) artisan migrate -n
+endif
 
-database/seeders/: database/migrations/ database/factories/
+database/seeders/: drop-db database/migrations/ database/factories/
 ifeq ($(ENV), local)
 	$(PHP) artisan db:seed --class=Database\\Seeders\\DatabaseSeeder
 else

@@ -1,56 +1,66 @@
-import axios, { AxiosRequestConfig, AxiosResponse, Method } from "axios";
-import { ValidationError } from "./ValidationError";
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  Method,
+} from 'axios';
+import { ValidationError } from './ValidationError';
 
 export abstract class Request<T, D = Record<string, never>> {
   protected data: D = {} as D;
   protected validationErrors: ValidationError[] = [];
   protected abortController: AbortController = new AbortController();
+  public isLoading: boolean = false;
 
-  private setValidationErrors(
-    response: AxiosResponse<T & { errors?: ValidationError[] }>,
-  ) {
+  private setValidationErrors(errors: ValidationError[]) {
     // TODO: Implement error store
-    this.validationErrors = response.data.errors ?? [];
+    this.validationErrors = errors ?? [];
   }
 
   protected abstract getEndPoint(): string;
 
   protected abstract getMethod(): Method;
 
-  public getResponse(): Promise<AxiosResponse<T, D>> {
+  public async getResponse(): Promise<AxiosResponse<T, D>> {
     const method = this.getMethod();
 
-    const useParams = ["GET", "HEAD", "OPTION"].includes(method.toUpperCase());
+    const useParams = ['GET', 'HEAD', 'OPTION'].includes(method.toUpperCase());
 
-    console.log(useParams, this.data);
+    // Completely kill all possible refs in data tree
+    const data = JSON.parse(JSON.stringify(this.data));
 
-    return axios
-      .request<T, AxiosResponse<T>, D>({
+    if (this.isLoading) {
+      this.cancel('Request overlap');
+      this.abortController = new AbortController();
+    }
+
+    this.isLoading = true;
+
+    try {
+      return await axios.request<T, AxiosResponse<T>, D>({
         url: this.getEndPoint(),
         method,
-        data: useParams ? [] : this.data,
-        params: useParams ? this.data : [],
+        data: useParams ? [] : data,
+        params: useParams ? data : [],
         withCredentials: true,
         signal: this.abortController.signal,
-      } as AxiosRequestConfig<D>)
-      .catch(
-        (
-          response: AxiosResponse<T & { errors?: ValidationError[] }>,
-        ): AxiosResponse<T> => {
-          switch (response.status) {
-            case 422:
-              this.setValidationErrors(response);
-              break;
-          }
+      } as AxiosRequestConfig<D>);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        switch (error.status) {
+          case 422:
+            this.setValidationErrors(error.response?.data.errors ?? []);
+            break;
+        }
+      }
 
-          // TODO: Implement other default responses
-
-          return response;
-        },
-      );
+      throw error;
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  public cancel(reason?: never) {
+  public cancel(reason?: string) {
     this.abortController.abort(reason);
   }
 }

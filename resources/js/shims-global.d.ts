@@ -1,6 +1,6 @@
-import { RouteParams, Router } from "ziggy-js";
-import { TranslateOptions } from "vue-i18n";
-import { ToastOptions } from "vue-toastification/dist/types/types";
+import { RouteParams, Router } from 'ziggy-js';
+import { TranslateOptions } from 'vue-i18n';
+import { ToastOptions } from 'vue-toastification/dist/types/types';
 
 let ToastFunction: (content: string, options?: ToastOptions) => void;
 

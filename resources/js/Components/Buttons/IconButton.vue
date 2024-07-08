@@ -9,9 +9,9 @@
 </template>
 
 <script setup lang="ts">
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { FontAwesomeIconProps } from "../Icons/FontAwesomeIconProps";
-import { PropType } from "vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { FontAwesomeIconProps } from '../Icons/FontAwesomeIconProps';
+import { PropType } from 'vue';
 
 // Add text-white bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600 (or equivalent) to button to change colour
 

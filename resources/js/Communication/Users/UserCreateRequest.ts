@@ -1,6 +1,6 @@
-import { Request } from "../Base/Request";
-import { UserData } from "../../Types/generated";
-import { Method } from "axios";
+import { Request } from '../Base/Request';
+import { UserData } from '../../Types/generated';
+import { Method } from 'axios';
 
 export interface UserCreateData {
   name: string;
@@ -12,11 +12,11 @@ export interface UserCreateData {
 
 export class UserCreateRequest extends Request<UserData, UserCreateData> {
   protected getEndPoint(): string {
-    return route("web.api.users.create") as string;
+    return route('web.api.users.create') as string;
   }
 
   protected getMethod(): Method {
-    return "POST";
+    return 'POST';
   }
 
   public setData(data: UserCreateData): UserCreateRequest {

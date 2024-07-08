@@ -1,6 +1,14 @@
-import i18n from "../../i18n";
-import { FontAwesomeIconProps } from "../Icons/FontAwesomeIconProps";
-import { QueryBuilderIndexRequest } from "../../Communication/Base/QueryBuilderIndexRequest";
+import i18n from '../../i18n';
+import { FontAwesomeIconProps } from '../Icons/FontAwesomeIconProps';
+import { QueryBuilderIndexRequest } from '../../Communication/Base/QueryBuilderIndexRequest';
+import moment from 'moment';
+import I18n from '../../i18n';
+import { SortDirection } from '../../Utilities/SortDirection';
+
+export type DateRangeValue = {
+  start: string | undefined;
+  end: string | undefined;
+};
 
 export enum FilterType {
   Search,
@@ -37,8 +45,12 @@ export type RemoteSelectFilterOptions<T extends Record<string, unknown>> = {
 export enum DateFilterType {
   DateRange,
   TimeRange,
-  SingleDate,
-  SingleTime,
+  FromDate,
+  UntilDate,
+  ExactDate,
+  FromTime,
+  UntilTime,
+  ExactTime,
 }
 
 export type DateFilterOption<T extends Record<string, unknown>> =
@@ -67,6 +79,9 @@ export type TableHeader<T extends Record<string, unknown>> = {
   bodySlot?: string;
   headerSlot?: string;
   filter?: FilterOption<T>;
+  sortable?: boolean;
+  defaultSortDirection?: SortDirection;
+  renderBody?: (entry: T) => string;
 };
 
 export type BulkOption<T extends Record<string, unknown>> = {
@@ -79,27 +94,43 @@ export type BulkOption<T extends Record<string, unknown>> = {
   confirmationText?: ((selected: T[]) => string) | string;
 };
 
-export const IdHeader = {
-  key: "id",
-  title: i18n.global.t("components.datatable.id_title"),
+export const IdHeader: TableHeader<Record<string, unknown & { id: number }>> = {
+  key: 'id',
+  title: i18n.global.t('components.datatable.id_title'),
+  sortable: true,
+  filter: {
+    type: FilterType.Search,
+    filter: 'id',
+    placeholder: I18n.global.t('components.datatable.id_search_placeholder'),
+  },
 };
 
-export const CreatedAtHeader = {
-  key: "created_at",
-  title: i18n.global.t("components.datatable.created_at_title"),
+export const CreatedAtHeader: TableHeader<
+  Record<string, unknown> & { created_at: string }
+> = {
+  key: 'created_at',
+  title: i18n.global.t('components.datatable.created_at_title'),
+  sortable: true,
+  renderBody: entry =>
+    moment(entry.created_at).locale(I18n.global.locale).format('lll'),
   filter: {
     type: FilterType.Date,
-    filter: "created_at",
-    dateFilterType: DateFilterType.DateRange,
+    filter: 'created_at',
+    dateFilterType: DateFilterType.FromDate,
   } as DateFilterOption<Record<string, unknown>>,
 };
 
-export const UpdatedAtHeader = {
-  key: "updated_at",
-  title: i18n.global.t("components.datatable.updated_at_title"),
+export const UpdatedAtHeader: TableHeader<
+  Record<string, unknown> & { updated_at: string }
+> = {
+  key: 'updated_at',
+  title: i18n.global.t('components.datatable.updated_at_title'),
+  sortable: true,
+  renderBody: entry =>
+    moment(entry.updated_at).locale(I18n.global.locale).format('lll'),
   filter: {
     type: FilterType.Date,
-    filter: "updated_at",
+    filter: 'updated_at',
     dateFilterType: DateFilterType.DateRange,
   } as DateFilterOption<Record<string, unknown>>,
 };
