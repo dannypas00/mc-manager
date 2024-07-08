@@ -19,7 +19,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import SidebarLayout from './Layouts/SidebarLayout.vue';
 // import BrandedStackedLayout from './Layouts/BrandedStackedLayout.vue';
-import {ZiggyVue} from 'ziggy-js';
 
 library.add(fas, fab, far);
 
@@ -49,8 +48,7 @@ createInertiaApp({
       .use(PortalVue)
       .use(createPinia())
       .use(autoAnimatePlugin)
-      .use(VueToastificationPlugin, toastOptions)
-      .use(ZiggyVue, {url: import.meta.env.VITE_APP_URL});
+      .use(VueToastificationPlugin, toastOptions);
 
     vue.config.globalProperties.$route = route;
     vue.config.globalProperties.$toast = useToast();

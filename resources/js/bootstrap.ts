@@ -30,5 +30,3 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //   disableStats: true,
 //   cluster: '',
 // });
-
-Ziggy.url = import.meta.env.VITE_APP_URL;
