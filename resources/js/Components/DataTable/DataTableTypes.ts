@@ -94,15 +94,14 @@ export type BulkOption<T extends Record<string, unknown>> = {
   confirmationText?: ((selected: T[]) => string) | string;
 };
 
-export const IdHeader: TableHeader<number> = {
+export const IdHeader: TableHeader<Record<string, unknown & { id: number }>> = {
   key: 'id',
   title: i18n.global.t('components.datatable.id_title'),
   sortable: true,
-  // TODO: FilterType.Exact
   filter: {
     type: FilterType.Search,
     filter: 'id',
-    placeholder: I18n.global.t('components.datatable.id_search_placeholder')
+    placeholder: I18n.global.t('components.datatable.id_search_placeholder'),
   },
 };
 
