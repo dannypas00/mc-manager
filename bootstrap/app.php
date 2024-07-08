@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 HandleInertiaRequests::class,
                 AddLinkHeadersForPreloadedAssets::class,
             ])
-            ->trustProxies(explode(',', env('TRUSTED_PROXIES')));
+            ->trustProxies(config('app.trusted_proxies'));
     })
     ->withExceptions()
     ->create();
