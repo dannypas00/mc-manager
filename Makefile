@@ -92,7 +92,11 @@ ifeq ($(ENV), local)
 endif
 
 database/migrations/: composer.lock docker-compose.yaml
+ifeq ($(ENV), production)
+	$(PHP) artisan migrate
+else
 	$(PHP) artisan migrate -n
+endif
 
 database/seeders/: drop-db database/migrations/ database/factories/
 ifeq ($(ENV), local)
