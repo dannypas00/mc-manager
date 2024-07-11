@@ -51,8 +51,8 @@ services:
       - artisan
       - schedule:work
 
-  websockets:
-    container_name: ${APP_NAME}-websockets
+  reverb:
+    container_name: ${APP_NAME}-reverb
     image: dannypas00/laravel-fpm:8.2
     extends:
       file: .docker/local/php-docker-compose.yaml
@@ -63,8 +63,9 @@ services:
       - reverb:start
       - --port=6001
       - --host=0.0.0.0
+      - --debug
     ports:
-      - "6001:6001"
+      - "${REVERB_PORT:-6001}:6001"
 
   nginx:
     container_name: ${APP_NAME}-nginx
@@ -74,10 +75,12 @@ services:
         required: true
     depends_on:
       - php
+      - reverb
     ports:
       - "${NGINX_PORT:-80}:80"
     volumes:
       - .docker/local/nginx-includes:/etc/nginx/conf.d
+      - .docker/local/nginx.conf:/etc/nginx/nginx.conf
       - ./:/var/www/project
 
   mailpit:
