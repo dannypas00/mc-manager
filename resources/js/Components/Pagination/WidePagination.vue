@@ -22,6 +22,7 @@
           :index="page"
           :is-current="currentPage === page"
           :key="page"
+          @click="currentPage = page"
         />
       </template>
       <template v-else>
@@ -53,9 +54,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, ModelRef, PropType, watch } from 'vue';
+import { ModelRef, PropType, watch } from 'vue';
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/vue/20/solid';
-import _ from 'lodash';
 import PaginationEntry from './Partials/PaginationEntry.vue';
 import { useOffsetPagination } from '@vueuse/core';
 import { QueryBuilderIndexData } from '../../Communication/Base/QueryBuilderRequest';

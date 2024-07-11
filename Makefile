@@ -107,7 +107,7 @@ endif
 
 docker-compose.yaml:
 ifneq ($(NO_DOCKER), true)
-	$(DOCKER_COMPOSE) up -d --wait
+	$(DOCKER_COMPOSE) up -d --wait --remove-orphans
 endif
 
 .PHONY: test-integration
