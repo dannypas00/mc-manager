@@ -6,4 +6,5 @@ return [
     App\Providers\HorizonServiceProvider::class,
     App\Providers\JetstreamServiceProvider::class,
     Spatie\WebhookClient\WebhookClientServiceProvider::class,
+    Illuminate\Broadcasting\BroadcastServiceProvider::class
 ];
