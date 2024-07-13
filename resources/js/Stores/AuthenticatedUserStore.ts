@@ -14,10 +14,10 @@ export const useAuthenticatedUserStore = defineStore(
     onMounted(() => {
       if (user.value) {
         window.Echo.channel(`users.${user.value.id}`).listen(
-          '.update',
-          (event: { user: UserData }) => {
+          '.UserUpdated',
+          (event: { model: UserData }) => {
             console.log('Received user update from reverb!', event);
-            user.value = _.assign(user.value, event.user);
+            user.value = _.assign(user.value, event.model);
           }
         );
       }

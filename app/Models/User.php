@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use App\Observers\UserObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
-use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +14,6 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @mixin IdeHelperUser
  */
-#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -24,6 +21,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use BroadcastsEvents;
 
     protected $fillable = [
         'name',
@@ -46,8 +44,13 @@ class User extends Authenticatable
         ];
     }
 
-//    public function broadcastOn($event)
-//    {
-//        return ['users.' . $this->id];
-//    }
+    public function broadcastAfterCommit(): bool
+    {
+        return true;
+    }
+
+    public function broadcastOn($event): Channel
+    {
+        return new Channel('users.' . $this->id);
+    }
 }
