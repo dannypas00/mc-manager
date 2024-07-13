@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -49,8 +50,8 @@ class User extends Authenticatable
         return true;
     }
 
-    public function broadcastOn($event): Channel
+    public function broadcastOn($event): PrivateChannel
     {
-        return new Channel('users.' . $this->id);
+        return new PrivateChannel('users.' . $this->id);
     }
 }

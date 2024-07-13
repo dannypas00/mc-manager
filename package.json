@@ -35,7 +35,10 @@
         "vue": "^3.3.13",
         "vue-i18n": "^9.10.2",
         "vue-toastification": "^2.0.0-rc.5",
-        "ziggy-js": "^2.0.4"
+        "laravel-echo": "^1.16.1",
+        "ziggy-js": "^2.0.4",
+        "typescript": "^5.5.3",
+        "pusher-js": "^8.4.0-rc2"
     },
     "devDependencies": {
         "@eslint/js": "^9.6.0",
@@ -43,11 +46,8 @@
         "@vue/eslint-config-standard": "^8.0.1",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.1.0",
-        "laravel-echo": "^1.16.1",
         "prettier": "^3.2.5",
         "prettier-plugin-tailwindcss": "^0.5.13",
-        "pusher-js": "^8.4.0-rc2",
-        "typescript": "^5.5.3",
         "typescript-eslint": "^7.15.0"
     }
 }
