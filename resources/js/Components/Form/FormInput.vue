@@ -51,11 +51,6 @@ import { computed } from 'vue';
 const emit = defineEmits(['update:model-value']);
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    required: true,
-  },
-
   id: {
     type: String,
     required: true,
@@ -86,9 +81,11 @@ const props = defineProps({
   },
 });
 
+const modelValue = defineModel();
+
 const value = computed({
   get() {
-    return props.modelValue;
+    return modelValue;
   },
   set() {
     emit('update:model-value');

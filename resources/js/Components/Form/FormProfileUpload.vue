@@ -1,10 +1,10 @@
 <template>
   <div>
-    <label :for="id" class="block text-sm font-medium leading-6 text-gray-900">
+    <span class="block text-sm font-medium leading-6 text-gray-900">
       {{ label }}
-    </label>
+    </span>
 
-    <label :for="id" class="mt-2 flex items-center gap-x-3">
+    <div class="mt-2 flex items-center gap-x-3">
       <img
         class="h-24 w-24 rounded text-gray-300"
         aria-hidden="true"
@@ -12,21 +12,13 @@
         :alt="$t('components.file_editor.uploaded_alt')"
       />
 
-      <span
-        type="button"
+      <button
+        ref="dropzoneUploadButton"
         class="cursor-pointer rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
       >
         {{ buttonText ?? $t('components.profile_upload.default_button_text') }}
-      </span>
-
-      <input
-        :id="id"
-        type="file"
-        class="hidden"
-        accept="image/*"
-        @change="onFileUpload"
-      />
-    </label>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -60,8 +52,9 @@ const props = defineProps({
   },
 });
 
-const imageUrl = ref();
-imageUrl.value = props.defaultImageUrl;
+const imageUrl = ref(props.defaultImageUrl);
+
+const dropzoneUploadButton = ref<HTMLButtonElement>();
 
 function onFileUpload(event) {
   const file = event.target.files[0];
