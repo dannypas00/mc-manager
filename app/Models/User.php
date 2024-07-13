@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @mixin IdeHelperUser
  */
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -25,7 +29,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile_photo_url',
     ];
 
     protected $hidden = [
@@ -42,4 +45,9 @@ class User extends Authenticatable
             'password'          => 'hashed',
         ];
     }
+
+//    public function broadcastOn($event)
+//    {
+//        return ['users.' . $this->id];
+//    }
 }

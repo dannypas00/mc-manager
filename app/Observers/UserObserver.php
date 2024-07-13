@@ -9,8 +9,6 @@ class UserObserver
 {
     public function updated(User $user): void
     {
-        if ($user->isDirty()) {
-            event(new UserUpdateEvent($user));
-        }
+        event(new UserUpdateEvent($user));
     }
 }

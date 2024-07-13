@@ -3,6 +3,7 @@
 use App\Actions\Fortify\CreateNewUser;
 use App\DataObjects\UserData;
 use App\Http\Controllers\Users\UserQueryBuilderController;
+use App\Http\Controllers\Users\UserUpdateController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
@@ -21,6 +22,7 @@ Route::middleware([
                 'create',
                 static fn () => UserData::fromModel((new CreateNewUser())->create(request()?->input()))
             )->name('create');
+            Route::put('{user}', UserUpdateController::class)->name('update');
         });
     });
 
