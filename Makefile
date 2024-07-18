@@ -1,13 +1,15 @@
 SHELL := bash
 
 ENV ?= local
+TEMPLATE_GITHUB_URL = github\.com\/dannypas00\/laravel-template
+GITHUB_URL ?= github\.com\/dannypas00\/laravel-template-2
 PROJECT_NAMESPACE ?= dannypas00
-PROJECT_NAME ?= laravel-template-project
+PROJECT_NAME ?= laravel-template-project-2
 DEVELOPER_FULLNAME ?= Danny\ Pas
 DEVELOPER_USERNAME ?= dannypas00
 DEVELOPER_EMAIL ?= github@dannypas.nl
 # Replacement map using sed (see $(TEMPLATES) target below
-TEMPLATES = laravel-template-namespace/${PROJECT_NAMESPACE} laravel-template-project/${PROJECT_NAME} laravel-template-fullname/${DEVELOPER_FULLNAME} laravel-template-username/${DEVELOPER_USERNAME} laravel-template-email/${DEVELOPER_EMAIL}
+TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template-email/$(DEVELOPER_EMAIL)
 
 NO_DOCKER ?= false
 
