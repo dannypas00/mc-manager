@@ -243,6 +243,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import { UserData } from '../Types/generated';
 import SidebarNavEntry from './Partials/SidebarNavEntry.vue';
 import { PortalTarget } from 'portal-vue';
+import { useAuthenticatedUserStore } from '../Stores/AuthenticatedUserStore';
 
 const navigation = layoutNavigationItems;
 const userNavigation = userNavigationItems;
@@ -256,5 +257,7 @@ const teams: {
 
 const sidebarOpen = ref(false);
 
-const user: UserData = usePage().props.user;
+const userStore = useAuthenticatedUserStore();
+
+const user = userStore.user;
 </script>

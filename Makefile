@@ -1,8 +1,18 @@
 SHELL := bash
 
 ENV ?= local
-PROJECT_NAME ?= laravel-template
-TEMPLATE_PATTERN = laravel-template
+TEMPLATE_GITHUB_URL = github\.com\/dannypas00\/laravel-template
+
+# Replace these values with your own, escape spaces with backslashes (in fullname for example)
+GITHUB_URL ?= github\.com\/dannypas00\/laravel-template
+PROJECT_NAMESPACE ?= dannypas00
+PROJECT_NAME ?= laravel-template-project
+DEVELOPER_FULLNAME ?= laravel-template-fullname
+DEVELOPER_USERNAME ?= laravel-template-username
+DEVELOPER_EMAIL ?= laravel-template@example.com
+
+# Replacement map using sed (see $(TEMPLATES) target below
+TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template@example.com/$(DEVELOPER_EMAIL)
 
 NO_DOCKER ?= false
 
@@ -22,13 +32,13 @@ NPM ?= $(PHP_CONTAINER) npm
 .DEFAULT_TARGET: project-setup
 
 .PHONY: project-setup
-project-setup: dependencies $(TEMPLATE_PATTERN) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
 
 .PHONY: deploy
-deploy: clear-cache dependencies $(TEMPLATE_PATTERN) .env.example install resources/js/ migrate vendor/autoload.php
+deploy: clear-cache dependencies $(TEMPLATES) .env.example install resources/js/ migrate vendor/autoload.php
 	$(PHP) artisan optimize
 
 .PHONY: clear-cache
@@ -41,11 +51,12 @@ dependencies:
 	@(command -v docker > /dev/null) || (echo "Docker not installed" && exit 127)
 	@(docker compose > /dev/null) || (echo "Docker compose plugin not installed" && exit 127)
 
-.PHONY: $(TEMPLATE_PATTERN)
-$(TEMPLATE_PATTERN):
+.PHONY: template $(TEMPLATES)
+template: $(TEMPLATES)
+$(TEMPLATES):
 	@# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
 	@# This fails if no files are found (script has already run), hence the || true.
-	@grep -rl $(TEMPLATE_PATTERN) . --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(TEMPLATE_PATTERN)/$(PROJECT_NAME)/g' || true
+	@grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
 
 .env.example:
 	@# Copy env.example file if env file doesn't exist yet

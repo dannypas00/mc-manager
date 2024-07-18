@@ -32,9 +32,9 @@ return [
 
         'pusher' => [
             'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY', 'test'),
-            'secret' => env('PUSHER_APP_SECRET', 'test'),
-            'app_id' => env('PUSHER_APP_ID', 0),
+            'key' => env('REVERB_APP_KEY', 'test'),
+            'secret' => env('REVERB_APP_SECRET', 'test'),
+            'app_id' => env('REVERB_APP_ID', 0),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'host' => '172.17.0.1',
