@@ -5,17 +5,17 @@
       selected ? 'text-brand-dark' : 'text-gray-900',
     ]"
   >
-    {{ entry[header.key] }}
+    {{ header.renderBody ? header.renderBody(entry) : entry[header.key] }}
   </td>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { PropType } from "vue";
-import { TableHeader } from "../DataTableTypes";
+import { PropType } from 'vue';
+import { TableHeader } from '../DataTableTypes';
 
 defineProps({
   header: {
-    type: Object as PropType<TableHeader>,
+    type: Object as PropType<TableHeader<T>>,
     required: true,
   },
   entry: {

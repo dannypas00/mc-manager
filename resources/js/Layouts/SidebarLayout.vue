@@ -158,7 +158,7 @@
             <li class="-mx-6 mt-auto">
               <Menu as="div" class="w-100">
                 <MenuButton
-                  class="w-100 flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark"
+                  class="w-full flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark"
                 >
                   <img
                     class="h-8 w-8 rounded-full bg-brand-dark"
@@ -221,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 import {
   Dialog,
   DialogPanel,
@@ -231,18 +231,19 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
-import { XMarkIcon } from "@heroicons/vue/24/outline";
+} from '@headlessui/vue';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import {
   appLogo,
   appName,
   layoutNavigationItems,
   userNavigationItems,
-} from "../LayoutConfig";
-import { Link, usePage } from "@inertiajs/vue3";
-import { UserData } from "../Types/generated";
-import SidebarNavEntry from "./Partials/SidebarNavEntry.vue";
-import { PortalTarget } from "portal-vue";
+} from '../LayoutConfig';
+import { Link, usePage } from '@inertiajs/vue3';
+import { UserData } from '../Types/generated';
+import SidebarNavEntry from './Partials/SidebarNavEntry.vue';
+import { PortalTarget } from 'portal-vue';
+import { useAuthenticatedUserStore } from '../Stores/AuthenticatedUserStore';
 
 const navigation = layoutNavigationItems;
 const userNavigation = userNavigationItems;
@@ -256,5 +257,7 @@ const teams: {
 
 const sidebarOpen = ref(false);
 
-const user: UserData = usePage().props.user;
+const userStore = useAuthenticatedUserStore();
+
+const user = userStore.user;
 </script>

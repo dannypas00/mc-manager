@@ -77,16 +77,16 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, any>">
-import { computed, ModelRef, PropType } from "vue";
-import { BulkOption, TableHeader } from "./DataTableTypes";
-import DataTableCell from "./Partials/DataTableCell.vue";
-import EditButton from "./Partials/EditButton.vue";
-import TableHead from "./Partials/TableHead.vue";
-import TableBulkAction from "./Partials/TableBulkAction.vue";
+import { computed, ModelRef, PropType } from 'vue';
+import { BulkOption, TableHeader } from './DataTableTypes';
+import DataTableCell from './Partials/DataTableCell.vue';
+import EditButton from './Partials/EditButton.vue';
+import TableHead from './Partials/TableHead.vue';
+import TableBulkAction from './Partials/TableBulkAction.vue';
 
-const emit = defineEmits(["update:selected"]);
+const emit = defineEmits(['update:selected']);
 
-const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
+const selectedModel: ModelRef<Array<T>> = defineModel('selected', {
   type: Array<T>,
   required: false,
   default: [],
@@ -94,12 +94,12 @@ const selectedModel: ModelRef<Array<T>> = defineModel("selected", {
 
 const selected = computed({
   get: () => selectedModel.value,
-  set: (value) => emit("update:selected", value),
+  set: value => emit('update:selected', value),
 });
 
 defineProps({
   headers: {
-    type: Array as PropType<TableHeader[]>,
+    type: Array as PropType<TableHeader<T>[]>,
     required: true,
   },
 
@@ -111,7 +111,7 @@ defineProps({
   identifier: {
     type: String,
     required: false,
-    default: "id",
+    default: 'id',
   },
 
   selectable: {

@@ -1,17 +1,19 @@
 services:
   base-php:
     build:
-      dockerfile: Dockerfile
+      dockerfile: cli.Dockerfile
       context: .
-    env_file:
-      - ../../.env
-    user: 1000:1000
+    environment:
+      APP_NAME: "laravel-template-project"
     working_dir: /var/www/project
+    user: ${CUSTOM_USER:-1000}
     command:
       - php
       - artisan
       - list
     volumes:
-      - ../../:/var/www/project
-      - ~/.config:/var/www/.config
-      - ./tests/output:/opt/phpstorm-coverage
+      - ../../:/var/www/project:rw
+      - ./tests/output:/opt/phpstorm-coverage:rw
+      - $HOME/.config:/var/www/.config:rw
+      - ${NPM_CACHE_DIR:-$HOME/.npm}:/var/www/.npm:rw
+      - ${COMPOSER_CACHE:-$HOME/.cache/composer}:/var/www/.cache:rw

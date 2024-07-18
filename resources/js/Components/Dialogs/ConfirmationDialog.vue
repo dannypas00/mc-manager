@@ -80,20 +80,20 @@
 </template>
 
 <script setup lang="ts">
-import I18n from "../../i18n";
-import { computed } from "vue";
+import I18n from '../../i18n';
+import { computed } from 'vue';
 import {
   Dialog,
   DialogPanel,
   DialogTitle,
   TransitionChild,
   TransitionRoot,
-} from "@headlessui/vue";
-import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
+} from '@headlessui/vue';
+import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline';
 
-const emit = defineEmits(["update:open", "positive", "negative"]);
+const emit = defineEmits(['update:open', 'positive', 'negative']);
 
-const open = defineModel("open", {
+const open = defineModel('open', {
   type: Boolean,
   required: true,
 });
@@ -113,31 +113,31 @@ defineProps({
     type: String,
     required: false,
     default: () =>
-      I18n.global.t("components.confirmation.default_positive_button"),
+      I18n.global.t('components.confirmation.default_positive_button'),
   },
 
   negativeButtonText: {
     type: String,
     required: false,
     default: () =>
-      I18n.global.t("components.confirmation.default_negative_button"),
+      I18n.global.t('components.confirmation.default_negative_button'),
   },
 
   positiveButtonClasses: {
     type: String,
     required: false,
-    default: "bg-red-600 text-white",
+    default: 'bg-red-600 text-white',
   },
 });
 
 function positiveButton() {
   isOpen.value = false;
-  emit("positive");
+  emit('positive');
 }
 
 function negativeButton() {
   isOpen.value = false;
-  emit("negative");
+  emit('negative');
 }
 
 const isOpen = computed({
@@ -145,7 +145,7 @@ const isOpen = computed({
     return open.value;
   },
   set(value: boolean) {
-    emit("update:open", value);
+    emit('update:open', value);
   },
 });
 </script>

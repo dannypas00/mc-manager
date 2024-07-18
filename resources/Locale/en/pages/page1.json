@@ -4,8 +4,17 @@
   },
   "table": {
     "delete_text": "Are you sure you want to delete these {n} users?",
+    "email_placeholder": "Search by email..",
     "email_title": "Email",
+    "name_placeholder": "Search by name..",
     "name_title": "Name"
   },
-  "title": "DataTable example"
+  "title": "DataTable example",
+  "user_form": {
+    "email": "Email",
+    "name": "User name",
+    "password": "Password",
+    "password_confirmation": "Confirm password",
+    "submit": "Create user"
+  }
 }

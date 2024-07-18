@@ -10,10 +10,25 @@
       "confirm_title": "Confirm bulk action",
       "default_confirm_text": "Are you sure you want to execute this {action} action on all {count} selected items?"
     },
+    "clear_title": "Clear input",
     "created_at_title": "Created",
+    "date_exact_header": {
+      "label": "On date"
+    },
+    "date_from_header": {
+      "label": "Since"
+    },
+    "date_range_header": {
+      "end": "End",
+      "start": "Start"
+    },
+    "date_until_header": {
+      "label": "Until"
+    },
     "edit_button": {
       "text": "Edit"
     },
+    "id_search_placeholder": "ID",
     "id_title": "ID",
     "updated_at_title": "Updated"
   },

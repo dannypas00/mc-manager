@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import { NavigationItem } from "../../LayoutConfig";
-import { Link, usePage } from "@inertiajs/vue3";
-import { computed, ComputedRef } from "vue";
-import { DisclosureButton } from "@headlessui/vue";
+import { NavigationItem } from '../../LayoutConfig';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed, ComputedRef } from 'vue';
+import { DisclosureButton } from '@headlessui/vue';
 
-defineEmits(["select"]);
+defineEmits(['select']);
 
 const props = defineProps<{
   item: NavigationItem;
