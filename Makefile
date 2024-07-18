@@ -2,14 +2,17 @@ SHELL := bash
 
 ENV ?= local
 TEMPLATE_GITHUB_URL = github\.com\/dannypas00\/laravel-template
-GITHUB_URL ?= github\.com\/dannypas00\/laravel-template-2
+
+# Replace these values with your own, escape spaces with backslashes (in fullname for example)
+GITHUB_URL ?= github\.com\/dannypas00\/laravel-template
 PROJECT_NAMESPACE ?= dannypas00
-PROJECT_NAME ?= laravel-template-project-2
-DEVELOPER_FULLNAME ?= Danny\ Pas
-DEVELOPER_USERNAME ?= dannypas00
-DEVELOPER_EMAIL ?= github@dannypas.nl
+PROJECT_NAME ?= laravel-template-project
+DEVELOPER_FULLNAME ?= laravel-template-fullname
+DEVELOPER_USERNAME ?= laravel-template-username
+DEVELOPER_EMAIL ?= laravel-template@example.com
+
 # Replacement map using sed (see $(TEMPLATES) target below
-TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template-email/$(DEVELOPER_EMAIL)
+TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template@example.com/$(DEVELOPER_EMAIL)
 
 NO_DOCKER ?= false
 
@@ -29,7 +32,7 @@ NPM ?= $(PHP_CONTAINER) npm
 .DEFAULT_TARGET: project-setup
 
 .PHONY: project-setup
-project-setup: dependencies $(TEMPLATES) .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
