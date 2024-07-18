@@ -20,6 +20,7 @@ DOCKER ?= docker
 DOCKER_COMPOSE ?= $(DOCKER) compose
 
 PHP_CONTAINER = $(DOCKER_COMPOSE) run php
+NODE_CONTAINER = $(DOCKER_COMPOSE) run node
 
 ifeq ($(NO_DOCKER), true)
 PHP_CONTAINER =
@@ -27,7 +28,7 @@ endif
 
 PHP ?= $(PHP_CONTAINER) php
 COMPOSER ?= $(PHP_CONTAINER) composer
-NPM ?= $(PHP_CONTAINER) npm
+NPM ?= $(NODE_CONTAINER) npm
 
 .DEFAULT_TARGET: project-setup
 
@@ -93,13 +94,17 @@ else
 endif
 
 .PHONY: init-db drop-db migrate seed
-init-db: docker-compose.yaml drop-db migrate seed
+init-db: drop-db docker-compose.yaml migrate seed
 migrate: database/migrations/
 seed: database/seeders/
 
 drop-db:
 ifeq ($(ENV), local)
+ifeq ($(NO_DOCKER), true)
 	$(PHP) artisan db:wipe || true
+else
+	$(DOCKER_COMPOSE) down -v
+endif
 endif
 
 database/migrations/: composer.lock docker-compose.yaml

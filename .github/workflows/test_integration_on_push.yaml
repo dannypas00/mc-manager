@@ -4,7 +4,10 @@ on:
     branches:
       - master
       - develop
-      - install
+  pull_request:
+    branches:
+      - develop
+      - master
 
 jobs:
   Run-make-with-integration-tests:
@@ -16,9 +19,9 @@ jobs:
     - uses: docker/setup-buildx-action@v3.4.0
       name: Setup buildx
 
-    - uses: actions/setup-node@v4
+    - run: cp .env.example .env
 
-    - run: mkdir $HOME/.npm
+    - run: docker compose up node
 
-    - run: CUSTOM_USER=1001 make NPM=npm -B
+    - run: CUSTOM_USER=1001 make -B
       name: Run Make

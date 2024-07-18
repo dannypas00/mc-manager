@@ -2,21 +2,20 @@
 
 namespace Tests\Integration;
 
+use Auth;
 use DB;
 use Http;
 use Illuminate\Database\Console\Migrations\StatusCommand as MigrationStatusCommand;
 use Illuminate\Mail\Message;
 use Laravel\Horizon\Console\StatusCommand as HorizonStatusCommand;
 use Mail;
-use Tests\Resources\TestMail;
 use Tests\TestCase;
 
 class EnvironmentRunningTest extends TestCase
 {
-    public function test_that_nginx_has_started(): void
+    public function test_that_homepage_is_available(): void
     {
-        $success = Http::get('nginx:80/healthz')->successful();
-        $this->assertTrue($success);
+        $this->assertTrue(Http::get('frank:8000')->successful());
     }
 
     public function test_that_redis_has_started(): void
@@ -49,9 +48,9 @@ class EnvironmentRunningTest extends TestCase
         $this->get(config('horizon.path'))->assertSuccessful();
     }
 
-    public function test_that_websocket_server_is_up(): void
+    public function test_that_reverb_server_is_up(): void
     {
-        $this->assertTrue(Http::get('http://websockets:6001')->notFound());
+        $this->assertTrue(Http::get('http://reverb:6001')->notFound());
     }
 
     public function test_that_mailpit_interface_is_up(): void
