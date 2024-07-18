@@ -3,7 +3,7 @@
   "authors": [
     {
       "name": "laravel-template-fullname",
-      "email": "laravel-template-email",
+      "email": "laravel-template@example.com",
       "role": "Developer"
     }
   ],
