@@ -7,7 +7,7 @@ DEVELOPER_FULLNAME ?= Danny\ Pas
 DEVELOPER_USERNAME ?= dannypas00
 DEVELOPER_EMAIL ?= github@dannypas.nl
 # Replacement map using sed (see $(TEMPLATES) target below
-TEMPLATES = "laravel-template-namespace/${PROJECT_NAMESPACE}" "laravel-template-project/${PROJECT_NAME}" "laravel-template-fullname/${DEVELOPER_FULLNAME}" "laravel-template-username/${DEVELOPER_USERNAME}" "laravel-template-email/${DEVELOPER_EMAIL}"
+TEMPLATES = laravel-template-namespace/${PROJECT_NAMESPACE} laravel-template-project/${PROJECT_NAME} laravel-template-fullname/${DEVELOPER_FULLNAME} laravel-template-username/${DEVELOPER_USERNAME} laravel-template-email/${DEVELOPER_EMAIL}
 
 NO_DOCKER ?= false
 
@@ -51,7 +51,7 @@ template: $(TEMPLATES)
 $(TEMPLATES):
 	@# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
 	@# This fails if no files are found (script has already run), hence the || true.
-	grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
+	@grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
 
 .env.example:
 	@# Copy env.example file if env file doesn't exist yet

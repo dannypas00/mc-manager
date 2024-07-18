@@ -1,9 +1,9 @@
 {
-  "name": "template-namespace/laravel-template-project",
+  "name": "laravel-template-namespace/laravel-template-project",
   "authors": [
     {
-      "name": "template-fullname",
-      "email": "template-email",
+      "name": "laravel-template-fullname",
+      "email": "laravel-template-email",
       "role": "Developer"
     }
   ],
