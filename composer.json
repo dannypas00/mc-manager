@@ -1,10 +1,16 @@
 {
-  "name": "laravel/laravel",
+  "name": "template-namespace/laravel-template",
+  "authors": [
+    {
+      "name": "template-fullname",
+      "email": "template-email",
+      "role": "Developer"
+    }
+  ],
   "type": "project",
   "description": "The skeleton application for the Laravel framework.",
   "keywords": [
-    "laravel",
-    "framework"
+    "laravel"
   ],
   "license": "MIT",
   "require": {
@@ -24,6 +30,7 @@
     "tightenco/ziggy": "^2.0"
   },
   "require-dev": {
+    "roave/security-advisories": "dev-latest",
     "fakerphp/faker": "^1.23",
     "laravel/pint": "^1.13",
     "laravel/sail": "^1.26",
