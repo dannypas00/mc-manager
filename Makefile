@@ -2,11 +2,11 @@ SHELL := bash
 
 ENV ?= local
 PROJECT_NAMESPACE ?= dannypas00
-PROJECT_NAME ?= laravel-template
+PROJECT_NAME ?= laravel-template-project
 DEVELOPER_FULLNAME ?= Danny\ Pas
 DEVELOPER_USERNAME ?= dannypas00
 DEVELOPER_EMAIL ?= github@dannypas.nl
-TEMPLATES = "template-namespace/${PROJECT_NAMESPACE}" "laravel-template/${PROJECT_NAME}" "template-fullname/${DEVELOPER_FULLNAME}" "template-username/${DEVELOPER_USERNAME}" "template-email/${DEVELOPER_EMAIL}"
+TEMPLATES = "laravel-template-namespace/${PROJECT_NAMESPACE}" "laravel-template-project/${PROJECT_NAME}" "laravel-template-fullname/${DEVELOPER_FULLNAME}" "laravel-template-username/${DEVELOPER_USERNAME}" "laravel-template-email/${DEVELOPER_EMAIL}"
 
 NO_DOCKER ?= false
 
@@ -50,8 +50,7 @@ template: $(TEMPLATES)
 $(TEMPLATES):
 	@# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
 	@# This fails if no files are found (script has already run), hence the || true.
-	echo $@
-	@grep -rl "template\-|laravel-template" . --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(TEMPLATE_PATTERN)/$(PROJECT_NAME)/g' || true
+	grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs echo
 
 .env.example:
 	@# Copy env.example file if env file doesn't exist yet
