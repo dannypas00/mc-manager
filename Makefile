@@ -154,5 +154,5 @@ app-key: docker
 
 resources/js/: package-lock.json
 	# If public/hot is present, laravel will try to serve from vite server
-	rm public/hot
+	@rm public/hot || true
 	$(NPM) run build
