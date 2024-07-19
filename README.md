@@ -19,3 +19,11 @@ To change ports of services, change the [.env](.env) file, ports are imported fr
 - User credentials:
   - email: test@example.com
   - password: test1234
+
+## Deploying
+- Change template values in [Makefile](Makefile)
+- Ensure the `ENV` environment variable is set to `prod`
+- Run `make`
+- Edit the [.env](.env) file to match the production environment
+- Run `make deploy`
+- This will install and expose the app according to the .env file
