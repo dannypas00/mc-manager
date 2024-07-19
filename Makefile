@@ -153,4 +153,6 @@ app-key: docker
 	(grep "^APP_KEY=$$" .env && $(PHP) artisan key:generate) || true
 
 resources/js/: package-lock.json
+	# If public/hot is present, laravel will try to serve from vite server
+	rm public/hot
 	$(NPM) run build
