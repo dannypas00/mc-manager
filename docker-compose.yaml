@@ -106,7 +106,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     tty: true
-    entrypoint: [ "php", "artisan", "octane:frankenphp", "--watch", "--caddyfile=/app/.docker/local/Caddyfile" ]
+    command: [ "php", "artisan", "octane:frankenphp", "--watch", "--caddyfile=/app/.docker/local/Caddyfile" ]
 
   mailpit:
     container_name: ${APP_NAME}-mailpit
