@@ -41,7 +41,7 @@ prod:
 clean:
 	$(DOCKER_COMPOSE) down -v
 	rm -rf composer.lock package-lock.json vendor node_modules bootstrap/cache/*.php public/build
-	$(MAKE) -B docker-compose.yaml
+	$(MAKE) -B ENV=local docker-compose.yaml
 
 .PHONY: project-setup
 project-setup: $(TEMPLATES) dependencies .env.example docker-compose.yaml composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
