@@ -38,7 +38,7 @@ clean:
 	rm -rf composer.lock package-lock.json vendor node_modules bootstrap/cache/*.php public/build
 
 .PHONY: project-setup
-project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+project-setup: clean $(TEMPLATES) dependencies .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
