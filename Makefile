@@ -33,41 +33,31 @@ NPM ?= $(NODE_CONTAINER) npm
 # First target not starting with "." is default target
 all: project-setup
 
-.PHONY: prod
-prod:
-	$(MAKE) ENV=prod project-setup deploy
-
-.PHONY: clean
-clean:
-	$(DOCKER_COMPOSE) down -v
-	rm -rf composer.lock package-lock.json vendor node_modules bootstrap/cache/*.php public/build
-
-.PHONY: project-setup
-project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json docker-compose.yaml app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
-
-.PHONY: install
-install: composer.lock package-lock.json docker-compose.yaml
-
-.PHONY: deploy
-deploy: dependencies $(TEMPLATES) .env.example install clear-cache resources/js/ migrate vendor/autoload.php
-	$(PHP) artisan optimize
-
-.PHONY: clear-cache
-clear-cache:
-	$(PHP) artisan optimize:clear
-
-.PHONY: dependencies
-dependencies:
-	@(command -v npm > /dev/null) || (echo "NPM not installed" && exit 127)
-	@(command -v docker > /dev/null) || (echo "Docker not installed" && exit 127)
-	@(docker compose > /dev/null) || (echo "Docker compose plugin not installed" && exit 127)
-
 .PHONY: template $(TEMPLATES)
 template: $(TEMPLATES)
 $(TEMPLATES):
 	@# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
 	@# This fails if no files are found (script has already run), hence the || true.
 	@grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
+
+.PHONY: prod clean install deploy project-setup clear-cache dependencies
+install: $(TEMPLATES) dependencies .env.example composer.lock package-lock.json composer.json package.json docker-compose.yaml app-key
+project-setup: install init-db test-integration vendor/autoload.php
+
+dependencies:
+	@(command -v npm > /dev/null) || (echo "NPM not installed" && exit 127)
+	@(command -v docker > /dev/null) || (echo "Docker not installed" && exit 127)
+	@(docker compose > /dev/null) || (echo "Docker compose plugin not installed" && exit 127)
+
+clean:
+	$(DOCKER_COMPOSE) down -v
+	rm -rf composer.lock package-lock.json vendor node_modules bootstrap/cache/*.php public/build
+
+deploy: install clear-cache resources/js/ migrate vendor/autoload.php
+	$(PHP) artisan optimize
+
+clear-cache:
+	$(PHP) artisan optimize:clear
 
 .env.example:
 	@# Copy env.example file if env file doesn't exist yet
@@ -128,7 +118,7 @@ database/seeders/: drop-db database/migrations/ database/factories/
 ifeq ($(ENV), local)
 	$(PHP) artisan db:seed --class=Database\\Seeders\\DatabaseSeeder
 else
-	$(PHP) artisan db:seed --class=Database\\Seeders\\LiveSeeder
+	$(PHP) artisan db:seed --class=Database\\Seeders\\LiveSeeder || true
 endif
 
 docker-compose.yaml:
