@@ -1,7 +1,6 @@
 SHELL := bash
 
 ENV ?= local
-TEMPLATE_GITHUB_URL = github\.com\/dannypas00\/laravel-template
 
 # Replace these values with your own, escape spaces with backslashes (in fullname for example)
 GITHUB_URL ?= github\.com\/dannypas00\/laravel-template
@@ -12,6 +11,7 @@ DEVELOPER_USERNAME ?= laravel-template-username
 DEVELOPER_EMAIL ?= laravel-template@example.com
 
 # Replacement map using sed (see $(TEMPLATES) target below
+TEMPLATE_GITHUB_URL = github\.com\/dannypas00\/laravel-template
 TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template@example.com/$(DEVELOPER_EMAIL)
 
 NO_DOCKER ?= false
