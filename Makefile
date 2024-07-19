@@ -30,7 +30,12 @@ PHP ?= $(PHP_CONTAINER) php
 COMPOSER ?= $(PHP_CONTAINER) composer
 NPM ?= $(NODE_CONTAINER) npm
 
-.DEFAULT_TARGET: project-setup
+# First target not starting with "." is default target
+all: project-setup
+
+.PHONY: prod
+prod:
+	$(MAKE) ENV=prod
 
 .PHONY: clean
 clean:
