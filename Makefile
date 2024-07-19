@@ -81,16 +81,16 @@ endif
 
 package.json:
 ifeq ($(ENV), local)
-	$(NPM) install
+	$(NPM) ci
 else
-	$(NPM) install --omit=dev
+	$(NPM) ci --omit=dev
 endif
 
 package-lock.json:
 ifeq ($(ENV), local)
 	$(NPM) install
 else
-	$(NPM) ci --omit=dev
+	$(NPM) install --omit=dev
 endif
 
 .PHONY: init-db drop-db migrate seed
