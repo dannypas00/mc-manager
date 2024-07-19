@@ -41,10 +41,10 @@ prod:
 clean:
 	$(DOCKER_COMPOSE) down -v
 	rm -rf composer.lock package-lock.json vendor node_modules bootstrap/cache/*.php public/build
-	$(MAKE) docker-compose.yaml
+	$(MAKE) -B docker-compose.yaml
 
 .PHONY: project-setup
-project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+project-setup: $(TEMPLATES) dependencies .env.example docker-compose.yaml composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
@@ -148,7 +148,7 @@ ifeq ($(ENV), local)
 endif
 
 .PHONY: app-key
-app-key:
+app-key: docker-compose.yaml
 	@# Only generate an app key if the .env doesn't have on yet
 	(grep "^APP_KEY=$$" .env && $(PHP) artisan key:generate) || true
 
