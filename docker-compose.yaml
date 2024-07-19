@@ -28,6 +28,8 @@ services:
     command:
       - sleep
       - infinity
+    profiles:
+      - dev
 
   node:
     container_name: ${APP_NAME}-node
@@ -104,7 +106,7 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     tty: true
-    entrypoint: ["php", "artisan", "octane:frankenphp", "--watch", "--caddyfile=/app/.docker/local/Caddyfile"]
+    entrypoint: [ "php", "artisan", "octane:frankenphp", "--watch", "--caddyfile=/app/.docker/local/Caddyfile" ]
 
   mailpit:
     container_name: ${APP_NAME}-mailpit
@@ -117,7 +119,7 @@ services:
       - "${MAILPIT_INTERFACE_PORT:-8025}:8025"
 
 volumes:
-    mysql:
-    npm-cache:
-    caddy_data:
-    caddy_config:
+  mysql:
+  npm-cache:
+  caddy_data:
+  caddy_config:

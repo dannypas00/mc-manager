@@ -19,7 +19,7 @@ NO_DOCKER ?= false
 DOCKER ?= docker
 DOCKER_COMPOSE ?= $(DOCKER) compose
 
-PHP_CONTAINER = $(DOCKER_COMPOSE) run php
+PHP_CONTAINER = $(DOCKER_COMPOSE) run frank
 NODE_CONTAINER = $(DOCKER_COMPOSE) run node
 
 ifeq ($(NO_DOCKER), true)
