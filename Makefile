@@ -44,7 +44,7 @@ project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json
 install: composer.lock package-lock.json docker-compose.yaml
 
 .PHONY: deploy
-deploy: clear-cache dependencies $(TEMPLATES) .env.example install resources/js/ migrate vendor/autoload.php
+deploy: dependencies $(TEMPLATES) .env.example install clear-cache resources/js/ migrate vendor/autoload.php
 	$(PHP) artisan optimize
 
 .PHONY: clear-cache
