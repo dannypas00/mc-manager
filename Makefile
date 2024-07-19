@@ -35,7 +35,7 @@ all: project-setup
 
 .PHONY: prod
 prod:
-	$(MAKE) ENV=prod docker-compose.yaml project-setup deploy
+	$(MAKE) ENV=prod project-setup deploy
 
 .PHONY: clean
 clean:
@@ -43,7 +43,7 @@ clean:
 	rm -rf composer.lock package-lock.json vendor node_modules bootstrap/cache/*.php public/build
 
 .PHONY: project-setup
-project-setup: $(TEMPLATES) dependencies .env.example docker-compose.yaml composer.json package.json app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
+project-setup: $(TEMPLATES) dependencies .env.example composer.json package.json docker-compose.yaml app-key init-db resources/js/ test-integration vendor/autoload.php docker-compose.yaml
 
 .PHONY: install
 install: composer.lock package-lock.json docker-compose.yaml
