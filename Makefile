@@ -9,10 +9,10 @@ PROJECT_NAMESPACE ?= dannypas00
 PROJECT_NAME ?= laravel-template-project
 DEVELOPER_FULLNAME ?= laravel-template-fullname
 DEVELOPER_USERNAME ?= laravel-template-username
-DEVELOPER_EMAIL ?= laravel-template\@example\.com
+DEVELOPER_EMAIL ?= laravel-template@example.com
 
 # Replacement map using sed (see $(TEMPLATES) target below
-TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template\@example\.com/$(DEVELOPER_EMAIL)
+TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template@example.com/$(DEVELOPER_EMAIL)
 
 NO_DOCKER ?= false
 
@@ -38,7 +38,7 @@ template: $(TEMPLATES)
 $(TEMPLATES):
 	@# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
 	@# This fails if no files are found (script has already run), hence the || true.
-	@grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
+	@grep -rl "laravel-template" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
 
 .PHONY: prod clean install deploy project-setup clear-cache dependencies
 install: $(TEMPLATES) dependencies .env.example docker-build composer.lock package-lock.json composer.json package.json docker app-key
