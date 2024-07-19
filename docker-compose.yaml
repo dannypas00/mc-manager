@@ -34,6 +34,7 @@ services:
     image: node:22
     ports:
       - 5174:5174
+    user: ${CUSTOM_USER:-1000}
     working_dir: /app
     command:
       - npx
