@@ -22,7 +22,7 @@ To change ports of services, change the [.env](.env) file, ports are imported fr
 
 ## Deploying
 - Change template values in [Makefile](Makefile)
-- Ensure the `ENV` environment variable is set to `prod`
+- Ensure the `ENV` environment variable is set to `production`
 - Run `make`
 - Edit the [.env](.env) file to match the production environment
 - Run `make deploy`
