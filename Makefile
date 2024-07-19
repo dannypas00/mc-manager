@@ -41,7 +41,7 @@ $(TEMPLATES):
 	@grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
 
 .PHONY: prod clean install deploy project-setup clear-cache dependencies
-install: $(TEMPLATES) dependencies .env.example composer.lock package-lock.json composer.json package.json docker app-key
+install: $(TEMPLATES) dependencies .env.example docker-build composer.lock package-lock.json composer.json package.json docker app-key
 project-setup: install init-db test-integration vendor/autoload.php
 
 dependencies:
@@ -117,9 +117,21 @@ else
 	$(PHP) artisan db:seed --class=Database\\Seeders\\LiveSeeder || true
 endif
 
-.PHONY: docker
+.PHONY: docker-build docker
+docker-build:
+ifneq ($(NO_DOCKER), true)
+ifeq ($(ENV), local)
+	$(DOCKER_COMPOSE) --profile dev pull
+	$(DOCKER_COMPOSE) --profile dev build
+else
+	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) up build
+endif
+endif
+
 docker:
 	$(MAKE) -B docker-compose.yaml
+
 docker-compose.yaml:
 ifneq ($(NO_DOCKER), true)
 ifeq ($(ENV), local)
