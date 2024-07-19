@@ -45,6 +45,8 @@ services:
     volumes:
       - ./:/app
       - ${NPM_CACHE_DIR:-$HOME/.npm}:/var/www/.npm:rw
+    profiles:
+      - dev
 
   horizon:
     container_name: ${APP_NAME}-horizon

@@ -123,7 +123,11 @@ endif
 
 docker-compose.yaml:
 ifneq ($(NO_DOCKER), true)
+ifeq ($(ENV), local)
+	$(DOCKER_COMPOSE) --profile dev up -d --wait --remove-orphans
+else
 	$(DOCKER_COMPOSE) up -d --wait --remove-orphans
+endif
 endif
 
 .PHONY: test-integration
