@@ -125,7 +125,7 @@ ifeq ($(ENV), local)
 	$(DOCKER_COMPOSE) --profile dev build
 else
 	$(DOCKER_COMPOSE) pull
-	$(DOCKER_COMPOSE) up build
+	$(DOCKER_COMPOSE) build
 endif
 endif
 
