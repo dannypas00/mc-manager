@@ -9,10 +9,10 @@ PROJECT_NAMESPACE ?= dannypas00
 PROJECT_NAME ?= laravel-template-project
 DEVELOPER_FULLNAME ?= laravel-template-fullname
 DEVELOPER_USERNAME ?= laravel-template-username
-DEVELOPER_EMAIL ?= laravel-template@example.com
+DEVELOPER_EMAIL ?= laravel-template\@example\.com
 
 # Replacement map using sed (see $(TEMPLATES) target below
-TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template@example.com/$(DEVELOPER_EMAIL)
+TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template\@example\.com/$(DEVELOPER_EMAIL)
 
 NO_DOCKER ?= false
 
@@ -128,16 +128,11 @@ endif
 endif
 
 docker:
-	$(MAKE) -B docker-compose.yaml
-
-docker-compose.yaml:
 ifneq ($(NO_DOCKER), true)
 ifeq ($(ENV), local)
-	$(DOCKER_COMPOSE) --profile dev pull
-	$(DOCKER_COMPOSE) --profile dev up --build -d --wait --remove-orphans
+	$(DOCKER_COMPOSE) --profile dev up -d --wait --remove-orphans
 else
-	$(DOCKER_COMPOSE) --profile prod pull
-	$(DOCKER_COMPOSE) --profile prod up --build -d --wait --remove-orphans
+	$(DOCKER_COMPOSE) --profile prod up -d --wait --remove-orphans
 endif
 endif
 
