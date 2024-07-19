@@ -35,7 +35,7 @@ all: project-setup
 
 .PHONY: prod
 prod:
-	$(MAKE) ENV=prod
+	$(MAKE) ENV=prod project-setup deploy
 
 .PHONY: clean
 clean:
