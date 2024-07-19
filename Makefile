@@ -41,7 +41,7 @@ $(TEMPLATES):
 	@grep -rl "laravel-template-" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
 
 .PHONY: prod clean install deploy project-setup clear-cache dependencies
-install: $(TEMPLATES) dependencies .env.example composer.lock package-lock.json composer.json package.json docker-compose.yaml app-key
+install: $(TEMPLATES) dependencies .env.example composer.lock package-lock.json composer.json package.json docker app-key
 project-setup: install init-db test-integration vendor/autoload.php
 
 dependencies:
@@ -94,20 +94,16 @@ else
 endif
 
 .PHONY: init-db drop-db migrate seed
-init-db: drop-db docker-compose.yaml migrate seed
+init-db: drop-db docker migrate seed
 migrate: database/migrations/
 seed: database/seeders/
 
 drop-db:
 ifeq ($(ENV), local)
-ifeq ($(NO_DOCKER), true)
 	$(PHP) artisan db:wipe || true
-else
-	$(DOCKER_COMPOSE) down -v
-endif
 endif
 
-database/migrations/: composer.lock docker-compose.yaml
+database/migrations/: composer.lock docker
 ifeq ($(ENV), production)
 	$(PHP) artisan migrate
 else
@@ -121,23 +117,28 @@ else
 	$(PHP) artisan db:seed --class=Database\\Seeders\\LiveSeeder || true
 endif
 
+.PHONY: docker
+docker:
+	$(MAKE) -B docker-compose.yaml
 docker-compose.yaml:
 ifneq ($(NO_DOCKER), true)
 ifeq ($(ENV), local)
-	$(DOCKER_COMPOSE) --profile dev up -d --wait --remove-orphans
+	$(DOCKER_COMPOSE) --profile dev pull
+	$(DOCKER_COMPOSE) --profile dev up --build -d --wait --remove-orphans
 else
-	$(DOCKER_COMPOSE) up -d --wait --remove-orphans
+	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) up --build -d --wait --remove-orphans
 endif
 endif
 
 .PHONY: test-integration
-test-integration: docker-compose.yaml
+test-integration: docker
 ifeq ($(ENV), local)
 	$(PHP) artisan test --env=integration --testsuite=Integration
 endif
 
 .PHONY: app-key
-app-key: docker-compose.yaml
+app-key: docker
 	@# Only generate an app key if the .env doesn't have on yet
 	(grep "^APP_KEY=$$" .env && $(PHP) artisan key:generate) || true
 
