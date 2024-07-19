@@ -128,7 +128,9 @@ endif
 
 .PHONY: test-integration
 test-integration: docker-compose.yaml
+ifeq ($(ENV), local)
 	$(PHP) artisan test --env=integration --testsuite=Integration
+endif
 
 .PHONY: app-key
 app-key:
