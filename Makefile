@@ -104,10 +104,10 @@ ifeq ($(ENV), local)
 endif
 
 database/migrations/: composer.lock docker
-ifeq ($(ENV), production)
-	$(PHP) artisan migrate
-else
+ifeq ($(ENV), local)
 	$(PHP) artisan migrate -n
+else
+	$(PHP) artisan migrate
 endif
 
 database/seeders/: drop-db database/migrations/ database/factories/
