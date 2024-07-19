@@ -138,8 +138,8 @@ ifeq ($(ENV), local)
 	$(DOCKER_COMPOSE) --profile dev pull
 	$(DOCKER_COMPOSE) --profile dev up --build -d --wait --remove-orphans
 else
-	$(DOCKER_COMPOSE) pull
-	$(DOCKER_COMPOSE) up --build -d --wait --remove-orphans
+	$(DOCKER_COMPOSE) --profile prod pull
+	$(DOCKER_COMPOSE) --profile prod up --build -d --wait --remove-orphans
 endif
 endif
 

@@ -12,6 +12,9 @@ services:
     command:
       - mariadbd
       - --port=${MARIADB_PORT:-3306}
+    profiles:
+      - dev
+      - prod
 
   redis:
     container_name: ${APP_NAME}-redis
@@ -19,6 +22,9 @@ services:
     env_file:
       - path: .env
         required: true
+    profiles:
+      - dev
+      - prod
 
   php:
     container_name: ${APP_NAME}-php
@@ -61,6 +67,9 @@ services:
       - php
       - artisan
       - horizon
+    profiles:
+      - dev
+      - prod
 
   schedule:
     container_name: ${APP_NAME}-schedule
@@ -71,6 +80,9 @@ services:
       - php
       - artisan
       - schedule:work
+    profiles:
+      - dev
+      - prod
 
   reverb:
     container_name: ${APP_NAME}-reverb
@@ -86,6 +98,9 @@ services:
       - --debug
     ports:
       - "${REVERB_PORT:-6001}:6001"
+    profiles:
+      - dev
+      - prod
 
   frank:
     container_name: ${APP_NAME}-frank
@@ -107,6 +122,9 @@ services:
       - caddy_config:/config
     tty: true
     command: [ "php", "artisan", "octane:frankenphp", "--watch", "--caddyfile=/app/.docker/local/Caddyfile" ]
+    profiles:
+      - dev
+      - prod
 
   mailpit:
     container_name: ${APP_NAME}-mailpit
@@ -117,6 +135,9 @@ services:
     ports:
       - "${MAILPIT_PORT:-1025}:1025"
       - "${MAILPIT_INTERFACE_PORT:-8025}:8025"
+    profiles:
+      - dev
+      - prod
 
 volumes:
   mysql:
