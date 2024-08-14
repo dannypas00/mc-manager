@@ -2,18 +2,22 @@
 
 namespace App\Http\Middleware;
 
-use App\DataObjects\UserData;
-use App\Models\User;
-use Auth;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+/**
+ * @codeCoverageIgnore We trust laravel default middleware does its job
+ */
 class HandleInertiaRequests extends Middleware
 {
+    protected $rootView = 'app';
+
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'user'             => fn () => Auth::user() ? UserData::fromModel(Auth::user()) : null,
+            'auth.user'        => fn () => $request->user()
+                ? $request->user()->with(['servers'])->sole()
+                : null,
             'route_parameters' => fn () => $request->route()->parameters,
         ]);
     }

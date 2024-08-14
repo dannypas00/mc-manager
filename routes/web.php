@@ -2,9 +2,12 @@
 
 use App\Actions\Fortify\CreateNewUser;
 use App\DataObjects\UserData;
+use App\Http\Controllers\Servers\ServerStoreController;
+use App\Http\Controllers\Storage\StoragePathController;
 use App\Http\Controllers\Users\UserQueryBuilderController;
 use App\Http\Controllers\Users\UserUpdateController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 Route::middleware([
@@ -12,6 +15,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(static function () {
+    Route::inertia('/', 'Home')->name('home');
+
     Route::name('api')->as('web.api.')->group(static function () {
         Route::as('users.')->prefix('users')->group(static function () {
             Route::get('me', static fn (Request $request) => $request->user())->name('current');
@@ -26,9 +31,23 @@ Route::middleware([
         });
     });
 
-    Route::inertia('/', 'Page1/DataTableExample')->name('page1');
-    Route::inertia('page2', 'Page2/ReverbExample')->name('page2');
-    Route::inertia('profile', 'Users/ProfileEdit')->name('me.profile');
-    Route::inertia('settings', 'Users/UserSettings')->name('me.settings');
-    Route::get('logout', [AuthenticatedSessionController::class, 'destroy']);
+    Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('auth.logout');
+
+    Route::prefix('servers')->as('servers.')->group(static function () {
+        Route::inertia('', 'Servers/ServerIndex')->name('index');
+        Route::inertia('create', 'Servers/ServerCreate')->name('create');
+        Route::post('create', ServerStoreController::class)->name('create');
+
+        Route::prefix('{id}')->group(static function () {
+            Route::get('', static fn (int $id) => redirect(route('servers.console', ['id' => $id])))->name('show');
+            Route::inertia('console', 'Servers/Console/ServerConsole')->name('console');
+            Route::get('files/path{path?}', StoragePathController::class)->name('files')->where('path', '\S+');
+            Route::inertia('settings', 'Servers/Settings/ServerSettings')->name('settings');
+
+            Route::get('edit', static fn (int $id) => Inertia::render(
+                'Servers/ServerEdit',
+                ['server' => Auth::user()?->servers()->findOrFail($id)]
+            ))->name('edit');
+        })->whereNumber('id');
+    });
 });

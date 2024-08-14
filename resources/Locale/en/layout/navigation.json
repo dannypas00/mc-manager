@@ -1,0 +1,11 @@
+{
+  "menu": {
+    "open": "Open menu"
+  },
+  "notifications": {
+    "view": "View notifications"
+  },
+  "user": {
+    "view": "Open user menu"
+  }
+}
