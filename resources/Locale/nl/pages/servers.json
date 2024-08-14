@@ -26,6 +26,17 @@
       "label": "Server omschrijving",
       "placeholder": "Mijn geweldige server!"
     },
+    "ftp_password": {
+      "label": "FTP wachtwoord"
+    },
+    "ftp_port": {
+      "label": "FTP poort"
+    },
+    "ftp_separator": "FTP Instellingen",
+    "ftp_test_button": "Test FTP verbinding",
+    "ftp_username": {
+      "label": "FTP gebruikersnaam"
+    },
     "icon_upload": {
       "label": "Server icoon"
     },
@@ -35,6 +46,9 @@
     },
     "installed_segment": {
       "title": "Geinstalleerde server instellingen"
+    },
+    "is_sftp": {
+      "label": "Gebruik SFTP in plaats van FTP"
     },
     "local_ip": {
       "explanation": "Het IP adres waarop de MC-Manager server de minecraft host kan bereiken. Het wordt aangeraden om de minecraft server op hetzelfde netwerk als MC-Manager te hosten. In dit geval zal dit een lokaal IP zijn.",
@@ -56,10 +70,18 @@
       "explanation": "Het openbare IP of de openbare hostnaam waarmee mensen met de Minecraft server verbinden.",
       "label": "Openbaar IP"
     },
+    "ssh_key": {
+      "label": "Prive SSH sleutel"
+    },
     "ssh_port": {
       "label": "SSH poort"
     },
-    "ssh_test_button": "Test SSH verbinding"
+    "ssh_separator": "SSH Instellingen",
+    "ssh_test_button": "Test SSH verbinding",
+    "ssh_username": {
+      "explanation": "Linux gebruiker om te gebruiken on in te loggen",
+      "label": "SSH Gebruiker"
+    }
   },
   "index": {
     "add_button_text`": "Nieuwe server",

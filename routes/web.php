@@ -3,6 +3,8 @@
 use App\Actions\Fortify\CreateNewUser;
 use App\DataObjects\UserData;
 use App\Http\Controllers\Servers\ServerStoreController;
+use App\Http\Controllers\Servers\ServerTestFtpController;
+use App\Http\Controllers\Servers\ServerTestSshCommandController;
 use App\Http\Controllers\Storage\StoragePathController;
 use App\Http\Controllers\Users\UserQueryBuilderController;
 use App\Http\Controllers\Users\UserUpdateController;
@@ -28,6 +30,13 @@ Route::middleware([
                 static fn () => UserData::from((new CreateNewUser())->create(request()?->input()))
             )->name('create');
             Route::put('{user}', UserUpdateController::class)->name('update');
+        });
+
+        Route::as('servers.')->prefix('servers')->group(static function () {
+            Route::prefix('test')->as('test.')->group(static function () {
+                Route::post('ssh', ServerTestSshCommandController::class)->name('ssh');
+                Route::post('ftp', ServerTestFtpController::class)->name('ftp');
+            });
         });
     });
 

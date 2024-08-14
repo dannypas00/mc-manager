@@ -4,10 +4,11 @@ import { AxiosResponse } from 'axios';
 import { useUserStore } from '../UserStore';
 import { ServerShowRequest } from '../../Communications/McManager/Servers/ServerShowRequest';
 import Server = App.Models.Server;
+import { ServerData } from '../../Types/generated';
 
 export const useServerEditStore = defineStore('ServerEdit', {
   state: () => ({
-    model: {} as Server,
+    model: {} as ServerData,
     original: {} as FormData,
     showRequest: new ServerShowRequest(),
 
@@ -16,11 +17,11 @@ export const useServerEditStore = defineStore('ServerEdit', {
 
   getters: {
     isChanged(state): boolean {
-      return !_.isEqual(state.dereferenced, state.original);
+      return !_.isEqual(this.dereferenced, state.original);
     },
 
     dereferenced(state): FormData {
-      return JSON.parse(JSON.stringify(state.requestData));
+      return JSON.parse(JSON.stringify(this.requestData));
     },
 
     requestData(state): FormData {
@@ -34,14 +35,14 @@ export const useServerEditStore = defineStore('ServerEdit', {
 
   actions: {
     retrieve(id: number) {
-      this.showRequest.setId(id).getResponse().then(this.setFromModel);
+      this.showRequest.setId(id).getResponse().then(this.setFromRequest);
     },
 
-    setFromRequest(response: AxiosResponse<Server>) {
+    setFromRequest(response: AxiosResponse<ServerData>) {
       this.setFromModel(response.data);
     },
 
-    setFromModel(model: Server) {
+    setFromModel(model: ServerData) {
       this.model = model;
       this.original = this.dereferenced;
     },
@@ -56,7 +57,8 @@ export const useServerEditStore = defineStore('ServerEdit', {
         enable_ftp: true,
         enable_ssh: true,
         users: [useUserStore().user],
-      } as Server;
+        // Casting to unknown first because not all required fields are available yet
+      } as unknown as ServerData;
       this.original = this.dereferenced;
     },
   },

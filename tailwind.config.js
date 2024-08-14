@@ -23,10 +23,10 @@ export default {
             },
             colors: {
                 brand: {
-                    light: '#c24141',
-                    hover: '#a22525',
-                    DEFAULT: '#980909',
-                    dark: '#540909',
+                    light: '#12bf8e',
+                    hover: '#0a8563',
+                    DEFAULT: '#065f46',
+                    dark: '#02271c',
                 },
                 'on-brand': {
                     DEFAULT: '#d2d2d2',

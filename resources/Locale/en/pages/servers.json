@@ -26,6 +26,17 @@
       "label": "Server description",
       "placeholder": "My awesome server!"
     },
+    "ftp_password": {
+      "label": "FTP password"
+    },
+    "ftp_port": {
+      "label": "FTP port"
+    },
+    "ftp_separator": "FTP Settings",
+    "ftp_test_button": "Test FTP connection",
+    "ftp_username": {
+      "label": "FTP username"
+    },
     "icon_upload": {
       "label": "Server icon"
     },
@@ -35,6 +46,9 @@
     },
     "installed_segment": {
       "title": "Installed server settings"
+    },
+    "is_sftp": {
+      "label": "Use SFTP instead of FTP"
     },
     "local_ip": {
       "explanation": "The IP address the MC-Manager server can reach the minecraft host on. It is recommended to host the minecraft server on the same network as MC-Manager, in which case this should be a local IP.",
@@ -56,10 +70,18 @@
       "explanation": "The public IP or hostname that people will use to connect to the Minecraft server.",
       "label": "Public IP"
     },
+    "ssh_key": {
+      "label": "Private SSH key"
+    },
     "ssh_port": {
       "label": "SSH port"
     },
-    "ssh_test_button": "Test SSH connection"
+    "ssh_separator": "SSH Settings",
+    "ssh_test_button": "Test SSH connection",
+    "ssh_username": {
+      "explanation": "Linux user to use for SSH login",
+      "label": "SSH User"
+    }
   },
   "index": {
     "add_button_text`": "New server",

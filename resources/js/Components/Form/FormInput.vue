@@ -6,6 +6,7 @@
       class="mb-2 block text-sm font-medium leading-6 text-gray-900"
     >
       {{ label }}
+      <span v-if="required" class="text-red-400">*</span>
     </label>
 
     <div class="flex">
@@ -24,7 +25,9 @@
           v-model="value"
           :placeholder="placeholder"
           :name="label"
-          type="text"
+          :required="required"
+          :type="type"
+          :autocomplete="autocomplete"
           class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
         />
 
@@ -79,6 +82,24 @@ const props = defineProps({
     required: false,
     default: undefined,
   },
+
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+
+  type: {
+    type: String,
+    required: false,
+    default: 'text',
+  },
+
+  autocomplete: {
+    type: String,
+    required: false,
+    default: undefined,
+  }
 });
 
 const modelValue = defineModel({ type: [String, null] as PropType<string | null>, required: true });
@@ -87,8 +108,8 @@ const value: WritableComputedRef<string | null> = computed({
   get() {
     return modelValue.value;
   },
-  set() {
-    emit('update:model-value');
+  set(value) {
+    emit('update:model-value', value);
   },
 });
 </script>

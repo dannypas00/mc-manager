@@ -61,8 +61,8 @@ const value: WritableComputedRef<string | null> = computed({
   get (): string | null {
     return modelValue.value;
   },
-  set () {
-    emit('update:model-value');
+  set (value) {
+    emit('update:model-value', value);
   },
 });
 </script>

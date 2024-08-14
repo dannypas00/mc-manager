@@ -2,16 +2,18 @@
 
 namespace App\DataObjects;
 
-use App\Models\Server;
-use App\Models\User;
 use Carbon\Carbon;
-use Carbon\CarbonImmutable;
-use DateTime;
+use Spatie\LaravelData\Attributes\MapName;
+use Spatie\LaravelData\Attributes\MapOutputName;
+use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
 /**
  * @typescript
  */
+#[MapOutputName(SnakeCaseMapper::class)]
 class UserData extends Data
 {
     /**

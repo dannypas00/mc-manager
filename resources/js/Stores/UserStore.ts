@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { UserShowRequest } from '../Communications/McManager/Users/UserShowRequest';
 import User = App.Models.User;
+import { UserData } from '../Types/generated';
 
 export const useUserStore = defineStore('User', {
   state: () => ({
-    user: {} as User,
+    user: {} as UserData,
     request: new UserShowRequest(),
   }),
 

@@ -3,18 +3,6 @@
     "default_negative_button": "Annuleer",
     "default_positive_button": "Bevestig"
   },
-  "file_editor": {
-    "confirm_unsaved_changes": "Je hebt onopgeslagen veranderingen. Weet je zeker dat je de pagina wilt verlaten?",
-    "nothing_to_save": "Geen wijzigingen om op te slaan",
-    "save_sucessful": "{name} is successvol opgeslagen",
-    "uploaded_alt": "Eigen geuploade afbeelding"
-  },
-  "flash": {
-    "dismiss": "Sluiten"
-  },
-  "profile_upload": {
-    "default_button_text": "Verander"
-  },
   "datatable": {
     "bulk_actions": {
       "confirm_negative_button": "Nee",
@@ -44,6 +32,15 @@
     "id_title": "ID",
     "updated_at_title": "Geüpdatet"
   },
+  "file_editor": {
+    "confirm_unsaved_changes": "Je hebt onopgeslagen veranderingen. Weet je zeker dat je de pagina wilt verlaten?",
+    "nothing_to_save": "Geen wijzigingen om op te slaan",
+    "save_sucessful": "{name} is successvol opgeslagen",
+    "uploaded_alt": "Eigen geuploade afbeelding"
+  },
+  "flash": {
+    "dismiss": "Sluiten"
+  },
   "layout": {
     "open_main_menu": "Open hoofdmenu",
     "open_user_menu": "Open gebruiker menu",
@@ -53,5 +50,8 @@
   "pagination": {
     "next_button": "Volgende",
     "previous_button": "Vorige"
+  },
+  "profile_upload": {
+    "default_button_text": "Verander"
   }
 }

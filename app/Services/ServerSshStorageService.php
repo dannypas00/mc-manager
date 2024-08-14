@@ -56,10 +56,24 @@ class ServerSshStorageService implements ServerStorageServiceInterface
             }
 
             return $process;
+        } catch (SshException $e) {
+            throw $e;
         } catch (Throwable $e) {
             File::delete($keypath);
             throw new SshException('Unexpected exception whilst running ssh command', previous: $e);
         }
+    }
+
+    /**
+     * This never returns false because any failure will trigger an exception, which is thrown to the frontend
+     *
+     * @param Server $server
+     * @throws SshException
+     * @return true
+     */
+    public function ping(Server $server): true
+    {
+        return $this->executeSsh($server, 'exit 0')->successful();
     }
 
     public function getContents(Server $server, string $path): ?string
@@ -132,7 +146,7 @@ class ServerSshStorageService implements ServerStorageServiceInterface
 
         $attributes = [
             StorageAttributes::ATTRIBUTE_PATH          => Str::after($name, './'),
-            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int) $size,
+            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int)$size,
             StorageAttributes::ATTRIBUTE_LAST_MODIFIED => Carbon::parse("$date $time")->timestamp,
             StorageAttributes::ATTRIBUTE_MIME_TYPE     => Str::afterLast($mime, ' '),
             StorageAttributes::ATTRIBUTE_TYPE          => $type,
@@ -156,7 +170,7 @@ class ServerSshStorageService implements ServerStorageServiceInterface
      */
     public function size(Server $server, string $path): int
     {
-        return (int) Str::before($this->executeSsh($server, "wc -c $path")->output(), ' ');
+        return (int)Str::before($this->executeSsh($server, "wc -c $path")->output(), ' ');
     }
 
     /**

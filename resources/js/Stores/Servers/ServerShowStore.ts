@@ -2,11 +2,12 @@ import { defineStore } from 'pinia';
 import { ServerShowRequest } from '../../Communications/McManager/Servers/ServerShowRequest';
 import { ServerEulaAcceptedRequest } from '../../Communications/McManager/Servers/ServerEulaAcceptedRequest';
 import Server = App.Models.Server;
+import { ServerData } from '../../Types/generated';
 
 export const useServerShowStore = defineStore('ServerShow', {
   state: () => ({
     request: new ServerShowRequest(),
-    model: {} as Server,
+    model: {} as ServerData,
     eulaAccepted: true,
     eulaAcceptedRequest: new ServerEulaAcceptedRequest(),
   }),
