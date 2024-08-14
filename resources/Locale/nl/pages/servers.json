@@ -21,6 +21,13 @@
       "description": "Instellingen om MC-Manager met je server te verbinden",
       "title": "Verbinding instellingen"
     },
+    "custom_docker_image": {
+      "explanation": "Gebruik een eigen java docker image voor het draaien van de server.",
+      "label": "Eigen docker image"
+    },
+    "customize_install": {
+      "label": "Aangepaste installatie setup"
+    },
     "description": {
       "description": "Zichtbaar in de minecraft server lijst",
       "label": "Server omschrijving",
@@ -73,6 +80,9 @@
       "explanation": "Het openbare IP of de openbare hostnaam waarmee mensen met de Minecraft server verbinden.",
       "label": "Openbaar IP"
     },
+    "server_properties": {
+      "label": "Extra server.properties"
+    },
     "ssh_key": {
       "label": "Prive SSH sleutel"
     },
@@ -84,6 +94,11 @@
     "ssh_username": {
       "explanation": "Linux gebruiker om te gebruiken on in te loggen",
       "label": "SSH Gebruiker"
+    },
+    "upload_custom_jar_button": "Upload custom jar",
+    "upload_custom_jar_explanation": "Upload je eigen jar bestand om te gebruiken",
+    "version": {
+      "label": "Minecraft versie"
     }
   },
   "index": {

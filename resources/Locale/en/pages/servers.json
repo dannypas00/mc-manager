@@ -21,6 +21,13 @@
       "description": "Settings for connecting MC-Manager to your server",
       "title": "Connection settings"
     },
+    "custom_docker_image": {
+      "explanation": "Use a custom java docker image for running the server.",
+      "label": "Custom docker image"
+    },
+    "customize_install": {
+      "label": "Custom installation setup"
+    },
     "description": {
       "description": "Visible in minecraft server list",
       "label": "Server description",
@@ -73,6 +80,9 @@
       "explanation": "The public IP or hostname that people will use to connect to the Minecraft server.",
       "label": "Public IP"
     },
+    "server_properties": {
+      "label": "Extra server.properties"
+    },
     "ssh_key": {
       "label": "Private SSH key"
     },
@@ -84,6 +94,11 @@
     "ssh_username": {
       "explanation": "Linux user to use for SSH login",
       "label": "SSH User"
+    },
+    "upload_custom_jar_button": "Upload custom jar",
+    "upload_custom_jar_explanation": "Upload a custom jar file to be used instead",
+    "version": {
+      "label": "Minecraft version"
     }
   },
   "index": {
