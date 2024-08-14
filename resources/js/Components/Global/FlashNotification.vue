@@ -1,6 +1,9 @@
 <template>
-  <div class="flex items-center gap-x-6 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 rounded-xl" :class="[ backgroundColor ]">
-    <p class="text-sm leading-6 text-center font-semibold">
+  <div
+    class="flex items-center gap-x-6 rounded-xl px-6 py-2.5 sm:px-3.5 sm:before:flex-1"
+    :class="[backgroundColor]"
+  >
+    <p class="text-center text-sm font-semibold leading-6">
       <Link
         :class="textColor"
         :href="isString(onClickAction) ? onClickAction : '#'"
@@ -13,8 +16,8 @@
       <Link
         v-if="buttonText"
         :href="isString(onClickAction) ? onClickAction : '#'"
-        :class="[ buttonBackgroundColor, buttonTextColor ]"
-        class="flex-none rounded-full mx-3 px-3.5 py-1 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+        :class="[buttonBackgroundColor, buttonTextColor]"
+        class="mx-3 flex-none rounded-full px-3.5 py-1 text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
         @click="isFunction(onClickAction) ? onClickAction : () => {}"
       >
         {{ buttonText }} <span aria-hidden="true">&rarr;</span>
@@ -27,9 +30,9 @@
         type="button"
         class="-m-3 p-3 focus-visible:outline-offset-[-4px]"
       >
-        <span v-t="'components.flash.dismiss'" class="sr-only"/>
+        <span v-t="'components.flash.dismiss'" class="sr-only" />
         <XMarkIcon
-          :class="[ buttonTextColor ]"
+          :class="[buttonTextColor]"
           class="h-5 w-5"
           aria-hidden="true"
         />

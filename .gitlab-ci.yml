@@ -22,7 +22,7 @@ test:
   image: dannypas00/laravel-fpm:8.2-npm
   stage: test
   variables:
-    XDEBUG_MODE: "coverage"
+    XDEBUG_MODE: 'coverage'
   before_script:
     - docker-php-ext-enable xdebug
     - touch .env

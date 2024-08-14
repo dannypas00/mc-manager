@@ -11,15 +11,15 @@ use League\Flysystem\Ftp\UnableToConnectToFtpHost;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Storage;
-use Tests\Traits\MocksServerConnectivityService;
 use Tests\Traits\MockServerFilesystemStorageService;
+use Tests\Traits\MocksServerConnectivityService;
 use Tests\UnitTestCase;
 
 #[CoversClass(ServerFilesystemStorageService::class)]
 class ServerFileSystemStorageServiceTest extends UnitTestCase
 {
-    use MocksServerConnectivityService;
     use MockServerFilesystemStorageService;
+    use MocksServerConnectivityService;
 
     public function testGetFtp(): void
     {
@@ -70,6 +70,7 @@ class ServerFileSystemStorageServiceTest extends UnitTestCase
         $ftp->put('testfile', 'testvalue');
 
         $this->mockFsGetDirectory(['test']);
+        $this->getFsMock()->makePartial();
 
         $result = app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), '');
 
@@ -82,6 +83,7 @@ class ServerFileSystemStorageServiceTest extends UnitTestCase
         $ftp->put('testdir/testfile', 'testvalue');
 
         $this->mockFsGetDirectory(['test']);
+        $this->getFsMock()->makePartial();
 
         $result = app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), 'testdir');
 
@@ -94,6 +96,7 @@ class ServerFileSystemStorageServiceTest extends UnitTestCase
         $ftp->put('testfile', 'testvalue');
 
         $this->mockFsGetDirectory(['test']);
+        $this->getFsMock()->makePartial();
 
         $result = app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), 'testfile');
 
@@ -105,6 +108,7 @@ class ServerFileSystemStorageServiceTest extends UnitTestCase
         $this->mockServerConnectivityServiceGetFilesystem();
 
         $this->mockFsGetDirectory(['test']);
+        $this->getFsMock()->makePartial();
 
         $this->expectException(FileNotFoundException::class);
         app(ServerFilesystemStorageService::class)->listContents(Server::factory()->makeOne(), 'nonexistentpath');
@@ -146,5 +150,37 @@ class ServerFileSystemStorageServiceTest extends UnitTestCase
         app(ServerFilesystemStorageService::class)->put(Server::factory()->makeOne(), 'testpath', 'testvalue');
 
         $ftp->assertExists('testpath', 'testvalue');
+    }
+
+    public function testSize(): void
+    {
+        $ftp = $this->mockServerConnectivityServiceGetFilesystem();
+        $ftp->put('testpath', 'teststring');
+
+        $this->assertEquals(10, app(ServerFilesystemStorageService::class)->size(Server::make(), 'testpath'));
+    }
+
+    public function testTail(): void
+    {
+        $ftp = $this->mockServerConnectivityServiceGetFilesystem();
+        $ftp->put('testpath', 'teststring');
+
+        $this->assertEquals(
+            'tstring',
+            app(ServerFilesystemStorageService::class)->tail(Server::make(), 'testpath', 3)
+        );
+    }
+
+    public function testAppend(): void
+    {
+        $ftp = $this->mockServerConnectivityServiceGetFilesystem();
+        $ftp->put('testpath', 'teststring');
+
+        app(ServerFilesystemStorageService::class)->append(Server::make(), 'testpath', "\ntest\ntest");
+
+        $this->assertEquals(
+            "teststring\ntest\ntest",
+            $ftp->get('testpath')
+        );
     }
 }

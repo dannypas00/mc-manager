@@ -3,69 +3,79 @@
 namespace Tests\Traits;
 
 use App\Services\ServerFilesystemStorageService;
+use App\Services\ServerStorageServiceInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Mockery\MockInterface;
 use Storage;
 
 trait MockServerFilesystemStorageService
 {
+    private MockInterface|ServerStorageServiceInterface $fsMock;
+
+    public function getFsMock(): MockInterface
+    {
+        if (!isset($this->fsMock)) {
+            $this->fsMock = $this->mock(ServerFilesystemStorageService::class);
+        }
+
+        return $this->fsMock;
+    }
+
     public function mockFsGetContent(?string $returns = null): void
     {
-        $this->mock(
-            ServerFilesystemStorageService::class,
-            fn (MockInterface $mock) => $mock
-                ->expects('getContents')
-                ->andReturn($returns)
-        )->makePartial();
+        $this->getFsMock()
+            ->expects('getContents')
+            ->andReturn($returns);
     }
 
     public function mockFsGetFtp(?Filesystem $returns = null): void
     {
-        $this->mock(
-            ServerFilesystemStorageService::class,
-            fn (MockInterface $mock) => $mock
-                ->shouldReceive('getFtp')
-                ->andReturn($returns ?? Storage::fake())
-        )->makePartial();
+        $this->getFsMock()
+            ->shouldReceive('getFtp')
+            ->andReturn($returns ?? Storage::fake());
     }
 
     public function mockFsDelete(): void
     {
-        $this->mock(
-            ServerFilesystemStorageService::class,
-            fn (MockInterface $mock) => $mock
-                ->shouldReceive('delete')
-                ->andReturn(true)
-        )->makePartial();
+        $this->getFsMock()
+            ->shouldReceive('delete')
+            ->andReturn(true);
     }
 
     public function mockFsListContents(array $returns = []): void
     {
-        $this->mock(
-            ServerFilesystemStorageService::class,
-            fn (MockInterface $mock) => $mock
-                ->shouldReceive('listContents')
-                ->andReturn($returns)
-        )->makePartial();
+        $this->getFsMock()
+            ->shouldReceive('listContents')
+            ->andReturn($returns);
     }
 
     public function mockFsGetDirectory(array $returns = []): void
     {
-        $this->mock(
-            ServerFilesystemStorageService::class,
-            fn (MockInterface $mock) => $mock
-                ->shouldReceive('getDirectory')
-                ->andReturn($returns)
-        )->makePartial();
+        $this->getFsMock()
+            ->shouldReceive('getDirectory')
+            ->andReturn($returns);
     }
 
     public function mockFsPut(string $expectedPath): void
     {
-        $this->mock(
-            ServerFilesystemStorageService::class,
-            fn (MockInterface $mock) => $mock
-                ->shouldReceive('put')
-                ->withSomeOfArgs($expectedPath)
-        )->makePartial();
+        $this->getFsMock()
+            ->shouldReceive('put')
+            ->withSomeOfArgs($expectedPath);
+    }
+
+    public function mockFsSize(string $expectedPath, int $returns): void
+    {
+        $this->getFsMock()
+            ->shouldReceive('size')
+            ->withSomeOfArgs($expectedPath)
+            ->andReturn($returns);
+    }
+
+    public function mockFsTail(string $expectedPath, string $returns): void
+    {
+        $this->getFsMock()
+            ->shouldReceive('tail')
+            ->withSomeOfArgs($expectedPath)
+            ->andReturn($returns);
     }
 }

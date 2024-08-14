@@ -25,6 +25,7 @@ class StoragePathController extends Controller
         ?string $path = '',
     ): Response {
         $server = $showRepository->show($id);
+
         return Inertia::render('Servers/Files/ServerFiles', [
             'path' => $path ?? '',
             ...$server->storage_service->listContents($server, $path ?? '')

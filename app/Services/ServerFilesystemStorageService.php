@@ -38,7 +38,8 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
     #[ArrayShape([
         'directories' => StorageAttributes::class . '[]|null',
         'files'       => 'string|null'
-    ])] public function listContents(Server $server, string $path): array
+    ])]
+    public function listContents(Server $server, string $path): array
     {
         $ftp = $this->getFtp($server);
 
@@ -55,6 +56,7 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
 
     /**
      * @throws FilesystemException
+     *
      * @returns StorageAttributes[]
      */
     public function getDirectory(Server $server, string $storagePath): array
@@ -75,5 +77,27 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
     public function put(Server $server, string $path, string $content): void
     {
         $this->getFtp($server)->put($path, $content);
+    }
+
+    public function size(Server $server, string $path): int
+    {
+        return $this->getFtp($server)->size($path);
+    }
+
+    /**
+     * @throws FilesystemException
+     */
+    public function tail(Server $server, string $path, int $offset): string
+    {
+        $stream = $this->getFtp($server)->readStream($path);
+        $contents = stream_get_contents($stream, null, $offset);
+        fclose($stream);
+
+        return $contents;
+    }
+
+    public function append(Server $server, string $path, string $content): void
+    {
+        $this->getFtp($server)->append($path, $content, '');
     }
 }

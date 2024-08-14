@@ -1,4 +1,70 @@
 {
+  "create": {
+    "title": "Maak nieuwe server",
+    "type_selector": {
+      "description": {
+        "1": "Handmatige servers zijn volledig door jou beheerd. Jij kiest op welke server de minecraft server draait, jij installeerd alle benodigde software, en jij zorgt ervoor dat minecraft geinstalleerd wordt en draait.",
+        "2": "Wanneer je voor een geinstalleerde server kiest ben je alleen verantwoordelijk voor het voorzien van een SSH verbinding met een server omgeving (op dit moment worden alleen debian-gebaseerde omgevingen ondersteund). Wanneer de verbinding opgezet is zal MC-Manager alle benodigde software installeren en de server draaiende houden.",
+        "3": "[Nog niet beschikbaar]\nBeheerde servers worden gemaakt en onderhouden door MC-Manager. Dit verzekert optimale compatibiliteit, betere ondersteuning, en geen gedoe met het installeren. Klik simpelweg op installeer en laat ons de rest afhandelen."
+      },
+      "names": {
+        "1": "Handmatig",
+        "2": "Breng-je-eigen-VM",
+        "3": "Beheerd door MC-Manager"
+      },
+      "next_title": "Begin server te maken met type {type}",
+      "title": "Kies een server type"
+    }
+  },
+  "form": {
+    "connection_segment": {
+      "description": "Instellingen om MC-Manager met je server te verbinden",
+      "title": "Verbinding instellingen"
+    },
+    "description": {
+      "description": "Zichtbaar in de minecraft server lijst",
+      "label": "Server omschrijving",
+      "placeholder": "Mijn geweldige server!"
+    },
+    "icon_upload": {
+      "label": "Server icoon"
+    },
+    "info_segment": {
+      "description": "Voornamelijk niet-technische informatie gebruikt voor het vertonen van de server",
+      "title": "Algemene informatie"
+    },
+    "installed_segment": {
+      "title": "Geinstalleerde server instellingen"
+    },
+    "local_ip": {
+      "explanation": "Het IP adres waarop de MC-Manager server de minecraft host kan bereiken. Het wordt aangeraden om de minecraft server op hetzelfde netwerk als MC-Manager te hosten. In dit geval zal dit een lokaal IP zijn.",
+      "label": "Verbinding IP"
+    },
+    "managed_segment": {
+      "description": "Instellingen die de beheerde server omgeving aansturen",
+      "title": "Beheerde server instellingen"
+    },
+    "minecraft_segment": {
+      "description": "Instellingen voor de installatie van de minecraft server",
+      "title": "Minecraft instellingen"
+    },
+    "name": {
+      "label": "Server naam",
+      "placeholder": "Mijn favorite server"
+    },
+    "public_ip": {
+      "explanation": "Het openbare IP of de openbare hostnaam waarmee mensen met de Minecraft server verbinden.",
+      "label": "Openbaar IP"
+    },
+    "ssh_port": {
+      "label": "SSH poort"
+    },
+    "ssh_test_button": "Test SSH verbinding"
+  },
+  "index": {
+    "add_button_text`": "Nieuwe server",
+    "title": "Jouw servers"
+  },
   "listing": {
     "player_list": "Spelers online:\n"
   },

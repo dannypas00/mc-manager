@@ -4,9 +4,9 @@ import Pusher from 'pusher-js';
 
 declare global {
   interface Window {
-    axios: typeof axios,
-    Pusher: typeof Pusher,
-    Echo: Echo,
+    axios: typeof axios;
+    Pusher: typeof Pusher;
+    Echo: Echo;
   }
 }
 

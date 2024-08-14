@@ -9,11 +9,8 @@ export const useUserStore = defineStore('User', {
   }),
 
   actions: {
-    async setCurrentUser (id: number) {
-      const response = await this.request
-        .addInclude('servers')
-        .setId(id)
-        .getResponse();
+    async setCurrentUser(id: number) {
+      const response = await this.request.addInclude('servers').setId(id).getResponse();
 
       this.user = response.data;
     },

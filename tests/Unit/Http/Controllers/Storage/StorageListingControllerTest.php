@@ -8,15 +8,15 @@ use App\Services\ServerFilesystemStorageService;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use RuntimeException;
-use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\Traits\MockServerFilesystemStorageService;
+use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\UnitTestCase;
 
 #[CoversClass(StorageListingController::class)]
 class StorageListingControllerTest extends UnitTestCase
 {
-    use MocksFrontendServerShowRepository;
     use MockServerFilesystemStorageService;
+    use MocksFrontendServerShowRepository;
 
     public function testCallsStorageListing(): void
     {

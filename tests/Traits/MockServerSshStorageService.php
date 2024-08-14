@@ -2,11 +2,8 @@
 
 namespace Tests\Traits;
 
-use App\Services\ServerFilesystemStorageService;
 use App\Services\ServerSshStorageService;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Mockery\MockInterface;
-use Storage;
 
 trait MockServerSshStorageService
 {

@@ -14,16 +14,16 @@
           <template v-for="(directory, index) in splitPath" :key="index">
             /
             <Link
-              v-if="!openedFile"
               class="cursor-pointer hover:underline active:text-indigo-400"
-              :href="$route('servers.files', {id: serverStore.model.id, path: take(splitPath, index + 1).join('/') })"
+              :href="
+                $route('servers.files', {
+                  id: serverStore.model.id,
+                  path: take(splitPath, index + 1).join('/'),
+                })
+              "
             >
               {{ directory }}
             </Link>
-
-            <span v-else>
-              {{ directory }}
-            </span>
           </template>
         </h1>
       </div>
@@ -56,11 +56,9 @@
           <div class="relative">
             <template v-if="openedFile !== null">
               <Suspense>
-                <ServerFileEditor ref="editor" :file="openedFile"/>
+                <ServerFileEditor ref="editor" :file="openedFile" />
 
-                <template #fallback>
-                  Loading editor...
-                </template>
+                <template #fallback> Loading editor... </template>
               </Suspense>
             </template>
 
@@ -74,23 +72,32 @@
                   class="inline-flex items-center rounded px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                   @click="deleteFiles"
                 >
-                  {{ $t('pages.servers.show.files.bulk_delete', { n: selectedFiles.length }) }}
+                  {{
+                    $t('pages.servers.show.files.bulk_delete', {
+                      n: selectedFiles.length,
+                    })
+                  }}
                 </button>
               </div>
               <input
                 type="checkbox"
-                class="ms-4 my-4 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                :checked="indeterminate || selectedFiles.length === directories.length"
+                class="my-4 ms-4 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                :checked="
+                  indeterminate || selectedFiles.length === directories.length
+                "
                 :indeterminate="indeterminate"
-                @change="selectedFiles = $event.target.checked ? directories : []"
-              >
+                @change="
+                  selectedFiles = $event.target.checked ? directories : []
+                "
+              />
 
-              <hr class="divide-y">
+              <hr class="divide-y" />
 
               <ServerFileList
                 v-model:selected-files="selectedFiles"
                 :entries="directories"
                 :is-root="['', '/'].includes(path)"
+                :current="path"
                 @go-up="goUp"
               />
             </template>
@@ -104,7 +111,9 @@
     v-model:open="confirmDeletionOpen"
     :title="$t('pages.servers.show.files.bulk_delete_confirm.title')"
     :message="$t('pages.servers.show.files.bulk_delete_confirm.message')"
-    :positive-button-text="$t('pages.servers.show.files.bulk_delete_confirm.positive')"
+    :positive-button-text="
+      $t('pages.servers.show.files.bulk_delete_confirm.positive')
+    "
     @positive="onDeleteConfirm"
   />
 </template>
@@ -125,14 +134,16 @@ import { Link, router } from '@inertiajs/vue3';
 export default defineComponent({
   components: {
     ConfirmationDialog,
-    ServerFileEditor: defineAsyncComponent(() => import('./Components/ServerFileEditor.vue')),
+    ServerFileEditor: defineAsyncComponent(
+      () => import('./Components/ServerFileEditor.vue')
+    ),
     ServerFileList,
     Link,
   },
 
   layout: ServerShowTemplate,
 
-  data () {
+  data() {
     return {
       serverStore: useServerShowStore(),
       storageListingRequest: new StorageListingRequest(),
@@ -140,7 +151,9 @@ export default defineComponent({
       directories: (this.$attrs.directories ?? []) as FileEntry[],
       selectedFiles: [] as FileEntry[],
       path: (this.$attrs.path ?? '') as string,
-      openedFile: this.$attrs.file ? { path: this.$attrs.file } : null as null | FileEntry,
+      openedFile: this.$attrs.file
+        ? { path: this.$attrs.file }
+        : (null as null | FileEntry),
       confirmDeletionOpen: false,
     };
   },
@@ -148,12 +161,17 @@ export default defineComponent({
   methods: {
     take,
 
-    goUp () {
+    goUp() {
       // Replace everything after last / with blank
-      router.visit(route('servers.files', { id: this.serverStore.model.id, path: this.path.replace(/\/?[^\/]*$/, '') }));
+      router.visit(
+        route('servers.files', {
+          id: this.serverStore.model.id,
+          path: this.path.replace(/\/?[^\/]*$/, ''),
+        })
+      );
     },
 
-    getDir () {
+    getDir() {
       this.storageListingRequest
         .setPath(this.path)
         .setServerId(this.serverStore.model.id)
@@ -171,13 +189,15 @@ export default defineComponent({
         });
     },
 
-    openFile (file: FileEntry) {
+    openFile(file: FileEntry) {
       this.openedFile = file;
     },
 
-    deleteFiles () {
+    deleteFiles() {
       // If file list includes at least one directory, request confirmation
-      const directories = this.selectedFiles.filter(file => file.type === 'dir');
+      const directories = this.selectedFiles.filter(
+        file => file.type === 'dir'
+      );
       if (directories.length > 0) {
         this.confirmDeletionOpen = true;
         return;
@@ -186,15 +206,17 @@ export default defineComponent({
       this.onDeleteConfirm();
     },
 
-    onDeleteConfirm () {
-      console.log(_.map(this.selectedFiles, 'path'));
+    onDeleteConfirm() {
       this.storageDeleteRequest
         .setId(this.serverStore.model.id)
         .setPaths(_.map(this.selectedFiles, 'path'))
         .getResponse()
         .then(() => {
-          useToast()
-            .success(this.$t('pages.servers.show.files.bulk_delete_success_toast', { n: this.selectedFiles.length }));
+          useToast().success(
+            this.$t('pages.servers.show.files.bulk_delete_success_toast', {
+              n: this.selectedFiles.length,
+            })
+          );
           this.selectedFiles = [];
           this.getDir();
         });
@@ -202,12 +224,19 @@ export default defineComponent({
   },
 
   computed: {
-    indeterminate () {
-      return this.selectedFiles.length > 0 && this.selectedFiles.length < this.directories.length;
+    indeterminate() {
+      return (
+        this.selectedFiles.length > 0 &&
+        this.selectedFiles.length < this.directories.length
+      );
     },
 
-    splitPath () {
-      return (this.openedFile?.path ?? this.path).split('/').filter(path => path !== '') ?? [];
+    splitPath() {
+      return (
+        (this.openedFile?.path ?? this.path)
+          .split('/')
+          .filter(path => path !== '') ?? []
+      );
     },
   },
 });

@@ -29,7 +29,7 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {
       store: useServerShowStore(),
       request: new StorageContentRequest(),
@@ -45,7 +45,7 @@ export default defineComponent({
   },
 
   methods: {
-    save () {
+    save() {
       if (!this.unsavedChanges) {
         useToast().warning(this.$t('components.file_editor.nothing_to_save'));
         return;
@@ -56,12 +56,16 @@ export default defineComponent({
         .setContent(this.fileData)
         .getResponse()
         .then(() => {
-          useToast().success(this.$t('components.file_editor.save_sucessful', { name: this.file.path }));
+          useToast().success(
+            this.$t('components.file_editor.save_sucessful', {
+              name: this.file.path,
+            })
+          );
           this.originalFileData = this.fileData;
         });
     },
 
-    onBeforeUnload (e: BeforeUnloadEvent) {
+    onBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
 
       e.returnValue = $t('components.file_editor.confirm_unsaved_changes');
@@ -69,13 +73,13 @@ export default defineComponent({
   },
 
   computed: {
-    unsavedChanges () {
+    unsavedChanges() {
       return this.fileData !== this.originalFileData;
     },
   },
 
   watch: {
-    unsavedChanges (value: boolean) {
+    unsavedChanges(value: boolean) {
       if (value) {
         window.addEventListener('beforeunload', this.onBeforeUnload);
         return;
@@ -85,8 +89,7 @@ export default defineComponent({
     },
   },
 
-  async mounted () {
-    console.log(this.file);
+  async mounted() {
     const response = await this.request
       .setServerId(this.store.model.id)
       .setPath(this.file.path)

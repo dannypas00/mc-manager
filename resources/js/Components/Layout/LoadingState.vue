@@ -1,7 +1,5 @@
 <template>
-  <div class="w-full h-full flex items-center">
-    Loading...
-  </div>
+  <div class="flex h-full w-full items-center">Loading...</div>
 </template>
 
 <script lang="ts">
@@ -10,7 +8,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   components: {},
 
-  data () {
+  data() {
     return {};
   },
 

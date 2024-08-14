@@ -26,3 +26,7 @@ _ide_helper.php
 /tests/output
 /tests/sandbox
 .composer
+
+/caddy
+frankenphp
+frankenphp-worker.php

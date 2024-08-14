@@ -1,6 +1,9 @@
 <template>
   <MainLayout>
-    <PageTitle :title="$t('pages.servers.show.title', { name: store.model.name })" :header="store.model.name"/>
+    <PageTitle
+      :title="$t('pages.servers.show.title', { name: store.model.name })"
+      :header="store.model.name"
+    />
 
     <FlashNotification
       v-if="!store.eulaAccepted"
@@ -12,17 +15,22 @@
     />
 
     <div class="mx-auto lg:flex lg:gap-x-16 lg:px-8">
-      <aside class="flex overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20  w-[15%]">
+      <aside
+        class="flex w-[15%] overflow-x-auto border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20"
+      >
         <nav class="flex-none px-4 sm:px-6 lg:px-0">
-          <ul role="list" class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
+          <ul
+            role="list"
+            class="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col"
+          >
             <li v-for="item in nav" :key="item.name">
               <a
                 :class="
                   $route().current(item.routeMatch)
                     ? 'bg-gray-50 text-emerald-500'
-                    : 'text-gray-700 hover:text-emerald-500 hover:bg-gray-50'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-emerald-500'
                 "
-                class="group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold"
+                class="group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm font-semibold leading-6"
                 role="button"
                 :href="item.route"
               >
@@ -32,7 +40,7 @@
                     $route().current(item.routeMatch)
                       ? 'text-emerald-500'
                       : 'text-gray-400 group-hover:text-emerald-500',
-                    'h-6 w-6 shrink-0'
+                    'h-6 w-6 shrink-0',
                   ]"
                   aria-hidden="true"
                 />
@@ -43,8 +51,8 @@
         </nav>
       </aside>
 
-      <main class="px-4 pb-16 sm:px-6 lg:flex-auto lg:px-0 lg:pb-20 w-[85%]">
-        <slot v-if="store.model.id" class="lg:w-2/3 lg:mx-auto"/>
+      <main class="w-[85%] px-4 pb-16 sm:px-6 lg:flex-auto lg:px-0 lg:pb-20">
+        <slot v-if="store.model.id" class="lg:mx-auto lg:w-2/3" />
       </main>
     </div>
   </MainLayout>
@@ -52,7 +60,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Cog8ToothIcon, FolderOpenIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
+import {
+  Cog8ToothIcon,
+  FolderOpenIcon,
+  UserCircleIcon,
+} from '@heroicons/vue/24/outline';
 import { useServerShowStore } from '../../Stores/Servers/ServerShowStore';
 import PageTitle from '../../Components/Layout/PageTitle.vue';
 import MainLayout from '../../Layouts/MainLayout.vue';
@@ -69,7 +81,7 @@ export default defineComponent({
 
   inheritAttrs: true,
 
-  data () {
+  data() {
     return {
       id: this.$attrs.route_parameters.id,
       store: useServerShowStore(),
@@ -77,7 +89,7 @@ export default defineComponent({
   },
 
   computed: {
-    nav () {
+    nav() {
       return [
         {
           name: this.$t('pages.servers.show.console.nav_title'),
@@ -101,7 +113,7 @@ export default defineComponent({
     },
   },
 
-  async beforeMount () {
+  async beforeMount() {
     if (this.store.model.id !== this.id) {
       await this.store.getServer(this.id);
     }

@@ -6,15 +6,15 @@ use App\Http\Controllers\Storage\StoragePathController;
 use App\Models\Server;
 use Inertia\Testing\AssertableInertia;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\Traits\MockServerFilesystemStorageService;
+use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\UnitTestCase;
 
 #[CoversClass(StoragePathController::class)]
 class StoragePathControllerTest extends UnitTestCase
 {
-    use MocksFrontendServerShowRepository;
     use MockServerFilesystemStorageService;
+    use MocksFrontendServerShowRepository;
 
     public function testReturnsInertiaResponse(): void
     {

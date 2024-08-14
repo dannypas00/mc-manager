@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('servers', static function (Blueprint $table) {
             $table->id();
 
-            $table->boolean('enabled')->default(true);
+            $table->boolean('enabled')->default(false);
             $table->unsignedInteger('port')->default(25565);
             $table->unsignedInteger('rcon_port')->default(25575);
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('icon')->default('dev-images/cavern-icon.png');
             $table->string('local_ip')->nullable();
-            $table->string('public_ip');
-            $table->string('rcon_password');
+            $table->string('public_ip')->nullable();
+            $table->string('rcon_password', 512);
             $table->timestamps();
 
             $table->index('enabled');

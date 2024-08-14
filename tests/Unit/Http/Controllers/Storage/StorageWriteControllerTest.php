@@ -5,15 +5,15 @@ namespace Tests\Unit\Http\Controllers\Storage;
 use App\Http\Controllers\Storage\StorageWriteController;
 use App\Models\Server;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\Traits\MockServerFilesystemStorageService;
+use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\UnitTestCase;
 
 #[CoversClass(StorageWriteController::class)]
 class StorageWriteControllerTest extends UnitTestCase
 {
-    use MocksFrontendServerShowRepository;
     use MockServerFilesystemStorageService;
+    use MocksFrontendServerShowRepository;
 
     public function testItCallsStorageWrite(): void
     {

@@ -4,20 +4,18 @@ namespace Tests\Unit\Http\Controllers\Storage;
 
 use App\Http\Controllers\Storage\StorageContentController;
 use App\Models\Server;
-use Closure;
-use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Tests\Traits\MockServerFilesystemStorageService;
 use Tests\Traits\MockServerSshStorageService;
 use Tests\Traits\MocksFrontendServerShowRepository;
-use Tests\Traits\MockServerFilesystemStorageService;
 use Tests\UnitTestCase;
 
 #[CoversClass(StorageContentController::class)]
 class StorageContentControllerTest extends UnitTestCase
 {
-    use MocksFrontendServerShowRepository;
     use MockServerFilesystemStorageService;
     use MockServerSshStorageService;
+    use MocksFrontendServerShowRepository;
 
     public function testItCallsStorageGetFilesystem(): void
     {
