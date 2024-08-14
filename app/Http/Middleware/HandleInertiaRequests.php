@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\Users\AuthenticatedUserRepository;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -10,14 +12,10 @@ use Inertia\Middleware;
  */
 class HandleInertiaRequests extends Middleware
 {
-    protected $rootView = 'app';
-
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'auth.user'        => fn () => $request->user()
-                ? $request->user()->with(['servers'])->sole()
-                : null,
+            'auth.user'        => fn () => app(AuthenticatedUserRepository::class)->getAuthenticatedUser(),
             'route_parameters' => fn () => $request->route()->parameters,
         ]);
     }

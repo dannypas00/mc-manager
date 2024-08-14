@@ -12,7 +12,7 @@ use App\Http\Controllers\Storage\StorageWriteController;
 use App\Http\Controllers\Users\UserIndexController;
 use App\Http\Controllers\Users\UserShowController;
 
-Route::as('api.')->group(static function () {
+Route::as('api.')->middleware(['api', 'auth:sanctum'])->group(static function () {
     Route::prefix('users')->as('users.')->group(static function () {
         Route::middleware(['auth:sanctum'])->name('current')->get('/current', function (Request $request) {
             return $request->user();

@@ -33,6 +33,7 @@
     "spatie/laravel-query-builder": "^5.8",
     "spatie/laravel-typescript-transformer": "^2.4",
     "spatie/laravel-webhook-client": "^3.3",
+    "spatie/ssh": "^1.10",
     "tightenco/ziggy": "^2.0",
     "xpaw/php-minecraft-query": "^4.0"
   },

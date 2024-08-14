@@ -178,7 +178,7 @@ class Server extends Model
         return app(ServerConnectivityService::class)->getRcon($this);
     }
 
-    public function getFtpAttribute(): FtpAdapter
+    public function getFtpAttribute(): FtpAdapter | FilesystemAdapter
     {
         return app(ServerConnectivityService::class)->getFilesystem($this);
     }

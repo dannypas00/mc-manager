@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
         if (!Auth::check() && !app()->hasDebugModeEnabled()) {
             return $request->expectsJson()
                 ? new JsonResponse(null, Response::HTTP_UNAUTHORIZED)
-                : redirect(route('auth.login'));
+                : redirect(route('login'));
         }
 
         return parent::render($request, $e);

@@ -115,7 +115,7 @@ ifeq ($(ENV), local)
 	$(PHP) artisan db:seed --class=Database\\Seeders\\DatabaseSeeder
 endif
 
-.PHONY: docker-build docker down
+.PHONY: docker-build docker down up restart
 docker-build:
 ifneq ($(NO_DOCKER), true)
 ifeq ($(ENV), local)
@@ -127,6 +127,7 @@ else
 endif
 endif
 
+up: docker
 docker:
 ifneq ($(NO_DOCKER), true)
 ifeq ($(ENV), local)
@@ -142,6 +143,15 @@ ifeq ($(ENV), local)
 	$(DOCKER_COMPOSE) --profile dev down
 else
 	$(DOCKER_COMPOSE) --profile prod down
+endif
+endif
+
+restart:
+ifneq ($(NO_DOCKER), true)
+ifeq ($(ENV), local)
+	$(DOCKER_COMPOSE) --profile dev restart
+else
+	$(DOCKER_COMPOSE) --profile prod restart
 endif
 endif
 
