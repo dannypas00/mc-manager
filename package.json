@@ -9,7 +9,7 @@
         "format": "prettier resources/js --write"
     },
     "dependencies": {
-        "@formkit/auto-animate": "^0.8.1",
+        "@formkit/auto-animate": "^0.8.2",
         "@fortawesome/fontawesome-svg-core": "^6.5.2",
         "@fortawesome/free-brands-svg-icons": "^6.5.2",
         "@fortawesome/free-regular-svg-icons": "^6.5.2",

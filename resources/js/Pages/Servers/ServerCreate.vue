@@ -57,17 +57,10 @@ export default defineComponent({
     },
   },
 
-  computed: {
-    FormType() {
-      return FormType;
-    },
-  },
-
   mounted() {
     this.serverStore.setEmpty();
 
-    // TODO: Remove because debugging
-    this.serverStore.model.type = 2;
+    // TODO: Remove for debug
     this.onTypeSelect(2);
   },
 });

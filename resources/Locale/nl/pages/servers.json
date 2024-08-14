@@ -26,6 +26,9 @@
       "label": "Server omschrijving",
       "placeholder": "Mijn geweldige server!"
     },
+    "enable_ftp": {
+      "label": "Gebruik FTP voor sneller bestandsbeheer?"
+    },
     "ftp_password": {
       "label": "FTP wachtwoord"
     },

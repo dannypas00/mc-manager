@@ -102,9 +102,9 @@ const props = defineProps({
   }
 });
 
-const modelValue = defineModel({ type: [String, null] as PropType<string | null>, required: true });
+const modelValue = defineModel({ required: true });
 
-const value: WritableComputedRef<string | null> = computed({
+const value = computed({
   get() {
     return modelValue.value;
   },

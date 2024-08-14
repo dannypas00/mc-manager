@@ -26,6 +26,9 @@
       "label": "Server description",
       "placeholder": "My awesome server!"
     },
+    "enable_ftp": {
+      "label": "Enable FTP connection for faster file management?"
+    },
     "ftp_password": {
       "label": "FTP password"
     },

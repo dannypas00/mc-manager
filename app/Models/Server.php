@@ -13,6 +13,7 @@ use App\Services\ServerSshStorageService;
 use App\Services\ServerStorageServiceInterface;
 use Cache;
 use Crypt;
+use Database\Factories\ServerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -56,14 +57,14 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property string $rcon_password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read \League\Flysystem\Ftp\FtpAdapter|\Illuminate\Filesystem\FilesystemAdapter $ftp
+ * @property-read FtpAdapter|FilesystemAdapter $ftp
  * @property-read bool $has_accepted_eula
  * @property-read array $player_list
- * @property-read \App\Rcon\Rcon|false $rcon
- * @property-read \App\Services\ServerStorageServiceInterface $storage_service
- * @property-read Collection<int, \App\Models\User> $users
+ * @property-read Rcon|false $rcon
+ * @property-read ServerStorageServiceInterface $storage_service
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
- * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
+ * @method static ServerFactory factory($count = null, $state = [])
  * @method static Builder|Server newModelQuery()
  * @method static Builder|Server newQuery()
  * @method static Builder|Server query()

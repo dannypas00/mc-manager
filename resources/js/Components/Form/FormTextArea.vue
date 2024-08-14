@@ -6,6 +6,7 @@
       class="mb-2 block text-sm font-medium leading-6 text-gray-900"
     >
       {{ label }}
+      <span v-if="required" class="text-red-400">*</span>
     </label>
 
     <textarea
@@ -50,15 +51,18 @@ const props = defineProps({
     required: false,
     default: undefined,
   },
+
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
-const modelValue: ModelRef<string | null> = defineModel({
-  type: [String, null] as PropType<string | null>,
-  required: true,
-});
+const modelValue = defineModel({  required: true});
 
-const value: WritableComputedRef<string | null> = computed({
-  get (): string | null {
+const value = computed({
+  get () {
     return modelValue.value;
   },
   set (value) {
