@@ -15,7 +15,9 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
+    "ext-sockets": "*",
     "barryvdh/laravel-ide-helper": "^3.0",
+    "fakerphp/faker": "^1.23",
     "inertiajs/inertia-laravel": "^1.0",
     "laravel/framework": "^11.0",
     "laravel/horizon": "^5.24",
@@ -23,14 +25,14 @@
     "laravel/octane": "^2.5",
     "laravel/reverb": "@beta",
     "laravel/sanctum": "^4.0",
+    "laravel/telescope": "^5.1",
     "laravel/tinker": "^2.9",
     "spatie/laravel-data": "^4.4",
     "spatie/laravel-query-builder": "^5.8",
     "spatie/laravel-typescript-transformer": "^2.4",
     "spatie/laravel-webhook-client": "^3.3",
-    "laravel/telescope": "^5.1",
     "tightenco/ziggy": "^2.0",
-    "fakerphp/faker": "^1.23"
+    "xpaw/php-minecraft-query": "^4.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
@@ -39,6 +41,7 @@
     "mockery/mockery": "^1.6",
     "nunomaduro/collision": "^8.0",
     "phpunit/phpunit": "^10.5",
+    "smknstd/fakerphp-picsum-images": "^1.0",
     "spatie/laravel-ignition": "^2.4"
   },
   "autoload": {
