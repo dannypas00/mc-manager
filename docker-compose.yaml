@@ -139,6 +139,77 @@ services:
       - dev
       - prod
 
+  minecraft:
+    container_name: ${APP_NAME}-minecraft
+    image: openjdk:22-slim
+    ports:
+      - '25565:25565'
+      - '25575:25575'
+    user: 1000:1000
+    volumes:
+      - .docker/local/minecraft:/minecraft
+    working_dir: /minecraft
+    restart: on-failure
+    command:
+      - java
+      - -Xmx1G
+      - -Xms1G
+      - -jar
+      - server.jar
+      - nogui
+    profiles:
+      - dev
+      - prod
+
+  ftp:
+    container_name: ${APP_NAME}-ftp
+    image: delfer/alpine-ftp-server:latest
+    ports:
+      - '21:21'
+      - '21000-21010:21000-21010'
+    environment:
+      - 'USERS=mcm-test|mcm-test|/minecraft|1000'
+    volumes:
+      - .docker/local/minecraft:/minecraft
+    profiles:
+      - dev
+      - prod
+
+  sftp:
+    container_name: mcm-sftp
+    image: atmoz/sftp:alpine
+    ports:
+      - '23:22'
+    environment:
+      - 'SFTP_USERS=mcm-test:mcm-test:::/minecraft'
+    volumes:
+      - .docker/local/minecraft:/minecraft
+    profiles:
+      - dev
+      - prod
+
+  ssh:
+    container_name: mcm-ssh
+    build:
+      dockerfile: .docker/local/ssh/Dockerfile
+      context: .
+    ports:
+      - '2222:2222'
+    environment:
+      - 'PUID=1000'
+      - 'PGID=1000'
+      - 'TZ=Etc/UTC'
+      - 'USER_NAME=mcm-test'
+      - 'PUBLIC_KEY_FILE=/public_key'
+      - 'LOG_STDOUT=true'
+    volumes:
+      - .docker/local/minecraft:/minecraft
+      - .docker/local/public_key:/public_key
+    profiles:
+      - dev
+      - prod
+
+
 volumes:
   mc-manager-mysql:
   npm-cache:
