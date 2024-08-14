@@ -17,6 +17,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,7 +30,7 @@ use League\Flysystem\Ftp\FtpAdapter;
  *
  * @property int $id
  * @property int $enabled
- * @property string $type
+ * @property ServerType $type
  * @property ServerStatus $status
  * @property int $port
  * @property int $rcon_port
@@ -99,6 +100,7 @@ use League\Flysystem\Ftp\FtpAdapter;
 class Server extends Model
 {
     use HasFactory;
+    use HasTimestamps;
 
     protected $fillable = [
         'name',
@@ -132,21 +134,9 @@ class Server extends Model
     ];
 
     protected $hidden = [
-        // Connection info
         'rcon_password',
-        // Cached info
-        'current_players',
-        'maximum_players',
-        'player_list',
-        'status',
-        // FTP settings
-        'enable_ftp',
-        'is_sftp',
-        'use_ssh_auth',
-        'ftp_port',
-        'ftp_host',
-        'ftp_username',
         'ssh_key',
+        'ftp_password',
     ];
 
     // Attributes
