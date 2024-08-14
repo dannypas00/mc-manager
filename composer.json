@@ -1,9 +1,9 @@
 {
-  "name": "dannypas00/laravel-template-project",
+  "name": "dannypas00/mc-manager",
   "authors": [
     {
-      "name": "laravel-template-fullname",
-      "email": "laravel-template@example.com",
+      "name": "Danny Pas",
+      "email": "github@dannypas.nl",
       "role": "Developer"
     }
   ],
