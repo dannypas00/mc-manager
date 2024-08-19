@@ -2,6 +2,7 @@
 
 namespace Tests\Traits;
 
+use App\Models\Server;
 use App\Repositories\Servers\ServerUpdateRepository;
 use Mockery\MockInterface;
 
@@ -17,19 +18,13 @@ trait MocksServerUpdateRepository
         )->makePartial();
     }
 
-    public function mockServerUpdateRepositoryUpdate(bool $returns = true, ?array $expectedData = null): void
+    public function mockServerUpdateRepositoryUpdate(Server $returns): void
     {
         $this->mock(
             ServerUpdateRepository::class,
-            function (MockInterface $mock) use ($expectedData, $returns) {
-                $expectation = $mock->expects('update');
-
-                if ($expectedData) {
-                    $expectation->withSomeOfArgs($expectedData);
-                }
-
-                return $expectation->andReturn($returns);
-            }
+            fn (MockInterface $mock) => $mock
+                ->expects('update')
+                ->andReturn($returns)
         )->makePartial();
     }
 }

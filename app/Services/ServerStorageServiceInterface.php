@@ -15,6 +15,7 @@ interface ServerStorageServiceInterface
      * Get the contents of a file
      *
      * @throws SshException
+     * @throws FilesystemException
      */
     public function getContents(Server $server, string $path): ?string;
 
@@ -43,6 +44,7 @@ interface ServerStorageServiceInterface
      * Write contents to specified path
      *
      * @throws SshException
+     * @throws FilesystemException
      */
     public function put(Server $server, string $path, string $content): void;
 
@@ -50,6 +52,7 @@ interface ServerStorageServiceInterface
      * Append content to the end of a file
      *
      * @throws SshException
+     * @throws FilesystemException
      */
     public function append(Server $server, string $path, string $content): void;
 
@@ -59,11 +62,12 @@ interface ServerStorageServiceInterface
      * @return int File size in bytes
      *
      * @throws SshException
+     * @throws FilesystemException
      */
     public function size(Server $server, string $path): int;
 
     /**
-     * @param  int  $offset Amount of bytes to skip from start of file
+     * @param  int  $offset  Amount of bytes to skip from start of file
      *
      * @throws SshException
      * @throws FilesystemException

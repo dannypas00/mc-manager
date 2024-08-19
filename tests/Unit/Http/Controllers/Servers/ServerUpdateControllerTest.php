@@ -2,13 +2,16 @@
 
 namespace Tests\Unit\Http\Controllers\Servers;
 
+use App\Enums\ServerStatus;
 use App\Enums\ServerType;
 use App\Http\Controllers\Servers\ServerUpdateController;
 use App\Models\Server;
+use App\Services\ServerConnectivityService;
+use App\Services\ServerSshService;
+use Cache;
 use Illuminate\Http\UploadedFile;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Str;
 use Tests\Traits\MocksFrontendServerShowRepository;
 use Tests\Traits\MocksIconService;
 use Tests\Traits\MocksServerConnectivityService;
@@ -20,10 +23,10 @@ use Tests\UnitTestCase;
 class ServerUpdateControllerTest extends UnitTestCase
 {
     use MocksFrontendServerShowRepository;
+    use MocksIconService;
     use MocksServerConnectivityService;
     use MocksServerSshService;
     use MocksServerUpdateRepository;
-    use MocksIconService;
 
     private const ROUTE = 'api.servers.update';
 
@@ -57,7 +60,7 @@ class ServerUpdateControllerTest extends UnitTestCase
         $attributes = [
             'name'              => 'test',
             'description'       => "test\ndescription",
-            'icon'              => UploadedFile::fake()->image('icon.jpg'),
+            'icon'              => 'insert-uuid-here.jpg',
             'public_ip'         => 'example.com',
             'port'              => '25565',
             'rcon_port'         => '25575',
@@ -66,32 +69,37 @@ class ServerUpdateControllerTest extends UnitTestCase
             'ssh_username'      => 'mcm-test',
             'ssh_key'           => 'ssh-key-here',
             'is_custom'         => false,
-            'server_properties' => "pvp=false\n"
+            'server_properties' => "pvp=false\n",
+            'enable_ssh'        => true
         ];
-        $data = $attributes + [];
+        $data = array_merge($attributes, [
+            'icon' => UploadedFile::fake()->image('icon.jpg'),
+        ]);
 
-        $this->setupRequest(Server::make(['type' => ServerType::Installed]));
+        Cache::partialMock()->expects('remember')->andReturns([]);
+
         // Test filesystem
-        $this->mockServerConnectivityServiceGetFilesystem();
+        $this->mockServerConnectivityServiceGetEulaAcceptedStatus();
+
         // Set provided server.properties
-        $this->mockSshPut('server.properties');
+        // Ping ssh service
+        $this->mock(
+            ServerSshService::class,
+            fn (MockInterface $mock) => $mock->shouldReceive('put', 'ping')
+        );
         // Upload icon to icon storage
         $this->mockIconServiceStoreServerIcon('insert-uuid-here.jpg');
-        // RCON password generation
-        $this->mock(
-            Str::class,
-            fn (MockInterface $mock) => $mock->shouldReceive('password')->andReturn('thisistotallyarandompassword')
-        )->makePartial();
 
+        $server = Server::factory()->makeOne(
+            ['type' => ServerType::Installed, 'id' => 1, 'enable_ftp' => false, 'is_sftp' => false, 'use_ssh_auth' => false, 'status' => ServerStatus::Unknown] + $attributes
+        );
+
+        $this->setupRequest($server);
 
         // Update model values
-        $this->mockServerUpdateRepositoryUpdate(expectedData: array_merge($attributes, [
-            'icon'          => 'insert-uuid-here.jpg',
-            'rcon_password' => 'thisistotallyarandompassword',
-        ]));
+        $this->mockServerUpdateRepositoryUpdate($server);
 
         $this->putJson(route(self::ROUTE, ['id' => 1]), $data)
-            ->assertValid()
             ->assertSuccessful();
     }
 

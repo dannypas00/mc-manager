@@ -68,7 +68,7 @@ class ServerConnectivityService
 
     public function query(Server $server): MinecraftQuery
     {
-        $query = new MinecraftQuery();
+        $query = new MinecraftQuery;
         $query->Connect($server->local_ip, $server->port);
 
         return $query;
@@ -96,9 +96,9 @@ class ServerConnectivityService
     public function getEulaAcceptedStatus(Server $server): bool
     {
         try {
-            return Str::isMatch('/.*eula=true.*/', $server->ftp->get('eula.txt'));
+            return Str::isMatch('/.*eula=true.*/', $server->storage_service->getContents($server, 'eula.txt'));
         } catch (Throwable $e) {
-            Log::error(
+            Log::warning(
                 'Error thrown when retrieving EULA',
                 ['exception' => $e::class, 'message' => $e->getMessage(), 'trace' => $e->getTrace()]
             );

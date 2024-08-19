@@ -16,16 +16,18 @@ class ServerUpdateRequest extends FormRequest
         'port'         => 'required|integer|min:0|max:65535',
         'rcon_port'    => 'required|integer|min:0|max:65535',
         'local_ip'     => 'required|string',
+        'enable_ssh'   => 'required|boolean|accepted_if:enable_ftp,false',
         'ssh_port'     => 'required|integer|min:0|max:65535',
         'ssh_username' => 'required|string',
         'ssh_key'      => 'required|string',
     ];
 
     private const CONNECTION_RULES = [
-        'enable_ftp'   => 'required|boolean',
-        'ftp_port'     => 'required_if:enable_ftp,true|integer|min:0|max:65535',
-        'ftp_username' => 'required_if:enable_ftp,true|string',
-        'ftp_password' => 'required_if:enable_ftp,true|string'
+        'enable_ftp'   => 'required|boolean|accepted_if:enable_ssh,false',
+        'is_sftp'      => 'required|boolean',
+        'ftp_port'     => 'required|integer|min:0|max:65535',
+        'ftp_username' => 'required|string',
+        'ftp_password' => 'required|string'
     ];
 
     private const MINECRAFT_RULES = [

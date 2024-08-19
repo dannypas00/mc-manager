@@ -124,6 +124,7 @@ class Server extends Model
         'enable_ftp',
         'is_sftp',
         'use_ssh_auth',
+        'enable_ssh',
         'ftp_port',
         'ftp_host',
         'ftp_username',
@@ -146,8 +147,8 @@ class Server extends Model
     public function rconPassword(): Attribute
     {
         return Attribute::make(
-            get: static fn (string $value): string => Crypt::decrypt($value),
-            set: static fn (string $value): string => Crypt::encrypt($value),
+            get: static fn (?string $value): string => $value ? Crypt::decrypt($value) : '',
+            set: static fn (?string $value): string => $value ? Crypt::encrypt($value) : '',
         );
     }
 

@@ -67,9 +67,7 @@ class ServerSshService implements ServerStorageServiceInterface
     /**
      * This never returns false because any failure will trigger an exception, which is thrown to the frontend
      *
-     * @param Server $server
      * @throws SshException
-     * @return true
      */
     public function ping(Server $server): true
     {
@@ -146,7 +144,7 @@ class ServerSshService implements ServerStorageServiceInterface
 
         $attributes = [
             StorageAttributes::ATTRIBUTE_PATH          => Str::after($name, './'),
-            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int)$size,
+            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int) $size,
             StorageAttributes::ATTRIBUTE_LAST_MODIFIED => Carbon::parse("$date $time")->timestamp,
             StorageAttributes::ATTRIBUTE_MIME_TYPE     => Str::afterLast($mime, ' '),
             StorageAttributes::ATTRIBUTE_TYPE          => $type,
@@ -170,7 +168,7 @@ class ServerSshService implements ServerStorageServiceInterface
      */
     public function size(Server $server, string $path): int
     {
-        return (int)Str::before($this->executeSsh($server, "wc -c $path")->output(), ' ');
+        return (int) Str::before($this->executeSsh($server, "wc -c $path")->output(), ' ');
     }
 
     /**

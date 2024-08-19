@@ -20,8 +20,7 @@ class ServerStoreController extends Controller
 
         $data = $request->validated();
         $data['rcon_password'] = Str::password();
-        $server = $user->servers()
-            ->create($data);
+        $server = $user->servers()->create($data);
 
         return redirect(route('servers.edit', ['id' => $server->id]));
     }

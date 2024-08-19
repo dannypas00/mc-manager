@@ -5,6 +5,7 @@ namespace App\Repositories\Servers;
 use App\Models\Server;
 use App\Services\ServerConnectivityService;
 use App\Traits\PadsArrayWithNull;
+use Arr;
 
 class ServerUpdateRepository
 {
@@ -26,8 +27,14 @@ class ServerUpdateRepository
         return $server->save();
     }
 
-    public function update(Server $server, array $data): bool
+    public function update(Server $server, array $data): Server
     {
-        return $server->update($this->padArrayWithNull($server->getFillable(), $data));
+        // Don't fill the hidden fields with null, since they won't be set to previous values in the frontend
+        $fillable = Arr::except($server->getFillable(), $server->getHidden());
+
+        $server->update($this->padArrayWithNull($fillable, $data));
+        $server->refresh();
+
+        return $server;
     }
 }

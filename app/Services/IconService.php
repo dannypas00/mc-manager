@@ -24,6 +24,11 @@ class IconService
         return $this->disk()->url($location);
     }
 
+    public function deleteIcon(string $location): bool
+    {
+        return $this->disk()->delete($location);
+    }
+
     private function disk()
     {
         return Storage::disk('profile-images');

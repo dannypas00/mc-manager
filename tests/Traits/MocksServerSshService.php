@@ -46,4 +46,13 @@ trait MocksServerSshService
                 ->withSomeOfArgs($expectedPath)
         )->makePartial();
     }
+
+    public function mockSshPing(): void
+    {
+        $this->mock(
+            ServerSshService::class,
+            fn (MockInterface $mock) => $mock
+                ->shouldReceive('ping')
+        )->makePartial();
+    }
 }
