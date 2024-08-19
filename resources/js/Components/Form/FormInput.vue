@@ -28,6 +28,7 @@
           :required="required"
           :type="type"
           :autocomplete="autocomplete"
+          v-bind="additionalProps"
           class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
         />
 
@@ -49,7 +50,7 @@
 
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { computed, PropType, WritableComputedRef } from 'vue';
+import { computed, PropType } from 'vue';
 
 const emit = defineEmits(['update:model-value']);
 
@@ -99,7 +100,13 @@ const props = defineProps({
     type: String,
     required: false,
     default: undefined,
-  }
+  },
+
+  additionalProps: {
+    type: Object as PropType<unknown>,
+    required: false,
+    default: {},
+  },
 });
 
 const modelValue = defineModel({ required: true });

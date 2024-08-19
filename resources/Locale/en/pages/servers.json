@@ -76,9 +76,16 @@
       "label": "Server name",
       "placeholder": "My favourite server"
     },
+    "port": {
+      "label": "Minecraft server port"
+    },
     "public_ip": {
       "explanation": "The public IP or hostname that people will use to connect to the Minecraft server.",
       "label": "Public IP"
+    },
+    "rcon_port": {
+      "explanation": "Minecraft's RCON port. If you aren't running multiple minecraft servers on the same server, don't touch this. If you are, make sure to pick one that hasn't been taken yet.",
+      "label": "RCON port"
     },
     "server_properties": {
       "label": "Extra server.properties"

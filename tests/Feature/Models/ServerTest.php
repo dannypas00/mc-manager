@@ -6,7 +6,7 @@ use App\Exceptions\NoStorageServiceConfiguredException;
 use App\Models\Server;
 use App\Models\User;
 use App\Services\ServerFilesystemStorageService;
-use App\Services\ServerSshStorageService;
+use App\Services\ServerSshService;
 use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Tests\FeatureTestCase;
@@ -106,7 +106,7 @@ class ServerTest extends FeatureTestCase
     {
         $server = Server::factory()->withSsh()->makeOne();
 
-        $this->assertEquals(ServerSshStorageService::class, $server->storage_service::class);
+        $this->assertEquals(ServerSshService::class, $server->storage_service::class);
     }
 
     public function testUndefinedServiceAttribute(): void

@@ -20,7 +20,7 @@ use Throwable;
 /**
  * @codeCoverageIgnore Testing will be done in integration tests
  */
-class ServerSshStorageService implements ServerStorageServiceInterface
+class ServerSshService implements ServerStorageServiceInterface
 {
     private const BASE_PATH = '/minecraft';
 

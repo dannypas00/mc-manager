@@ -4,9 +4,12 @@ namespace App\Repositories\Servers;
 
 use App\Models\Server;
 use App\Services\ServerConnectivityService;
+use App\Traits\PadsArrayWithNull;
 
 class ServerUpdateRepository
 {
+    use PadsArrayWithNull;
+
     public function updateByPing(Server $server): bool
     {
         $data = app(ServerConnectivityService::class)->ping($server);
@@ -21,5 +24,10 @@ class ServerUpdateRepository
         $server->version = $data['version']['name'];
 
         return $server->save();
+    }
+
+    public function update(Server $server, array $data): bool
+    {
+        return $server->update($this->padArrayWithNull($server->getFillable(), $data));
     }
 }

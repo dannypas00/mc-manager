@@ -8,7 +8,7 @@ use App\Http\Requests\Servers\ServerTestSshCommandRequest;
 use App\Models\Server;
 use App\Services\ServerConnectivityService;
 use App\Services\ServerFilesystemStorageService;
-use App\Services\ServerSshStorageService;
+use App\Services\ServerSshService;
 use League\Flysystem\FilesystemException;
 
 class ServerTestFtpController extends Controller

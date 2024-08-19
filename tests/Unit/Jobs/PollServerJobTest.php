@@ -24,7 +24,7 @@ class PollServerJobTest extends UnitTestCase
     {
         $server = Server::factory()->makeOne(['status' => ServerStatus::Down, 'current_players' => 10]);
         $this->mockServerShowRepositoryFindOrFail($server);
-        $this->mockServerShowRepositoryUpdateByPing();
+        $this->mockServerUpdateRepositoryUpdateByPing();
         dispatch_sync(new PollServerJob(1));
 
         $this->assertEquals(0, $server->current_players);

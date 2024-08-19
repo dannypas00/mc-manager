@@ -1,13 +1,7 @@
 <?php
 
-use App\Actions\Fortify\CreateNewUser;
-use App\DataObjects\UserData;
 use App\Http\Controllers\Servers\ServerStoreController;
-use App\Http\Controllers\Servers\ServerTestFtpController;
-use App\Http\Controllers\Servers\ServerTestSshCommandController;
 use App\Http\Controllers\Storage\StoragePathController;
-use App\Http\Controllers\Users\UserQueryBuilderController;
-use App\Http\Controllers\Users\UserUpdateController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -17,28 +11,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(static function () {
+    Route::prefix('webapi/')->as('api.')->group(base_path('routes/webapi/root.php'));
+
     Route::inertia('/', 'Home')->name('home');
-
-    Route::name('api')->as('web.api.')->group(static function () {
-        Route::as('users.')->prefix('users')->group(static function () {
-            Route::get('me', static fn (Request $request) => $request->user())->name('current');
-            Route::get('', [UserQueryBuilderController::class, 'index'])->name('index');
-            Route::get('{id}', [UserQueryBuilderController::class, 'show'])->name('show');
-            Route::get('all', [UserQueryBuilderController::class, 'all'])->name('all');
-            Route::post(
-                'create',
-                static fn () => UserData::from((new CreateNewUser())->create(request()?->input()))
-            )->name('create');
-            Route::put('{user}', UserUpdateController::class)->name('update');
-        });
-
-        Route::as('servers.')->prefix('servers')->group(static function () {
-            Route::prefix('test')->as('test.')->group(static function () {
-                Route::post('ssh', ServerTestSshCommandController::class)->name('ssh');
-                Route::post('ftp', ServerTestFtpController::class)->name('ftp');
-            });
-        });
-    });
 
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('auth.logout');
 

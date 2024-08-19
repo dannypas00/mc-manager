@@ -9,7 +9,7 @@ use App\Observers\ServerObserver;
 use App\Rcon\Rcon;
 use App\Services\ServerConnectivityService;
 use App\Services\ServerFilesystemStorageService;
-use App\Services\ServerSshStorageService;
+use App\Services\ServerSshService;
 use App\Services\ServerStorageServiceInterface;
 use Cache;
 use Crypt;
@@ -108,6 +108,7 @@ class Server extends Model
         'description',
         'icon',
         'enabled',
+        'type',
         // Connection info
         'local_ip',
         'public_ip',
@@ -208,7 +209,7 @@ class Server extends Model
         }
 
         if ($this->enable_ssh) {
-            return app(ServerSshStorageService::class);
+            return app(ServerSshService::class);
         }
 
         throw new NoStorageServiceConfiguredException($this->id ?? -1);

@@ -76,9 +76,16 @@
       "label": "Server naam",
       "placeholder": "Mijn favorite server"
     },
+    "port": {
+      "label": "Minecraft server poort"
+    },
     "public_ip": {
       "explanation": "Het openbare IP of de openbare hostnaam waarmee mensen met de Minecraft server verbinden.",
       "label": "Openbaar IP"
+    },
+    "rcon_port": {
+      "explanation": "Minecraft's RCON poort. Als je niet meerdere minecraft servers op een server draait, laat deze zoals hij is. Als je dat wel doet, zorg dat je een poort kiest die nog niet bezet is.",
+      "label": "RCON poort"
     },
     "server_properties": {
       "label": "Extra server.properties"
