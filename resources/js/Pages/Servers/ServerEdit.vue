@@ -6,7 +6,7 @@
   </div>
 
   <FullpageSpinner
-    v-if="loading"
+    v-if="serverStore.updateRequest.isLoading"
     :reason="$t('pages.servers.create.save_loader', { server: serverStore.model.name })"
   />
 </template>
@@ -41,7 +41,7 @@ export default defineComponent({
 
   methods: {
     save () {
-      console.log(this.serverStore.requestData);
+      this.serverStore.update();
     },
   },
 

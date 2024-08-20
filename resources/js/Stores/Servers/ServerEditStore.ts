@@ -3,6 +3,8 @@ import _ from 'lodash';
 import { AxiosResponse } from 'axios';
 import { useUserStore } from '../UserStore';
 import { ServerShowRequest } from '../../Communications/McManager/Servers/ServerShowRequest';
+import Server = App.Models.Server;
+import { ServerUpdateRequest } from '../../Communications/McManager/Servers/ServerUpdateRequest';
 import { ServerData } from '../../Types/generated';
 
 export const useServerEditStore = defineStore('ServerEdit', {
@@ -10,6 +12,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
     model: {} as ServerData,
     original: {} as FormData,
     showRequest: new ServerShowRequest(),
+    updateRequest: new ServerUpdateRequest(),
 
     icon: null as File | null,
     customizeInstallProcess: false,
@@ -110,5 +113,12 @@ export const useServerEditStore = defineStore('ServerEdit', {
         'max-world-size=29999984';
       this.original = this.dereferenced;
     },
+
+    async update () {
+      return this.updateRequest
+        .setId(this.model.id)
+        .setData(this.requestData)
+        .getResponse();
+    }
   },
 });

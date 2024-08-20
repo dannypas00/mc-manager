@@ -1,35 +1,40 @@
 import { Request } from './Request';
-import { uniq } from 'lodash';
+import _, { uniq } from 'lodash';
+import { SortDirection } from '../../Utilities/SortDirection';
 
 type QueryBuilderData = {
-  filter?: Record<string, string | number>;
-  page?: number;
-  per_page?: number;
+  filter?: Record<string, unknown>;
   include?: string[];
   sort?: string[];
   fields?: string[];
 };
 
-export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends Request<T, D & QueryBuilderData> {
-  private page = 1;
-  private perPage = 25;
-  private filter: Record<string, string | number> = {};
+export type QueryBuilderIndexData<T extends Record<string, unknown>> =
+  QueryBuilderData & {
+    data: T[];
+    links: Array<unknown>;
+    meta: {
+      current_page: number;
+      last_page: number;
+      from: number;
+      per_page: number;
+      to: number;
+      total: number;
+    };
+  };
+
+type QueryBuilderResponseData<T extends Record<string, unknown>> =
+  | T
+  | QueryBuilderIndexData<T>;
+
+export abstract class QueryBuilderRequest<
+  T extends Record<string, unknown>,
+  D extends QueryBuilderData | QueryBuilderIndexData<T> = QueryBuilderData,
+> extends Request<T & QueryBuilderResponseData<T>, D> {
+  private filter: Record<string, unknown> = {};
   private sort: string[] = [];
   private include: string[] = [];
   private fields: string[] = ['*'];
-
-  // Pagination:
-  public setPage(page: number): this {
-    this.page = page;
-    this.data.page = this.page;
-    return this;
-  }
-
-  public setPerPage(perPage: number): this {
-    this.perPage = perPage;
-    this.data.per_page = this.perPage;
-    return this;
-  }
 
   // Includes
   public setInclude(include: string[]): this {
@@ -45,7 +50,9 @@ export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends 
   }
 
   public removeInclude(include: string): this {
-    let index = this.include.findIndex(entry => entry === include || entry === `-${include}`);
+    const index = this.include.findIndex(
+      entry => entry === include || entry === `-${include}`
+    );
     if (index > -1) {
       this.include.splice(index, 1);
     }
@@ -60,8 +67,17 @@ export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends 
   }
 
   // Sorting
-  public setSort(sorting: string[]): this {
-    this.sort = sorting;
+  public setSort(sorting: Record<string, SortDirection>): this {
+    // If ascending, set key, if descending set -key
+    this.sort = _(sorting)
+      .map((value: SortDirection, key: string) => {
+        if (value === SortDirection.None) {
+          return null;
+        }
+        return value === SortDirection.Desc ? `-${key}` : key;
+      })
+      .filter()
+      .value();
     this.data.sort = this.sort;
     return this;
   }
@@ -73,7 +89,9 @@ export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends 
   }
 
   public removeSort(sorting: string): this {
-    let index = this.sort.findIndex(entry => entry === sorting || entry === `-${sorting}`);
+    const index = this.sort.findIndex(
+      entry => entry === sorting || entry === `-${sorting}`
+    );
     if (index > -1) {
       this.sort.splice(index, 1);
     }
@@ -88,13 +106,13 @@ export abstract class QueryBuilderRequest<T, D = Record<string, never>> extends 
   }
 
   // Filtering
-  public setFilters(filters: Record<string, string | number>): this {
+  public setFilters(filters: Record<string, unknown>): this {
     this.filter = filters;
     this.data.filter = this.filter;
     return this;
   }
 
-  public addFilter(filter: string, value: string | number): this {
+  public addFilter(filter: string, value: unknown): this {
     this.filter[filter] = value;
     this.data.filter = this.filter;
     return this;
