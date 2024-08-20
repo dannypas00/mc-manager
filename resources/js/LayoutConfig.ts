@@ -1,10 +1,4 @@
-import {
-  ArrowLeftStartOnRectangleIcon,
-  CogIcon,
-  UserCircleIcon,
-  TableCellsIcon,
-  SpeakerWaveIcon,
-} from '@heroicons/vue/24/outline';
+import { ArrowLeftStartOnRectangleIcon } from '@heroicons/vue/24/outline';
 import { FunctionalComponent } from 'vue';
 import ApplicationLogo from '../images/icons/MCM-logo.webp';
 
@@ -14,8 +8,7 @@ interface NavigationItem {
   icon: FunctionalComponent;
 }
 
-const layoutNavigationItems: NavigationItem[] = [
-];
+const layoutNavigationItems: NavigationItem[] = [];
 
 const userNavigationItems: NavigationItem[] = [
   { name: 'Sign out', route: 'logout', icon: ArrowLeftStartOnRectangleIcon },

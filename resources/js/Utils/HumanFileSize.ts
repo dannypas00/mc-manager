@@ -14,7 +14,10 @@ export default function humanFileSize(bytes, si = true, dp = 1) {
   do {
     bytes /= thresh;
     ++u;
-  } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
+  } while (
+    Math.round(Math.abs(bytes) * r) / r >= thresh &&
+    u < units.length - 1
+  );
 
   return bytes.toFixed(dp) + ' ' + units[u];
 }

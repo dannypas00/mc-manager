@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { AxiosResponse } from 'axios';
 import { useUserStore } from '../UserStore';
 import { ServerShowRequest } from '../../Communications/McManager/Servers/ServerShowRequest';
-import Server = App.Models.Server;
 import { ServerUpdateRequest } from '../../Communications/McManager/Servers/ServerUpdateRequest';
 import { ServerData } from '../../Types/generated';
 
@@ -25,7 +24,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
       return !_.isEqual(this.dereferenced, state.original);
     },
 
-    dereferenced(state): FormData {
+    dereferenced(): FormData {
       return JSON.parse(JSON.stringify(this.requestData));
     },
 
@@ -114,11 +113,11 @@ export const useServerEditStore = defineStore('ServerEdit', {
       this.original = this.dereferenced;
     },
 
-    async update () {
+    async update() {
       return this.updateRequest
         .setId(this.model.id)
         .setData(this.requestData)
         .getResponse();
-    }
+    },
   },
 });

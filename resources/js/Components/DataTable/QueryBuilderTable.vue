@@ -11,7 +11,11 @@
     :data="data.data"
   />
 
-  <WidePagination v-if="!!data.data.length" v-model="currentPage" :data="data" />
+  <WidePagination
+    v-if="!!data.data.length"
+    v-model="currentPage"
+    :data="data"
+  />
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">

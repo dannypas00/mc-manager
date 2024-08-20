@@ -1,14 +1,11 @@
 <template>
   <div class="block">
     <NeutralButton
-      class="inline-block mr-4"
+      class="mr-4 inline-block"
       :text="text"
       @click="connectionTest"
     />
-    <span
-      v-if="loading"
-      class="inline-block text-blue-600"
-    >
+    <span v-if="loading" class="inline-block text-blue-600">
       <!-- Loading -->
       <FontAwesomeIcon icon="fa-solid fa-circle-notch" spin />
     </span>
@@ -53,7 +50,7 @@ const props = defineProps({
 const connectionStatus: Ref<boolean | undefined> = ref(undefined);
 const loading = ref(false);
 
-async function connectionTest () {
+async function connectionTest() {
   loading.value = true;
   connectionStatus.value = await props.test();
   loading.value = false;

@@ -1,13 +1,22 @@
 <template>
   <div>
     <span class="text-3xl" v-t="'pages.servers.form.ftp_separator'" />
-    <hr>
+    <hr />
   </div>
 
-  <ToggleButton v-model="serverStore.model.enable_ftp" :label="$t('pages.servers.form.enable_ftp.label')" />
+  <ToggleButton
+    v-model="serverStore.model.enable_ftp"
+    :label="$t('pages.servers.form.enable_ftp.label')"
+  />
 
-  <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8" v-if="serverStore.model.enable_ftp">
-    <ToggleButton v-model="serverStore.model.is_sftp" :label="$t('pages.servers.form.is_sftp.label')" />
+  <div
+    class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8"
+    v-if="serverStore.model.enable_ftp"
+  >
+    <ToggleButton
+      v-model="serverStore.model.is_sftp"
+      :label="$t('pages.servers.form.is_sftp.label')"
+    />
 
     <FormInput
       id="ftp-port"
@@ -32,7 +41,10 @@
       autocomplete="off"
     />
 
-    <ConnectionTestButton :text="$t('pages.servers.form.ftp_test_button')" :test="testFtp" />
+    <ConnectionTestButton
+      :text="$t('pages.servers.form.ftp_test_button')"
+      :test="testFtp"
+    />
   </div>
 </template>
 
@@ -45,15 +57,18 @@ import axios from 'axios';
 
 const serverStore = useServerEditStore();
 
-async function testFtp (): Promise<boolean> {
+async function testFtp(): Promise<boolean> {
   try {
-    const response = await axios.post(route('web.api.servers.test.ftp') as string, {
-      host: serverStore.model.local_ip,
-      port: Number(serverStore.model.ftp_port),
-      user: serverStore.model.ftp_username,
-      password: serverStore.model.ftp_password,
-      is_sftp: serverStore.model.is_sftp,
-    });
+    const response = await axios.post(
+      route('web.api.servers.test.ftp') as string,
+      {
+        host: serverStore.model.local_ip,
+        port: Number(serverStore.model.ftp_port),
+        user: serverStore.model.ftp_username,
+        password: serverStore.model.ftp_password,
+        is_sftp: serverStore.model.is_sftp,
+      }
+    );
 
     return response.status === 200;
   } catch {

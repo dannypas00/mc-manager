@@ -1,6 +1,9 @@
 <template>
   <Combobox as="div" v-model="selected" @update:modelValue="query = ''">
-    <ComboboxLabel class="block text-sm font-medium leading-6 text-gray-900" v-if="label">
+    <ComboboxLabel
+      class="block text-sm font-medium leading-6 text-gray-900"
+      v-if="label"
+    >
       {{ label }}
       <span v-if="required" class="text-red-400">*</span>
     </ComboboxLabel>
@@ -10,7 +13,9 @@
         @change="query = $event.target.value"
         @blur="query = ''"
       />
-      <ComboboxButton class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+      <ComboboxButton
+        class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+      >
         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
       </ComboboxButton>
 
@@ -25,14 +30,22 @@
           as="template"
           v-slot="{ active, selected }"
         >
-          <li :class="['relative cursor-default select-none py-2 pl-8 pr-4', active ? 'bg-indigo-600 text-white' : 'text-gray-900']">
+          <li
+            :class="[
+              'relative cursor-default select-none py-2 pl-8 pr-4',
+              active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+            ]"
+          >
             <span :class="['block truncate', selected && 'font-semibold']">
               {{ option }}
             </span>
 
             <span
               v-if="selected"
-              :class="['absolute inset-y-0 left-0 flex items-center pl-1.5', active ? 'text-white' : 'text-indigo-600']"
+              :class="[
+                'absolute inset-y-0 left-0 flex items-center pl-1.5',
+                active ? 'text-white' : 'text-indigo-600',
+              ]"
             >
               <CheckIcon class="h-5 w-5" aria-hidden="true" />
             </span>
@@ -78,10 +91,10 @@ const props = defineProps({
 
 const modelValue = defineModel({ type: String, required: true });
 const selected = computed({
-  get () {
+  get() {
     return modelValue.value;
   },
-  set (value) {
+  set(value) {
     emit('update:model-value', value);
   },
 });
@@ -92,7 +105,7 @@ const filteredOptions = computed(() =>
   query.value === ''
     ? props.options
     : props.options.filter((option: string) => {
-      return option.includes(query.value.toLowerCase());
-    }),
+        return option.includes(query.value.toLowerCase());
+      })
 );
 </script>

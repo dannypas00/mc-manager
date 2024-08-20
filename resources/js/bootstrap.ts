@@ -30,7 +30,7 @@ window.Echo = new Echo({
   forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
   enabledTransports: ['ws', 'wss'],
   encrypted: true,
-  authorizer: (channel, options) => {
+  authorizer: (channel) => {
     return {
       authorize: (socketId, callback) => {
         axios

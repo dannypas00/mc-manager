@@ -1,8 +1,10 @@
 <template>
   <Portal to="loader">
-    <div class=" bg-gray-300/70 w-full h-full z-[60] inset-0 fixed flex items-center justify-center">
-      <div class="select-none flex flex-col font-bold text-center space-y-4">
-        <FontAwesomeIcon icon="fas fa-spinner" spin-pulse size="4x"/>
+    <div
+      class="fixed inset-0 z-[60] flex h-full w-full items-center justify-center bg-gray-300/70"
+    >
+      <div class="flex select-none flex-col space-y-4 text-center font-bold">
+        <FontAwesomeIcon icon="fas fa-spinner" spin-pulse size="4x" />
         <span v-if="reason">{{ reason }}</span>
       </div>
     </div>
@@ -17,6 +19,6 @@ defineProps({
     type: String,
     required: false,
     default: undefined,
-  }
-})
+  },
+});
 </script>

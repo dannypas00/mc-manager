@@ -159,7 +159,7 @@
             <li class="-mx-6 mt-auto">
               <Menu as="div" class="w-100">
                 <MenuButton
-                  class="w-full flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark"
+                  class="flex w-full items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark"
                 >
                   <img
                     class="h-8 w-8 rounded-full bg-brand-dark"

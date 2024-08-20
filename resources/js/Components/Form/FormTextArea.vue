@@ -59,13 +59,13 @@ const props = defineProps({
   },
 });
 
-const modelValue = defineModel({  required: true});
+const modelValue = defineModel({ required: true });
 
 const value = computed({
-  get () {
+  get() {
     return modelValue.value;
   },
-  set (value) {
+  set(value) {
     emit('update:model-value', value);
   },
 });

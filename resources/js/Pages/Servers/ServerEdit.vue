@@ -1,13 +1,19 @@
 <template>
-  <ServerForm v-if="serverStore.model" :type="serverStore.model.type"/>
+  <ServerForm v-if="serverStore.model" :type="serverStore.model.type" />
 
-  <div class="w-full pt-4 flex justify-end">
-    <PositiveButton class="text-center" :text="$t('general.buttons.save')" @click="save"/>
+  <div class="flex w-full justify-end pt-4">
+    <PositiveButton
+      class="text-center"
+      :text="$t('general.buttons.save')"
+      @click="save"
+    />
   </div>
 
   <FullpageSpinner
     v-if="serverStore.updateRequest.isLoading"
-    :reason="$t('pages.servers.create.save_loader', { server: serverStore.model.name })"
+    :reason="
+      $t('pages.servers.create.save_loader', { server: serverStore.model.name })
+    "
   />
 </template>
 
@@ -33,26 +39,27 @@ export default defineComponent({
     },
   },
 
-  data () {
+  data() {
     return {
       serverStore: useServerEditStore(),
     };
   },
 
   methods: {
-    save () {
+    save() {
       this.serverStore.update();
     },
   },
 
-  mounted () {
+  mounted() {
     this.serverStore.model = this.server;
     // TODO: THIS IS DEBUG DATA, REMOVE WHEN DONE TESTING
     this.serverStore.model.type = 2;
     this.serverStore.model.local_ip = '172.17.0.1';
     this.serverStore.model.ssh_username = 'mcm-test';
     this.serverStore.model.ssh_port = 2222;
-    this.serverStore.model.ssh_key = '-----BEGIN OPENSSH PRIVATE KEY-----\n' +
+    this.serverStore.model.ssh_key =
+      '-----BEGIN OPENSSH PRIVATE KEY-----\n' +
       'b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAArAAAABNlY2RzYS\n' +
       '1zaGEyLW5pc3RwNTIxAAAACG5pc3RwNTIxAAAAhQQBdCb4l4oGSF5J5I+3pvI3zTPJyvWJ\n' +
       '5z+qdKLtZH7TR/Z+fzuXG3x2tH2A9tKhsZPxuBKPGrvpgzPArphunH+y7ucBjBwi4IF8pK\n' +

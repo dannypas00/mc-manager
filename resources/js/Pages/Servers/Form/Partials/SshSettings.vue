@@ -1,7 +1,7 @@
 <template>
   <div>
     <span class="text-3xl" v-t="'pages.servers.form.ssh_separator'" />
-    <hr>
+    <hr />
   </div>
 
   <FormInput
@@ -29,7 +29,10 @@
     required
   />
 
-  <ConnectionTestButton :text="$t('pages.servers.form.ssh_test_button')" :test="testSsh" />
+  <ConnectionTestButton
+    :text="$t('pages.servers.form.ssh_test_button')"
+    :test="testSsh"
+  />
 </template>
 
 <script setup lang="ts">
@@ -41,14 +44,17 @@ import axios from 'axios';
 
 const serverStore = useServerEditStore();
 
-async function testSsh (): Promise<boolean> {
+async function testSsh(): Promise<boolean> {
   try {
-    const response = await axios.post(route('web.api.servers.test.ssh') as string, {
-      host: serverStore.model.local_ip,
-      user: serverStore.model.ssh_username,
-      port: Number(serverStore.model.ssh_port),
-      private_key: serverStore.model.ssh_key,
-    });
+    const response = await axios.post(
+      route('web.api.servers.test.ssh') as string,
+      {
+        host: serverStore.model.local_ip,
+        user: serverStore.model.ssh_username,
+        port: Number(serverStore.model.ssh_port),
+        private_key: serverStore.model.ssh_key,
+      }
+    );
 
     return response.status === 200;
   } catch {

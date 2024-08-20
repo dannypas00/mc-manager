@@ -6,8 +6,11 @@
 
     <div
       ref="imageDropzone"
-      class="mt-2 flex items-center gap-x-3 w-fit rounded-xl bg-blend-overlay box-border p-2"
-      :class="{ 'outline-2 outline-dashed outline-indigo-500 bg-indigo-50': isOverDropZone }"
+      class="mt-2 box-border flex w-fit items-center gap-x-3 rounded-xl p-2 bg-blend-overlay"
+      :class="{
+        'bg-indigo-50 outline-dashed outline-2 outline-indigo-500':
+          isOverDropZone,
+      }"
     >
       <img
         class="h-24 w-24 rounded text-gray-300"
@@ -82,7 +85,7 @@ onChange((files: FileList | null) => {
   }
 });
 
-function onFileUpload (file: File) {
+function onFileUpload(file: File) {
   imageUrl.value = URL.createObjectURL(file);
   emit('change', file);
 }
