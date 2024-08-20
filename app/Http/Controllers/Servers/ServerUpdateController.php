@@ -40,7 +40,9 @@ class ServerUpdateController extends Controller
 
         $data = $request->validated();
 
-        $server->icon = $this->iconService->storeServerIcon($request->files->get('icon'));
+        if ($request->hasFile('icon_file')) {
+            $server->icon = $this->iconService->storeServerIcon($request->files->get('icon_file'));
+        }
 
         try {
             DB::beginTransaction();

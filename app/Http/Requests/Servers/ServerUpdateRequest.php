@@ -45,7 +45,7 @@ class ServerUpdateRequest extends FormRequest
         $rules = [
             'name'        => 'required|string',
             'description' => 'required|string',
-            'icon'        => 'required|image',
+            'icon_file'        => 'sometimes|image',
         ];
 
         return match ($this->getServer()->type) {

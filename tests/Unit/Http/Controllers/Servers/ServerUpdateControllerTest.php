@@ -73,7 +73,7 @@ class ServerUpdateControllerTest extends UnitTestCase
             'enable_ssh'        => true
         ];
         $data = array_merge($attributes, [
-            'icon' => UploadedFile::fake()->image('icon.jpg'),
+            'icon_file' => UploadedFile::fake()->image('icon.jpg'),
         ]);
 
         Cache::partialMock()->expects('remember')->andReturns([]);
@@ -85,7 +85,7 @@ class ServerUpdateControllerTest extends UnitTestCase
         // Ping ssh service
         $this->mock(
             ServerSshService::class,
-            fn (MockInterface $mock) => $mock->shouldReceive('put', 'ping')
+            fn (MockInterface $mock) => $mock->allows(['put', 'ping'])
         );
         // Upload icon to icon storage
         $this->mockIconServiceStoreServerIcon('insert-uuid-here.jpg');
