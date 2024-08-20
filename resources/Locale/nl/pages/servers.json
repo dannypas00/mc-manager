@@ -1,5 +1,6 @@
 {
   "create": {
+    "save_loader": "{server} aan het opslaan",
     "title": "Maak nieuwe server",
     "type_selector": {
       "description": {
