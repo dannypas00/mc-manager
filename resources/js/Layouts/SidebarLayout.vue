@@ -1,4 +1,5 @@
 <template>
+  <PortalTarget name="loader" />
   <div>
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog

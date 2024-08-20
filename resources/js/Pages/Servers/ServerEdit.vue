@@ -1,15 +1,28 @@
 <template>
-  <ServerForm v-if="serverStore.model" :type="serverStore.model.type" />
+  <ServerForm v-if="serverStore.model" :type="serverStore.model.type"/>
+
+  <div class="w-full pt-4 flex justify-end">
+    <PositiveButton class="text-center" :text="$t('general.buttons.save')" @click="save"/>
+  </div>
+
+  <FullpageSpinner
+    v-if="loading"
+    :reason="$t('pages.servers.create.save_loader', { server: serverStore.model.name })"
+  />
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import ServerForm from './Form/ServerForm.vue';
 import { useServerEditStore } from '../../Stores/Servers/ServerEditStore';
+import PositiveButton from '../../Components/Buttons/PositiveButton.vue';
+import FullpageSpinner from '../../Components/Layout/FullpageSpinner.vue';
 import Server = App.Models.Server;
 
 export default defineComponent({
   components: {
+    FullpageSpinner,
+    PositiveButton,
     ServerForm,
   },
 
@@ -20,13 +33,19 @@ export default defineComponent({
     },
   },
 
-  data() {
+  data () {
     return {
       serverStore: useServerEditStore(),
     };
   },
 
-  mounted() {
+  methods: {
+    save () {
+      console.log(this.serverStore.requestData);
+    },
+  },
+
+  mounted () {
     this.serverStore.model = this.server;
     // TODO: THIS IS DEBUG DATA, REMOVE WHEN DONE TESTING
     this.serverStore.model.type = 2;

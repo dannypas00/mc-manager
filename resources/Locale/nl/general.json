@@ -1,3 +1,6 @@
 {
+  "buttons": {
+    "save": "Opslaan"
+  },
   "cancel": "Annuleer"
 }
