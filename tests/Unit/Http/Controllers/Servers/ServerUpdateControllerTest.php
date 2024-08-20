@@ -85,7 +85,7 @@ class ServerUpdateControllerTest extends UnitTestCase
         // Ping ssh service
         $this->mock(
             ServerSshService::class,
-            fn (MockInterface $mock) => $mock->allows(['put', 'ping'])
+            fn (MockInterface $mock) => $mock->shouldReceive('put', 'ping')
         );
         // Upload icon to icon storage
         $this->mockIconServiceStoreServerIcon('insert-uuid-here.jpg');

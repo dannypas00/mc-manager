@@ -41,7 +41,7 @@ class ServerUpdateController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('icon_file')) {
-            $server->icon = $this->iconService->storeServerIcon($request->files->get('icon_file'));
+            $data['icon'] = $this->iconService->storeServerIcon($request->files->get('icon_file'));
         }
 
         try {

@@ -30,7 +30,7 @@ class ServerUpdateRepository
     public function update(Server $server, array $data): Server
     {
         // Don't fill the hidden fields with null, since they won't be set to previous values in the frontend
-        $fillable = Arr::except($server->getFillable(), $server->getHidden());
+        $fillable = Arr::except($server->getFillable(), $server->getHidden() + ['icon']);
 
         $server->update($this->padArrayWithNull($fillable, $data));
         $server->refresh();
