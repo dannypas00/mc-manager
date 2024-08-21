@@ -32,9 +32,9 @@ class ServerUpdateRequest extends FormRequest
 
     private const MINECRAFT_RULES = [
         'is_custom'           => 'required|boolean',
-        'custom_jar'          => 'sometimes|file|mimes:application/java-archive',
-        'custom_docker_image' => 'sometimes|string',
-        'server_properties'   => 'required|string'
+        'custom_jar'          => 'sometimes|nullable|file|mimes:application/java-archive',
+        'custom_docker_image' => 'sometimes|nullable|string',
+        'server_properties'   => 'sometimes|nullable|string'
     ];
 
     /**
@@ -43,9 +43,10 @@ class ServerUpdateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
+            'enabled'     => 'required|boolean',
             'name'        => 'required|string',
-            'description' => 'required|string',
-            'icon_file'        => 'sometimes|image',
+            'description' => 'sometimes|nullable|string',
+            'icon_file'   => 'sometimes|nullable|image',
         ];
 
         return match ($this->getServer()->type) {

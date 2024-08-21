@@ -115,11 +115,6 @@ class Server extends Model
         'port',
         'rcon_port',
         'rcon_password',
-        // Cached info
-        'current_players',
-        'maximum_players',
-        'player_list',
-        'status',
         // FTP settings
         'enable_ftp',
         'is_sftp',

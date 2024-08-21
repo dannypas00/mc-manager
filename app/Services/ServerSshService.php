@@ -13,6 +13,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
+use Log;
 use Spatie\Ssh\Ssh;
 use Str;
 use Throwable;
@@ -60,6 +61,7 @@ class ServerSshService implements ServerStorageServiceInterface
             throw $e;
         } catch (Throwable $e) {
             File::delete($keypath);
+            Log::error('SSH exception', ['command' => $command, 'message' => $e->getMessage()]);
             throw new SshException('Unexpected exception whilst running ssh command', previous: $e);
         }
     }

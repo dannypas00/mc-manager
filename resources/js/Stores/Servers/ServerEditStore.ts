@@ -20,39 +20,65 @@ export const useServerEditStore = defineStore('ServerEdit', {
   }),
 
   getters: {
-    isChanged(state): boolean {
+    isChanged (state): boolean {
       return !_.isEqual(this.dereferenced, state.original);
     },
 
-    dereferenced(): FormData {
+    dereferenced (): FormData {
       return JSON.parse(JSON.stringify(this.requestData));
     },
 
-    requestData(state): FormData {
-      const filtered = _.pick(state.model, ['type', 'name']);
+    requestData (state): FormData {
+      const filtered = _.pick(
+        state.model,
+        [
+          'enabled',
+          'name',
+          'description',
+          'public_ip',
+          'port',
+          'rcon_port',
+          'local_ip',
+          'enable_ssh',
+          'ssh_port',
+          'ssh_username',
+          'ssh_key',
+          'enable_ftp',
+          'is_sftp',
+          'ftp_port',
+          'ftp_username',
+          'ftp_password',
+        ],
+      );
 
       return {
         ...filtered,
+        icon_file: state.icon,
+        is_custom: state.customizeInstallProcess,
+        custom_docker_image: state.dockerImage,
+        server_properties: state.serverProperties,
+        // custom_jar: state.customJar,
       } as unknown as FormData;
     },
   },
 
   actions: {
-    retrieve(id: number) {
+    retrieve (id: number) {
       this.showRequest.setId(id).getResponse().then(this.setFromRequest);
     },
 
-    setFromRequest(response: AxiosResponse<ServerData>) {
+    setFromRequest (response: AxiosResponse<ServerData>) {
       this.setFromModel(response.data);
     },
 
-    setFromModel(model: ServerData) {
+    setFromModel (model: ServerData) {
       this.model = model;
       this.original = this.dereferenced;
     },
 
-    setEmpty() {
+    setEmpty () {
       this.model = {
+        enabled: false,
         enable_ftp: true,
         enable_ssh: true,
         users: [useUserStore().user],
@@ -113,7 +139,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
       this.original = this.dereferenced;
     },
 
-    async update() {
+    async update () {
       return this.updateRequest
         .setId(this.model.id)
         .setData(this.requestData)

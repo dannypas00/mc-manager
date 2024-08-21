@@ -6,6 +6,11 @@
     :placeholder="$t('pages.servers.form.name.placeholder')"
   />
 
+  <ToggleButton
+    v-model="serverStore.model.enabled"
+    :label="$t('pages.servers.form.enabled.label')"
+  />
+
   <FormTextArea
     id="description"
     v-model="serverStore.model.description"
@@ -29,15 +34,17 @@ import FormInput from '../../../Components/Form/FormInput.vue';
 import FormProfileUpload from '../../../Components/Form/FormProfileUpload.vue';
 import { useServerEditStore } from '../../../Stores/Servers/ServerEditStore';
 import ApplicationLogo from '../../../../images/icons/MCM-logo.webp';
+import ToggleButton from '../../../Components/Form/ToggleButton.vue';
 
 export default defineComponent({
   components: {
+    ToggleButton,
     FormProfileUpload,
     FormInput,
     FormTextArea,
   },
 
-  data() {
+  data () {
     return {
       serverStore: useServerEditStore(),
       ApplicationLogo,

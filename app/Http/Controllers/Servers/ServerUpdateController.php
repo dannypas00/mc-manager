@@ -11,11 +11,9 @@ use App\Models\Server;
 use App\Repositories\Servers\ServerUpdateRepository;
 use App\Services\IconService;
 use App\Services\ServerSshService;
-use DB;
 use Illuminate\Http\JsonResponse;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
-use Str;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -25,7 +23,8 @@ class ServerUpdateController extends Controller
         private readonly ServerUpdateRepository $updateRepository,
         private readonly ServerSshService $sshService,
         private readonly IconService $iconService,
-    ) {}
+    ) {
+    }
 
     /**
      * TODO: Type is immutable
@@ -45,10 +44,8 @@ class ServerUpdateController extends Controller
         }
 
         try {
-            DB::beginTransaction();
+            $server = $this->updateRepository->update($server, $data);
             try {
-                $this->updateRepository->update($server, $data);
-
                 $this->pingSsh($server);
 
                 $this->putServerProperties($server, $request->get('server_properties'));
@@ -60,16 +57,15 @@ class ServerUpdateController extends Controller
                 throw new RuntimeException('errors.server.not_enough_connection_for_storage');
             }
         } catch (RuntimeException $e) {
-            DB::rollBack();
-            $this->iconService->deleteIcon($server->icon);
+            if (array_key_exists('icon', $data) && $data['icon']) {
+                $this->iconService->deleteIcon($data['icon']);
+            }
 
             return new JsonResponse([
                 'errors'  => $e->getMessage(),
                 'context' => $e->getPrevious()?->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
-        DB::commit();
 
         return new JsonResponse(ServerData::from($server));
     }

@@ -37,6 +37,12 @@
     "enable_ftp": {
       "label": "Gebruik FTP voor sneller bestandsbeheer?"
     },
+    "enable_ssh": {
+      "label": "Zet SSH aan voor automatische taken"
+    },
+    "enabled": {
+      "label": "Zet server aan"
+    },
     "ftp_password": {
       "label": "FTP wachtwoord"
     },

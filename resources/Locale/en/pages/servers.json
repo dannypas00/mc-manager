@@ -37,6 +37,12 @@
     "enable_ftp": {
       "label": "Enable FTP connection for faster file management?"
     },
+    "enable_ssh": {
+      "label": "Enable SSH for automated tasks"
+    },
+    "enabled": {
+      "label": "Start server"
+    },
     "ftp_password": {
       "label": "FTP password"
     },

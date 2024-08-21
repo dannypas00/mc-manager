@@ -10,4 +10,8 @@ trait PadsArrayWithNull
     {
         return $assocaitiveValues + array_fill_keys($keys, null);
     }
+
+    private function exceptValues(array $input, array $exceptValues): array {
+        return array_flip(Arr::except($input, $exceptValues));
+    }
 }
