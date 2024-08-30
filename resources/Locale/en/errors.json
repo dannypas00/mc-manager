@@ -1,0 +1,5 @@
+{
+  "server": {
+    "invalid_ssh_connection": "Invalid SSH settings"
+  }
+}
