@@ -1,6 +1,9 @@
 {
   "buttons": {
-    "save": "Save"
+    "save": "Save",
+    "save_and_continue_editing": "Save and continue"
   },
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "server_error": "A server error has occurred",
+  "validation_failed": "Validation has failed"
 }

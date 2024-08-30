@@ -1,11 +1,23 @@
 <template>
   <ServerForm v-if="serverStore.model" :type="serverStore.model.type" />
 
-  <div class="flex w-full justify-end pt-4">
+  <div class="flex w-full justify-end gap-2 pt-4">
+    <PositiveButton
+      class="text-center"
+      :text="$t('general.buttons.save_and_continue_editing')"
+      @click="save"
+      outline
+    />
+
     <PositiveButton
       class="text-center"
       :text="$t('general.buttons.save')"
-      @click="save"
+      @click="
+        () => {
+          save();
+          $inertia.get($route('servers.show', { id }));
+        }
+      "
     />
   </div>
 
@@ -18,12 +30,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import ServerForm from './Form/ServerForm.vue';
 import { useServerEditStore } from '../../Stores/Servers/ServerEditStore';
 import PositiveButton from '../../Components/Buttons/PositiveButton.vue';
 import FullpageSpinner from '../../Components/Layout/FullpageSpinner.vue';
-import Server = App.Models.Server;
 
 export default defineComponent({
   components: {
@@ -40,13 +51,13 @@ export default defineComponent({
   },
 
   methods: {
-    save() {
-      this.serverStore.update();
+    async save() {
+      await this.serverStore.update();
     },
   },
 
   async mounted() {
-    await this.serverStore.retrieve(this.id)
+    await this.serverStore.retrieve(this.id);
   },
 });
 </script>

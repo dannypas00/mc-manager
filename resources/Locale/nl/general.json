@@ -1,6 +1,9 @@
 {
   "buttons": {
-    "save": "Opslaan"
+    "save": "Opslaan",
+    "save_and_continue_editing": "Sla op en ga verder"
   },
-  "cancel": "Annuleer"
+  "cancel": "Annuleer",
+  "server_error": "Er heeft een serverfout opgetreden",
+  "validation_failed": "Validatie is misluked"
 }

@@ -5,16 +5,30 @@ import axios, {
   Method,
 } from 'axios';
 import { ValidationError } from './ValidationError';
+import _ from 'lodash';
+import { useToast } from 'vue-toastification';
+import I18n from '../../i18n';
 
 export abstract class Request<T, D = Record<string, never>> {
   protected data: D = {} as D;
   protected validationErrors: ValidationError[] = [];
   protected abortController: AbortController = new AbortController();
   public isLoading: boolean = false;
+  protected quiet: boolean = false;
 
   private setValidationErrors(errors: ValidationError[]) {
     // TODO: Implement error store
     this.validationErrors = errors ?? [];
+
+    if (!_.isEmpty(errors) && !this.quiet) {
+      useToast().warning(
+        I18n.global.t('general.validation_failed') +
+          '\n' +
+          Object.values(this.serverStore.updateRequest.validationErrors).join(
+            ',\n'
+          )
+      );
+    }
   }
 
   protected abstract getEndPoint(): string;
@@ -36,6 +50,9 @@ export abstract class Request<T, D = Record<string, never>> {
 
     this.isLoading = true;
 
+    // Reset validation errors
+    this.setValidationErrors([]);
+
     try {
       return await axios.request<T, AxiosResponse<T>, D>({
         url: this.getEndPoint(),
@@ -47,9 +64,14 @@ export abstract class Request<T, D = Record<string, never>> {
       } as AxiosRequestConfig<D>);
     } catch (error) {
       if (error instanceof AxiosError) {
-        switch (error.status) {
+        switch (error.response?.status) {
           case 422:
             this.setValidationErrors(error.response?.data.errors ?? []);
+            break;
+          case 500:
+            if (!this.quiet) {
+              useToast().error(I18n.global.t('general.server_error'));
+            }
             break;
         }
       }
@@ -62,5 +84,10 @@ export abstract class Request<T, D = Record<string, never>> {
 
   public cancel(reason?: string) {
     this.abortController.abort(reason);
+  }
+
+  public setQuiet(quiet: boolean): this {
+    this.quiet = quiet;
+    return this;
   }
 }
