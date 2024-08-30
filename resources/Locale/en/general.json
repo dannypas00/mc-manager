@@ -1,5 +1,6 @@
 {
   "buttons": {
+    "edit": "Edit",
     "save": "Save",
     "save_and_continue_editing": "Save and continue"
   },

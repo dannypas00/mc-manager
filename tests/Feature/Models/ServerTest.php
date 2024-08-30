@@ -139,4 +139,15 @@ class ServerTest extends FeatureTestCase
         $server->refresh();
         $this->assertEmpty($server->users);
     }
+
+    public function test_ssh_key_filled_attribute(): void
+    {
+        $server = Server::factory()->createOne(['ssh_key' => 'aaaa']);
+
+        $this->assertTrue($server->is_ssh_key_filled);
+
+        $server = Server::findOrFail($server->id);
+
+        $this->assertTrue($server->is_ssh_key_filled);
+    }
 }

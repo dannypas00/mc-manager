@@ -43,7 +43,7 @@ export default createI18n({
       return;
     }
 
-    throw new Error(
+    console.error(
       `Missing translation! Language: '${locale}' | Key/Path: '${path}'`
     );
   },

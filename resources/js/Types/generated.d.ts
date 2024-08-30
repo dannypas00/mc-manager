@@ -25,6 +25,7 @@ export type ServerData = {
   has_accepted_eula: boolean;
   player_list: Array<any>;
   users: Array<any> | null;
+  is_ssh_key_filled: boolean;
   created_at: string | null;
   updated_at: string | null;
   rcon_password: string | null;

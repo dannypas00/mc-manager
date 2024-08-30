@@ -215,7 +215,8 @@ export default defineComponent({
   props: {
     auth: {
       type: Object as PropType<{ user: User }>,
-      required: true,
+      required: false,
+      default: undefined
     },
   },
 

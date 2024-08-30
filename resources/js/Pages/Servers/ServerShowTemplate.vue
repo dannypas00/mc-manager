@@ -3,7 +3,14 @@
     <PageTitle
       :title="$t('pages.servers.show.title', { name: store.model.name })"
       :header="store.model.name"
-    />
+    >
+      <PositiveButton
+        :href="$route('servers.edit', { id })"
+        :text="$t('general.buttons.edit')"
+        outline
+        is-link
+      />
+    </PageTitle>
 
     <FlashNotification
       v-if="!store.eulaAccepted"
@@ -69,9 +76,11 @@ import { useServerShowStore } from '../../Stores/Servers/ServerShowStore';
 import PageTitle from '../../Components/Layout/PageTitle.vue';
 import MainLayout from '../../Layouts/MainLayout.vue';
 import FlashNotification from '../../Components/Global/FlashNotification.vue';
+import PositiveButton from '../../Components/Buttons/PositiveButton.vue';
 
 export default defineComponent({
   components: {
+    PositiveButton,
     FlashNotification,
     MainLayout,
     PageTitle,

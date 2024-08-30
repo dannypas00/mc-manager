@@ -98,7 +98,8 @@
       "label": "Extra server.properties"
     },
     "ssh_key": {
-      "label": "Prive SSH sleutel"
+      "label": "Prive SSH sleutel",
+      "placeholder": "Deze SSH sleutel is al gevuld. Je kunt hem hier overschrijven, maar dezelfde sleutel hoeft niet nog een keer opgegeven te worden."
     },
     "ssh_port": {
       "label": "SSH poort"

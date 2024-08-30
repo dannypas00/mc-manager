@@ -43,6 +43,7 @@ class ServerData extends Data
         public bool $has_accepted_eula,
         public array $player_list,
         public ?array $users,
+        public bool $is_ssh_key_filled,
         #[WithCast(DateTimeInterfaceCast::class)]
         public ?carbon $created_at,
         #[WithCast(DateTimeInterfaceCast::class)]

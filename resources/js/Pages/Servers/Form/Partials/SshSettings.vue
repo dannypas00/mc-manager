@@ -1,14 +1,13 @@
 <template>
   <div>
-    <span class="text-3xl" v-t="'pages.servers.form.ssh_separator'"/>
-    <hr/>
+    <span class="text-3xl" v-t="'pages.servers.form.ssh_separator'" />
+    <hr />
   </div>
 
   <ToggleButton
     v-model="serverStore.model.enable_ssh"
     :label="$t('pages.servers.form.enable_ssh.label')"
   />
-
 
   <div
     class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8"
@@ -36,10 +35,21 @@
       id="ssh-private-key"
       v-model="serverStore.model.ssh_key"
       :label="$t('pages.servers.form.ssh_key.label')"
-      required
+      :placeholder="
+        serverStore.model.is_ssh_key_filled
+          ? $t('pages.servers.form.ssh_key.placeholder')
+          : '-----BEGIN OPENSSH PRIVATE KEY-----\n<...>\n-----END OPENSSH PRIVATE KEY-----'
+      "
+      :required="!serverStore.model.is_ssh_key_filled"
     />
 
     <ConnectionTestButton
+      v-if="
+        serverStore.model.local_ip &&
+        serverStore.model.ssh_username &&
+        serverStore.model.ssh_port &&
+        serverStore.model.ssh_key
+      "
       :text="$t('pages.servers.form.ssh_test_button')"
       :test="testSsh"
     />
@@ -56,17 +66,14 @@ import ToggleButton from '../../../../Components/Form/ToggleButton.vue';
 
 const serverStore = useServerEditStore();
 
-async function testSsh (): Promise<boolean> {
+async function testSsh(): Promise<boolean> {
   try {
-    const response = await axios.post(
-      route('api.servers.test.ssh') as string,
-      {
-        host: serverStore.model.local_ip,
-        user: serverStore.model.ssh_username,
-        port: Number(serverStore.model.ssh_port),
-        private_key: serverStore.model.ssh_key,
-      },
-    );
+    const response = await axios.post(route('api.servers.test.ssh') as string, {
+      host: serverStore.model.local_ip,
+      user: serverStore.model.ssh_username,
+      port: Number(serverStore.model.ssh_port),
+      private_key: serverStore.model.ssh_key,
+    });
 
     return response.status === 200;
   } catch (e) {

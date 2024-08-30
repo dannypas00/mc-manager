@@ -53,14 +53,15 @@ use League\Flysystem\Ftp\FtpAdapter;
  * @property string|null $version
  * @property string $icon
  * @property string|null $local_ip
- * @property string $public_ip
+ * @property string|null $public_ip
  * @property string $rcon_password
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read FtpAdapter|FilesystemAdapter $ftp
  * @property-read bool $has_accepted_eula
+ * @property-read bool $is_ssh_key_filled
  * @property-read array $player_list
- * @property-read Rcon|false $rcon
+ * @property-read Rcon $rcon
  * @property-read ServerStorageServiceInterface $storage_service
  * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
@@ -109,6 +110,7 @@ class Server extends Model
         'icon',
         'enabled',
         'type',
+        'version',
         // Connection info
         'local_ip',
         'public_ip',
@@ -132,13 +134,17 @@ class Server extends Model
 
     protected $casts = [
         'status' => ServerStatus::class,
-        'type' => ServerType::class,
+        'type'   => ServerType::class,
     ];
 
     protected $hidden = [
         'rcon_password',
         'ssh_key',
         'ftp_password',
+    ];
+
+    protected $appends = [
+        'is_ssh_key_filled',
     ];
 
     // Attributes
@@ -180,7 +186,7 @@ class Server extends Model
         return app(ServerConnectivityService::class)->getRcon($this);
     }
 
-    public function getFtpAttribute(): FtpAdapter | FilesystemAdapter
+    public function getFtpAttribute(): FtpAdapter|FilesystemAdapter
     {
         return app(ServerConnectivityService::class)->getFilesystem($this);
     }
@@ -213,6 +219,14 @@ class Server extends Model
         }
 
         throw new NoStorageServiceConfiguredException($this->id ?? -1);
+    }
+
+    public function getIsSshKeyFilledAttribute(): bool
+    {
+        $this->makeVisible('ssh_key');
+        $filled = $this->ssh_key !== null;
+        $this->makeHidden('ssh_key');
+        return $filled;
     }
 
     // Relations

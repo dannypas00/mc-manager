@@ -98,7 +98,8 @@
       "label": "Extra server.properties"
     },
     "ssh_key": {
-      "label": "Private SSH key"
+      "label": "Private SSH key",
+      "placeholder": "This SSH key is already filled. You can overwrite it here, but it is not required to re-submit the same key again."
     },
     "ssh_port": {
       "label": "SSH port"

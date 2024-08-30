@@ -54,14 +54,16 @@ class ServerSshService implements ServerStorageServiceInterface
                 throw new SshException($process->errorOutput(), $process->exitCode());
             }
 
+            File::delete($keypath);
+
             return $process;
         } catch (SshException $e) {
+            File::delete($keypath);
             throw $e;
         } catch (Throwable $e) {
+            File::delete($keypath);
             Log::error('SSH exception', ['command' => $command, 'message' => $e->getMessage()]);
             throw new SshException('Unexpected exception whilst running ssh command', previous: $e);
-        } finally {
-            File::delete($keypath);
         }
     }
 
@@ -145,7 +147,7 @@ class ServerSshService implements ServerStorageServiceInterface
 
         $attributes = [
             StorageAttributes::ATTRIBUTE_PATH          => Str::after($name, './'),
-            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int) $size,
+            StorageAttributes::ATTRIBUTE_FILE_SIZE     => (int)$size,
             StorageAttributes::ATTRIBUTE_LAST_MODIFIED => Carbon::parse("$date $time")->timestamp,
             StorageAttributes::ATTRIBUTE_MIME_TYPE     => Str::afterLast($mime, ' '),
             StorageAttributes::ATTRIBUTE_TYPE          => $type,
@@ -169,7 +171,7 @@ class ServerSshService implements ServerStorageServiceInterface
      */
     public function size(Server $server, string $path): int
     {
-        return (int) Str::before($this->executeSsh($server, "wc -c $path")->output(), ' ');
+        return (int)Str::before($this->executeSsh($server, "wc -c $path")->output(), ' ');
     }
 
     /**

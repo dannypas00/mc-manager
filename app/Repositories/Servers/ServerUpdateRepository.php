@@ -34,8 +34,10 @@ class ServerUpdateRepository
             $server->getFillable(),
             $data,
             ['icon', 'type'],
-            array_merge($server->getHidden(), ['enable_ftp', 'enable_ssh', 'is_sftp', 'use_ssh_auth'])
+            ['enable_ftp', 'enable_ssh', 'is_sftp', 'use_ssh_auth', 'ssh_key', 'ftp_password', 'rcon_password']
         );
+
+        Log::debug('Filling model', ['fillData' => $fillableData]);
 
         foreach ($fillableData as $key => $value) {
             $server->$key = $value;

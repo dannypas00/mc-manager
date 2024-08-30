@@ -21,13 +21,12 @@ export abstract class Request<T, D = Record<string, never>> {
     this.validationErrors = errors ?? [];
 
     if (!_.isEmpty(errors) && !this.quiet) {
-      useToast().warning(
-        I18n.global.t('general.validation_failed') +
-          '\n' +
-          Object.values(this.serverStore.updateRequest.validationErrors).join(
-            ',\n'
-          )
-      );
+      console.log(_.isObject(errors));
+      const header = I18n.global.t('general.validation_failed');
+      const message = _.isString(errors)
+        ? I18n.global.t(errors)
+        : Object.values(errors).join(',\n');
+      useToast().warning(`${header}\n${message}`);
     }
   }
 

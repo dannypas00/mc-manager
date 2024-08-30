@@ -13,8 +13,8 @@
       class="text-center"
       :text="$t('general.buttons.save')"
       @click="
-        () => {
-          save();
+        async () => {
+          await save();
           $inertia.get($route('servers.show', { id }));
         }
       "

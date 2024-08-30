@@ -48,6 +48,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
           'ftp_port',
           'ftp_username',
           'ftp_password',
+          'version',
         ],
       );
 

@@ -33,10 +33,10 @@
   </div>
   <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8" v-else>
     <ComboboxInput
-      :options="versionOptions"
       v-model="serverStore.model.version"
-      required
+      :options="versionOptions"
       :label="$t('pages.servers.form.version.label')"
+      required
     />
   </div>
 

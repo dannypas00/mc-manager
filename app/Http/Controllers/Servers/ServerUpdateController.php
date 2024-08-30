@@ -37,6 +37,8 @@ class ServerUpdateController extends Controller
         ServerUpdateRequest $request,
     ): JsonResponse {
         $server = $request->getServer();
+        // Show all hidden fields because they are needed for connections and we shouldn't be dumping them to the frontend
+        $server = $server->makeVisible($server->getHidden());
 
         $data = $request->validated();
 
@@ -54,7 +56,7 @@ class ServerUpdateController extends Controller
             try {
                 $this->pingSsh($server);
 
-                $this->putServerProperties($server, $request->get('server_properties'));
+                $this->putServerProperties($server, $request->get('server_properties') ?? '');
             } catch (FilesystemException $e) {
                 throw new RuntimeException('errors.server.invalid_filesystem_connection', previous: $e);
             } catch (SshException $e) {
