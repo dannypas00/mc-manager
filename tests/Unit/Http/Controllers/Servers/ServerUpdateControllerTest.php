@@ -6,7 +6,6 @@ use App\Enums\ServerStatus;
 use App\Enums\ServerType;
 use App\Http\Controllers\Servers\ServerUpdateController;
 use App\Models\Server;
-use App\Services\ServerConnectivityService;
 use App\Services\ServerSshService;
 use Cache;
 use Illuminate\Http\UploadedFile;
@@ -70,7 +69,8 @@ class ServerUpdateControllerTest extends UnitTestCase
             'ssh_key'           => 'ssh-key-here',
             'is_custom'         => false,
             'server_properties' => "pvp=false\n",
-            'enable_ssh'        => true
+            'enable_ssh'        => true,
+            'enabled'           => true,
         ];
         $data = array_merge($attributes, [
             'icon_file' => UploadedFile::fake()->image('icon.jpg'),

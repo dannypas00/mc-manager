@@ -27,25 +27,34 @@ class PadsArrayWithNullTest extends TestCase
         $associative = ['a', 'b', 'c', 'd'];
         $excludeValues = ['a', 'c'];
         $expect = ['b', 'd'];
-        $actual = $this->exceptValues($associative, $excludeValues);
+        $actual = $this->exceptKeys($associative, $excludeValues);
         assertEquals($expect, $actual);
     }
 
     public function test_it_excludes_non_fillable_values(): void
     {
-        $keys = ['a', 'b', 'c'];
+        $keys = ['a', 'b', 'c', 'g', 'h'];
         $values = [
             'a' => 'testa',
             'c' => 'testc',
             'd' => 'testd',
+            'e' => 'teste',
+            'f' => 'testf',
+            'h' => 'testh',
         ];
+        $except = ['c', 'e', 'f'];
+        $unset = ['g', 'h'];
 
-        $padded = $this->getOnlyPaddedFillable($keys, $values, ['c']);
+        $padded = $this->getOnlyPaddedFillable($keys, $values, $except, $unset);
 
         self::assertArrayHasKey('a', $padded);
         self::assertArrayHasKey('b', $padded);
         self::assertNull($padded['b']);
         self::assertArrayNotHasKey('c', $padded);
         self::assertArrayNotHasKey('d', $padded);
+        self::assertArrayNotHasKey('e', $padded);
+        self::assertArrayNotHasKey('f', $padded);
+        self::assertArrayNotHasKey('g', $padded);
+        self::assertArrayHasKey('h', $padded);
     }
 }

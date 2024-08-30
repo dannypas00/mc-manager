@@ -124,6 +124,10 @@ class Server extends Model
         'ftp_host',
         'ftp_username',
         'ftp_password',
+        // SSH settings
+        'ssh_username',
+        'ssh_port',
+        'ssh_key',
     ];
 
     protected $casts = [

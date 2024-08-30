@@ -16,9 +16,17 @@ trait PadsArrayWithNull
         return array_keys(Arr::except(array_flip($input), $exceptValues));
     }
 
-    private function getOnlyPaddedFillable(array $fillable, array $data, array $hidden = []): array
+    private function getOnlyPaddedFillable(array $fillable, array $data, array $hidden = [], array $unsetIfNull = []): array
     {
         $keys = $this->exceptKeys($fillable, $hidden);
-        return $this->padArrayWithNull($keys, Arr::only($data, $keys));
+        $values = $this->padArrayWithNull($keys, Arr::only($data, $keys));
+
+        foreach ($unsetIfNull as $key) {
+            if (array_key_exists($key, $values) && $values[$key] === null) {
+                unset($values[$key]);
+            }
+        }
+
+        return $values;
     }
 }

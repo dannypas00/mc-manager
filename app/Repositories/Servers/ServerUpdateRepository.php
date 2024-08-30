@@ -5,6 +5,7 @@ namespace App\Repositories\Servers;
 use App\Models\Server;
 use App\Services\ServerConnectivityService;
 use App\Traits\PadsArrayWithNull;
+use Log;
 
 class ServerUpdateRepository
 {
@@ -29,12 +30,21 @@ class ServerUpdateRepository
     public function update(Server $server, array $data): Server
     {
         // Don't fill the hidden fields with null, since they won't be set to previous values in the frontend
-        $fillable = $this->exceptValues(
+        $fillableData = $this->getOnlyPaddedFillable(
             $server->getFillable(),
-            $server->getHidden() + ['icon', 'type']
+            $data,
+            ['icon', 'type'],
+            array_merge($server->getHidden(), ['enable_ftp', 'enable_ssh', 'is_sftp', 'use_ssh_auth'])
         );
 
-        $server->update($this->padArrayWithNull($fillable, $data));
-        return $server->refresh();
+        foreach ($fillableData as $key => $value) {
+            $server->$key = $value;
+        }
+
+        $server->save();
+
+        Log::debug('Server', ['server' => $server->toArray(), 'data' => $fillableData]);
+
+        return $server;
     }
 }

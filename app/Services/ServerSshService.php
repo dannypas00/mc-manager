@@ -50,8 +50,6 @@ class ServerSshService implements ServerStorageServiceInterface
             $command = $this->getSsh($server, $keypath)->getExecuteCommand('cd ' . static::BASE_PATH . PHP_EOL . $command);
             $process = Process::run($command);
 
-            File::delete($keypath);
-
             if (!$process->successful()) {
                 throw new SshException($process->errorOutput(), $process->exitCode());
             }
@@ -60,9 +58,10 @@ class ServerSshService implements ServerStorageServiceInterface
         } catch (SshException $e) {
             throw $e;
         } catch (Throwable $e) {
-            File::delete($keypath);
             Log::error('SSH exception', ['command' => $command, 'message' => $e->getMessage()]);
             throw new SshException('Unexpected exception whilst running ssh command', previous: $e);
+        } finally {
+            File::delete($keypath);
         }
     }
 

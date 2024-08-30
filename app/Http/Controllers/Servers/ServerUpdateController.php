@@ -14,6 +14,7 @@ use App\Services\ServerSshService;
 use Illuminate\Http\JsonResponse;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
+use Str;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -41,6 +42,11 @@ class ServerUpdateController extends Controller
 
         if ($request->hasFile('icon_file')) {
             $data['icon'] = $this->iconService->storeServerIcon($request->files->get('icon_file'));
+        }
+
+        // Ensure ssh keys end with a newline, otherwise they won't work
+        if ($request->has('ssh_key') && !Str::endsWith($data['ssh_key'], PHP_EOL)) {
+            $data['ssh_key'] .= PHP_EOL;
         }
 
         try {
