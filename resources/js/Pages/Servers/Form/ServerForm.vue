@@ -76,7 +76,6 @@ export default defineComponent({
       };
 
       // Connection segment
-      // TODO: IP address, host, SSH key, ftp creds
       const connectionSegment = {
         title: this.$t('pages.servers.form.connection_segment.title'),
         description: this.$t(

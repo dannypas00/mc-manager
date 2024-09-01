@@ -35,7 +35,6 @@ class ServerUpdateRequest extends FormRequest
         'is_custom'           => 'required|boolean',
         'custom_jar'          => 'sometimes|nullable|file|mimes:application/java-archive',
         'custom_docker_image' => 'sometimes|nullable|string',
-        'server_properties'   => 'sometimes|nullable|string'
     ];
 
     /**

@@ -12,6 +12,7 @@ use App\Repositories\Servers\ServerUpdateRepository;
 use App\Services\IconService;
 use App\Services\ServerSshService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
 use Str;
@@ -24,8 +25,7 @@ class ServerUpdateController extends Controller
         private readonly ServerUpdateRepository $updateRepository,
         private readonly ServerSshService $sshService,
         private readonly IconService $iconService,
-    ) {
-    }
+    ) {}
 
     /**
      * TODO: Type is immutable
@@ -56,7 +56,8 @@ class ServerUpdateController extends Controller
             try {
                 $this->pingSsh($server);
 
-                $this->putServerProperties($server, $request->get('server_properties') ?? '');
+                // Store the server icon as the server-icon.png in the file root
+                $this->putIconOnServer($server, $request->files->get('icon_file'));
             } catch (FilesystemException $e) {
                 throw new RuntimeException('errors.server.invalid_filesystem_connection', previous: $e);
             } catch (SshException $e) {
@@ -92,12 +93,8 @@ class ServerUpdateController extends Controller
      * @throws FilesystemException
      * @throws SshException
      */
-    private function putServerProperties(Server $server, string $inputProperties): void
+    private function putIconOnServer(Server $server, UploadedFile $icon): void
     {
-        $server->storage_service->put(
-            $server,
-            'server.properties',
-            file_get_contents(base_path('static/default_server.properties')) . $inputProperties
-        );
+        $server->storage_service->put($server, 'server-icon.png', $icon->getContent());
     }
 }

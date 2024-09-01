@@ -39,16 +39,6 @@
       required
     />
   </div>
-
-  <div class="h-[40vh] w-full">
-    <span v-t="'pages.servers.form.server_properties.label'" />
-    <VueMonacoEditor
-      theme="vs-dark"
-      :options="monacoOptions"
-      language="TOML"
-      v-model:value="serverStore.serverProperties"
-    />
-  </div>
 </template>
 
 <script lang="ts">
@@ -58,13 +48,11 @@ import ComboboxInput from '../../../Components/Form/ComboboxInput.vue';
 import { useServerEditStore } from '../../../Stores/Servers/ServerEditStore';
 import NeutralButton from '../../../Components/Buttons/NeutralButton.vue';
 import { useFileDialog } from '@vueuse/core';
-import VueMonacoEditor from '@guolao/vue-monaco-editor';
 import FormInput from '../../../Components/Form/FormInput.vue';
 
 export default defineComponent({
   components: {
     FormInput,
-    VueMonacoEditor,
     NeutralButton,
     ComboboxInput,
     ToggleButton,
@@ -80,11 +68,6 @@ export default defineComponent({
         multiple: false,
       }),
       customJar: undefined as undefined | File,
-      monacoOptions: {
-        automaticLayout: true,
-        formatOnType: true,
-        formatOnPaste: true,
-      },
     };
   },
 
