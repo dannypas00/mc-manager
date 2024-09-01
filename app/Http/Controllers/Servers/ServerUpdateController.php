@@ -93,8 +93,10 @@ class ServerUpdateController extends Controller
      * @throws FilesystemException
      * @throws SshException
      */
-    private function putIconOnServer(Server $server, UploadedFile $icon): void
+    private function putIconOnServer(Server $server, ?UploadedFile $icon): void
     {
-        $server->storage_service->put($server, 'server-icon.png', $icon->getContent());
+        if ($icon) {
+            $server->storage_service->put($server, 'server-icon.png', $icon->getContent());
+        }
     }
 }

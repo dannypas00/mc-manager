@@ -53,6 +53,8 @@ class ServerUpdateRequest extends FormRequest
                 ServerType::Managed => self::MINECRAFT_RULES,
             };
 
+        dd($this->allFiles());
+
         if ($rules['ssh_key'] && !$this->getServer()->is_ssh_key_filled) {
             $rules['ssh_key'] = 'required|string';
         }

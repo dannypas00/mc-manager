@@ -51,6 +51,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
         ],
       );
 
+      console.log(state.icon);
       return {
         ...filtered,
         icon_file: state.icon,

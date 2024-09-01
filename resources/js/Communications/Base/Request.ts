@@ -15,6 +15,8 @@ export abstract class Request<T, D = Record<string, never>> {
   protected abortController: AbortController = new AbortController();
   public isLoading: boolean = false;
   protected quiet: boolean = false;
+  protected headers: Record<string, string> = {};
+  protected isFormdata: boolean = false;
 
   private setValidationErrors(errors: ValidationError[]) {
     // TODO: Implement error store
@@ -35,12 +37,32 @@ export abstract class Request<T, D = Record<string, never>> {
   protected abstract getMethod(): Method;
 
   public async getResponse(): Promise<AxiosResponse<T, D>> {
-    const method = this.getMethod();
+    let method = this.getMethod();
 
     const useParams = ['GET', 'HEAD', 'OPTION'].includes(method.toUpperCase());
 
     // Completely kill all possible refs in data tree
-    const data = JSON.parse(JSON.stringify(this.data));
+    let data = JSON.parse(JSON.stringify(this.data));
+
+    // Laravel can't accept PUT or PATCH requests for some content types, so we need to set _method
+    if (method == 'PUT' || method == 'PATCH') {
+      data['_method'] = method;
+      method = 'POST';
+    }
+
+    // Files only come along when formdata is used
+    if (this.isFormdata) {
+      let formData = new FormData();
+      _.each(data, (value, key) => {
+        console.log(key, value, value instanceof File);
+        if (value instanceof File) {
+          formData.append(key, value, value.name);
+        } else {
+          formData.append(key, value);
+        }
+      });
+      data = formData;
+    }
 
     if (this.isLoading) {
       this.cancel('Request overlap');
@@ -60,6 +82,7 @@ export abstract class Request<T, D = Record<string, never>> {
         params: useParams ? data : [],
         withCredentials: true,
         signal: this.abortController.signal,
+        headers: this.headers,
       } as AxiosRequestConfig<D>);
     } catch (error) {
       if (error instanceof AxiosError) {
