@@ -71,6 +71,7 @@ class ServerUpdateControllerTest extends UnitTestCase
             'server_properties' => "pvp=false\n",
             'enable_ssh'        => true,
             'enabled'           => true,
+            'version'           => '1.21.1',
         ];
         $data = array_merge($attributes, [
             'icon_file' => UploadedFile::fake()->image('icon.jpg'),
