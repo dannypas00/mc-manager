@@ -1,5 +1,7 @@
 {
   "server": {
-    "invalid_ssh_connection": "Invalid SSH settings"
+    "invalid_ssh_connection": "Invalid SSH settings",
+    "no_ssh_key_provided": "No SSH key configured for server",
+    "not_enough_connection_for_storage": "Not enough settings provided to set up a storage connection"
   }
 }

@@ -12,10 +12,10 @@ use App\Repositories\Servers\ServerUpdateRepository;
 use App\Services\IconService;
 use App\Services\ServerSshService;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
 use Str;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -25,7 +25,8 @@ class ServerUpdateController extends Controller
         private readonly ServerUpdateRepository $updateRepository,
         private readonly ServerSshService $sshService,
         private readonly IconService $iconService,
-    ) {}
+    ) {
+    }
 
     /**
      * TODO: Type is immutable
@@ -46,9 +47,10 @@ class ServerUpdateController extends Controller
             $data['icon'] = $this->iconService->storeServerIcon($request->files->get('icon_file'));
         }
 
-        // Ensure ssh keys end with a newline, otherwise they won't work
-        if ($request->has('ssh_key') && !Str::endsWith($data['ssh_key'], PHP_EOL)) {
-            $data['ssh_key'] .= PHP_EOL;
+        if (!$server->ssh_key && !$request->has('ssh_key')) {
+            return new JsonResponse([
+                'errors' => 'errors.server.no_ssh_key_provided'
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         try {
@@ -57,7 +59,9 @@ class ServerUpdateController extends Controller
                 $this->pingSsh($server);
 
                 // Store the server icon as the server-icon.png in the file root
-                $this->putIconOnServer($server, $request->files->get('icon_file'));
+                if ($data['icon']) {
+                    $this->putIconOnServer($server, $data['icon']);
+                }
             } catch (FilesystemException $e) {
                 throw new RuntimeException('errors.server.invalid_filesystem_connection', previous: $e);
             } catch (SshException $e) {
@@ -93,10 +97,8 @@ class ServerUpdateController extends Controller
      * @throws FilesystemException
      * @throws SshException
      */
-    private function putIconOnServer(Server $server, ?UploadedFile $icon): void
+    private function putIconOnServer(Server $server, string $iconPath): void
     {
-        if ($icon) {
-            $server->storage_service->put($server, 'server-icon.png', $icon->getContent());
-        }
+        $server->storage_service->put($server, 'server-icon.png', app(IconService::class)->getIcon($iconPath));
     }
 }

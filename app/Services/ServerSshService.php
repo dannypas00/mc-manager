@@ -49,6 +49,7 @@ class ServerSshService implements ServerStorageServiceInterface
 
             $command = $this->getSsh($server, $keypath)->getExecuteCommand('cd ' . static::BASE_PATH . PHP_EOL . $command);
             $process = Process::run($command);
+            Log::debug($process->output() . PHP_EOL . $process->errorOutput());
 
             if (!$process->successful()) {
                 throw new SshException($process->errorOutput(), $process->exitCode());
@@ -163,7 +164,8 @@ class ServerSshService implements ServerStorageServiceInterface
      */
     public function put(Server $server, string $path, string $content): void
     {
-        $this->executeSsh($server, "echo '$content' > ./$path");
+        $base64 = base64_encode($content);
+        $this->executeSsh($server, "echo '$base64' | base64 -d - > ./$path");
     }
 
     /**

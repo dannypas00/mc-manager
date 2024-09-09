@@ -33,7 +33,7 @@ class ServerUpdateRepository
         $fillableData = $this->getOnlyPaddedFillable(
             $server->getFillable(),
             $data,
-            ['icon', 'type'],
+            ['type'],
             ['enable_ftp', 'enable_ssh', 'is_sftp', 'use_ssh_auth', 'ssh_key', 'ftp_password', 'rcon_password']
         );
 

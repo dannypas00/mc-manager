@@ -6,6 +6,7 @@ use App\Enums\ServerType;
 use App\Models\Server;
 use App\Repositories\Servers\FrontendServerShowRepository;
 use Illuminate\Foundation\Http\FormRequest;
+use Str;
 
 class ServerUpdateRequest extends FormRequest
 {
@@ -67,5 +68,15 @@ class ServerUpdateRequest extends FormRequest
         }
 
         return $this->model;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('ssh_key')) {
+            // Remove Windows line endings and ensure file ends with newline
+            $this->merge([
+                'ssh_key' => str_replace("\r\n", "\n", $this->input('ssh_key')) . Str::endsWith(PHP_EOL, $this->get('ssh_key')) ? '' : PHP_EOL,
+            ]);
+        }
     }
 }
