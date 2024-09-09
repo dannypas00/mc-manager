@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use Illuminate\Http\UploadedFile;
+use Intervention\Image\Laravel\Facades\Image;
 use Storage;
 use Str;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class IconService
 {
@@ -13,8 +14,12 @@ class IconService
      */
     public function storeServerIcon(UploadedFile $file): string
     {
-        $location = 'server_icons/' . Str::uuid() . '.' . $file->extension();
-        $this->disk()->putFileAs($location, $file);
+        $location = 'server_icons/' . Str::uuid() . '.' . $file->getPathInfo()?->getExtension() ?? 'png';
+        $stream = Image::read($file)
+            ->resize(64, 64)
+            ->toPng()
+            ->toFilePointer();
+        $this->disk()->writeStream($location, $stream);
 
         return $location;
     }

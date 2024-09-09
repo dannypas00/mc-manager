@@ -4,14 +4,14 @@
     <hr />
   </div>
 
-  <ToggleButton
-    v-model="serverStore.model.enable_ssh"
-    :label="$t('pages.servers.form.enable_ssh.label')"
-  />
+  <!--<ToggleButton-->
+  <!--  v-model="serverStore.model.enable_ssh"-->
+  <!--  :label="$t('pages.servers.form.enable_ssh.label')"-->
+  <!--/>-->
 
+  <!--v-if="serverStore.model.enable_ssh"-->
   <div
     class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8"
-    v-if="serverStore.model.enable_ssh"
   >
     <FormInput
       id="ssh-port"

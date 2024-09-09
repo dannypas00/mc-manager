@@ -19,7 +19,7 @@ class ServerUpdateRequest extends FormRequest
         'enable_ssh'   => 'required|boolean|accepted_if:enable_ftp,false',
         'ssh_port'     => 'required|integer|min:0|max:65535',
         'ssh_username' => 'required|string',
-        'ssh_key'      => 'sometimes|nullable|string',
+        'ssh_key'      => 'sometimes|string',
     ];
 
     private const CONNECTION_RULES = [
@@ -32,9 +32,9 @@ class ServerUpdateRequest extends FormRequest
 
     private const MINECRAFT_RULES = [
         'version'             => 'required_if:is_custom,false|string',
-        'is_custom'           => 'required|boolean',
-        'custom_jar'          => 'sometimes|nullable|file|mimes:application/java-archive',
-        'custom_docker_image' => 'sometimes|nullable|string',
+        'is_custom'           => 'sometimes|boolean',
+        'custom_jar'          => 'sometimes|file|mimes:application/java-archive',
+        'custom_docker_image' => 'sometimes|string',
     ];
 
     /**
@@ -45,15 +45,13 @@ class ServerUpdateRequest extends FormRequest
         $rules = [
                 'enabled'     => 'required|boolean',
                 'name'        => 'required|string',
-                'description' => 'sometimes|nullable|string',
-                'icon_file'   => 'sometimes|nullable|image',
+                'description' => 'sometimes|string',
+                'icon_file'   => 'sometimes|image',
             ] + match ($this->getServer()->type) {
                 ServerType::Manual => self::SSH_RULES + self::CONNECTION_RULES + self::MINECRAFT_RULES,
                 ServerType::Installed => self::SSH_RULES + self::MINECRAFT_RULES,
                 ServerType::Managed => self::MINECRAFT_RULES,
             };
-
-        dd($this->allFiles());
 
         if ($rules['ssh_key'] && !$this->getServer()->is_ssh_key_filled) {
             $rules['ssh_key'] = 'required|string';

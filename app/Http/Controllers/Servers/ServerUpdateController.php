@@ -12,7 +12,7 @@ use App\Repositories\Servers\ServerUpdateRepository;
 use App\Services\IconService;
 use App\Services\ServerSshService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\UploadedFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
 use Str;

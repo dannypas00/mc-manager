@@ -9,7 +9,7 @@ import { ServerData } from '../../Types/generated';
 export const useServerEditStore = defineStore('ServerEdit', {
   state: () => ({
     model: {} as ServerData,
-    original: {} as FormData,
+    original: {} as unknown,
     showRequest: new ServerShowRequest(),
     updateRequest: new ServerUpdateRequest(),
 
@@ -23,11 +23,11 @@ export const useServerEditStore = defineStore('ServerEdit', {
       return !_.isEqual(this.dereferenced, state.original);
     },
 
-    dereferenced (): FormData {
+    dereferenced (): Record<string, any> {
       return JSON.parse(JSON.stringify(this.requestData));
     },
 
-    requestData (state): FormData {
+    requestData (state): Record<string, any> {
       const filtered = _.pick(
         state.model,
         [
@@ -51,6 +51,8 @@ export const useServerEditStore = defineStore('ServerEdit', {
         ],
       );
 
+      console.log(filtered, state.model);
+
       console.log(state.icon);
       return {
         ...filtered,
@@ -58,7 +60,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
         is_custom: state.customizeInstallProcess,
         custom_docker_image: state.dockerImage,
         // custom_jar: state.customJar,
-      } as unknown as FormData;
+      };
     },
   },
 
@@ -82,8 +84,7 @@ export const useServerEditStore = defineStore('ServerEdit', {
         enable_ftp: true,
         enable_ssh: true,
         users: [useUserStore().user],
-        // Casting to unknown first because not all required fields are available yet
-      } as unknown as ServerData;
+      } as ServerData;
       this.original = this.dereferenced;
     },
 

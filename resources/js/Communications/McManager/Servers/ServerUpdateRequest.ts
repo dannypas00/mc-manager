@@ -4,7 +4,6 @@ import { Method } from 'axios';
 
 export class ServerUpdateRequest extends Request<Server> {
   private id?: number;
-  protected isFormdata = true;
 
   protected getEndPoint(): string {
     return route('api.servers.update', { id: this.id }) as string;
@@ -19,7 +18,7 @@ export class ServerUpdateRequest extends Request<Server> {
     return this;
   }
 
-  public setData(data: FormData): this {
+  public setData(data: Record<string, any>): this {
     this.data = data;
     return this;
   }

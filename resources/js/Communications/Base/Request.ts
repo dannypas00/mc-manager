@@ -1,24 +1,18 @@
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  Method,
-} from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { ValidationError } from './ValidationError';
 import _ from 'lodash';
 import { useToast } from 'vue-toastification';
 import I18n from '../../i18n';
 
-export abstract class Request<T, D = Record<string, never>> {
+export abstract class Request<T, D extends Record<string, any> = Record<string, any>> {
   protected data: D = {} as D;
   protected validationErrors: ValidationError[] = [];
   protected abortController: AbortController = new AbortController();
   public isLoading: boolean = false;
   protected quiet: boolean = false;
   protected headers: Record<string, string> = {};
-  protected isFormdata: boolean = false;
 
-  private setValidationErrors(errors: ValidationError[]) {
+  private setValidationErrors (errors: ValidationError[]) {
     // TODO: Implement error store
     this.validationErrors = errors ?? [];
 
@@ -32,36 +26,36 @@ export abstract class Request<T, D = Record<string, never>> {
     }
   }
 
-  protected abstract getEndPoint(): string;
+  protected abstract getEndPoint (): string;
 
-  protected abstract getMethod(): Method;
+  protected abstract getMethod (): Method;
 
-  public async getResponse(): Promise<AxiosResponse<T, D>> {
+  public async getResponse (): Promise<AxiosResponse<T, D>> {
     let method = this.getMethod();
 
     const useParams = ['GET', 'HEAD', 'OPTION'].includes(method.toUpperCase());
 
-    // Completely kill all possible refs in data tree
-    let data = JSON.parse(JSON.stringify(this.data));
+    // Files only come along when formdata is used
+    let formData = new FormData();
+    _.each(this.data, (value: any, key: string) => {
+      if (value === null || value === undefined || value === '') {
+        return;
+      }
+
+      if (value instanceof File) {
+        formData.append(key, value, value.name);
+      } else if (typeof value === 'boolean') {
+        console.log(key, value);
+        formData.append(key, value ? '1' : '0');
+      } else {
+        formData.append(key, value);
+      }
+    });
 
     // Laravel can't accept PUT or PATCH requests for some content types, so we need to set _method
     if (method == 'PUT' || method == 'PATCH') {
-      data['_method'] = method;
+      formData.append('_method', method);
       method = 'POST';
-    }
-
-    // Files only come along when formdata is used
-    if (this.isFormdata) {
-      let formData = new FormData();
-      _.each(data, (value, key) => {
-        console.log(key, value, value instanceof File);
-        if (value instanceof File) {
-          formData.append(key, value, value.name);
-        } else {
-          formData.append(key, value);
-        }
-      });
-      data = formData;
     }
 
     if (this.isLoading) {
@@ -75,15 +69,14 @@ export abstract class Request<T, D = Record<string, never>> {
     this.setValidationErrors([]);
 
     try {
-      return await axios.request<T, AxiosResponse<T>, D>({
+      return await axios.request<T, AxiosResponse<T>>({
         url: this.getEndPoint(),
         method,
-        data: useParams ? [] : data,
-        params: useParams ? data : [],
+        data: formData,
         withCredentials: true,
         signal: this.abortController.signal,
         headers: this.headers,
-      } as AxiosRequestConfig<D>);
+      } as AxiosRequestConfig);
     } catch (error) {
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
@@ -104,11 +97,11 @@ export abstract class Request<T, D = Record<string, never>> {
     }
   }
 
-  public cancel(reason?: string) {
+  public cancel (reason?: string) {
     this.abortController.abort(reason);
   }
 
-  public setQuiet(quiet: boolean): this {
+  public setQuiet (quiet: boolean): this {
     this.quiet = quiet;
     return this;
   }
