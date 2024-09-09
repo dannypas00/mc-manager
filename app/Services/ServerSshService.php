@@ -6,6 +6,7 @@ use App\Exceptions\SshException;
 use App\Models\Server;
 use Carbon\Carbon;
 use File;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Process\ProcessResult;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Process;
@@ -99,7 +100,11 @@ class ServerSshService implements ServerStorageServiceInterface
         if (empty($path)) {
             $path = '.';
         }
-        $process = $this->executeSsh($server, "ls -lA --full-time $path");
+        try {
+            $process = $this->executeSsh($server, "ls -lA --full-time $path");
+        } catch (SshException $e) {
+            throw new FileNotFoundException();
+        }
 
         $ls = collect(
             explode(
@@ -116,7 +121,7 @@ class ServerSshService implements ServerStorageServiceInterface
         try {
             $mimes = collect(explode(PHP_EOL, $this->executeSsh($server, "file --mime-type $path/*")->output()));
         } catch (SshException $e) {
-            // When file can't be executed (because it is not a GNU command and so not present on all systems), we stop trying to understand the mimetype
+            // When file can't be executed (because it is not a GNU command and so not present on some Linux systems like Alpine), we stop trying to understand the mimetype
             // Instead we tell the user that every file is an application/octet-stream, because "The "octet-stream" subtype is used to indicate that a body contains arbitrary binary data."
             $mimes = collect();
         }

@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Implement empty state if 'empty' === true -->
   <div class="px-4 sm:px-6 lg:px-8">
     <!-- Header -->
     <div class="sm:flex sm:items-center">

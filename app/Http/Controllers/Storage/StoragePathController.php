@@ -15,7 +15,6 @@ use League\Flysystem\FilesystemException;
 class StoragePathController extends Controller
 {
     /**
-     * @throws FileNotFoundException
      * @throws FilesystemException
      * @throws SshException
      */
@@ -26,9 +25,16 @@ class StoragePathController extends Controller
     ): Response {
         $server = $showRepository->show($id);
 
-        return Inertia::render('Servers/Files/ServerFiles', [
-            'path' => $path ?? '',
-            ...$server->storage_service->listContents($server, $path ?? '')
-        ]);
+        try {
+            return Inertia::render('Servers/Files/ServerFiles', [
+                'path' => $path ?? '',
+                ...$server->storage_service->listContents($server, ltrim($path ?? '', '/'))
+            ]);
+        } catch (FileNotFoundException) {
+            return Inertia::render('Servers/Files/ServerFiles', [
+                'path'  => $path ?? '',
+                'empty' => true,
+            ]);
+        }
     }
 }
