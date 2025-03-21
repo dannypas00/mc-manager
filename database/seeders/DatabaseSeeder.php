@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\UniqueConstraintViolationException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,12 +16,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name'     => 'Test User',
-            'email'    => 'test@example.com',
-            'password' => 'test1234',
-        ]);
+        try {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'password' => 'test1234',
+            ]);
 
-        User::factory(30)->create();
+            User::factory(30)->create();
+        } catch (UniqueConstraintViolationException) {
+            // User already exists
+        }
+
+        $this->call(ServerSeeder::class);
     }
 }
