@@ -19,7 +19,7 @@ x-function-php: &php
     context: .docker/local/
   working_dir: /app
   environment:
-    APP_NAME: "laravel-template-project"
+    APP_NAME: "mc-manager"
   command:
     - sleep
     - infinity
