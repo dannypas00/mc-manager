@@ -1,49 +1,78 @@
+x-function-base: &base
+  restart: unless-stopped
+  env_file:
+    - path: .env
+      required: true
+  command:
+    - sleep
+    - infinity
+  profiles:
+    - dev
+    - prod
+  user: ${CUSTOM_USER:-1000}
+
+x-function-php: &php
+  restart: unless-stopped
+  user: ${CUSTOM_USER:-1000}
+  build:
+    dockerfile: cli.Dockerfile
+    context: .docker/local/
+  working_dir: /app
+  environment:
+    APP_NAME: "laravel-template-project"
+  command:
+    - sleep
+    - infinity
+  volumes:
+    - ./:/app:rw
+    - ./.docker/local/tests/output:/opt/phpstorm-coverage:rw
+    - $HOME/.config:/home/app/.config:rw
+  profiles:
+    - dev
+    - prod
+
 services:
   db:
+    <<: *base
     container_name: ${APP_NAME}-db
     image: mariadb:latest
-    env_file:
-      - path: .env
-        required: true
+    user: root
     ports:
       - "${MARIADB_PORT:-3306}:${MARIADB_PORT:-3306}"
     volumes:
-      - mc-manager-mysql:/var/lib/mysql/
+      - mysql:/var/lib/mysql/
     command:
       - mariadbd
       - --port=${MARIADB_PORT:-3306}
-    profiles:
-      - dev
-      - prod
 
   redis:
+    <<: *base
     container_name: ${APP_NAME}-redis
     image: redis:latest
-    env_file:
-      - path: .env
-        required: true
-    profiles:
-      - dev
-      - prod
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - no
+    user: root
 
   php:
+    <<: *php
     container_name: ${APP_NAME}-php
-    extends:
-      file: .docker/local/php-docker-compose.yaml
-      service: base-php
     command:
       - sleep
       - infinity
-    profiles:
+    profiles: !override
       - dev
 
   node:
+    <<: *base
     container_name: ${APP_NAME}-node
-    restart: unless-stopped
-    image: dannypas00/node
+    image: dannypas00/node:22.11.0
+    user: ${CUSTOM_USER:-1000}
     ports:
       - 5174:5174
-    user: ${CUSTOM_USER:-1000}
     working_dir: /app
     command:
       - npx
@@ -51,19 +80,16 @@ services:
       - --host
       - --port=5174
     volumes:
-      - ./:/app
-      - ${NPM_CACHE_DIR:-$HOME/.npm}:/var/www/.npm:rw
-    profiles:
+      - ./:/app:rw
+    profiles: !override
       - dev
 
   horizon:
+    <<: *php
     container_name: ${APP_NAME}-horizon
     depends_on:
       - redis
       - db
-    extends:
-      file: .docker/local/php-docker-compose.yaml
-      service: base-php
     command:
       - php
       - artisan
@@ -73,10 +99,8 @@ services:
       - prod
 
   schedule:
+    <<: *php
     container_name: ${APP_NAME}-schedule
-    extends:
-      file: .docker/local/php-docker-compose.yaml
-      service: base-php
     command:
       - php
       - artisan
@@ -86,10 +110,8 @@ services:
       - prod
 
   reverb:
+    <<: *php
     container_name: ${APP_NAME}-reverb
-    extends:
-      file: .docker/local/php-docker-compose.yaml
-      service: base-php
     command:
       - php
       - artisan
@@ -99,121 +121,43 @@ services:
       - --debug
     ports:
       - "${REVERB_PORT:-6001}:6001"
-    profiles:
-      - dev
-      - prod
 
   frank:
+    <<: *php
     container_name: ${APP_NAME}-frank
-    restart: unless-stopped
     build:
       dockerfile: .docker/local/frankenphp.Dockerfile
       context: .
       args:
         USER: ${CUSTOM_USER:-app}
-    env_file:
-      - path: .env
-        required: true
     depends_on:
       - reverb
     ports:
       - "${FRANKENPHP_PORT:-80}:8000"
     volumes:
-      - ./:/app
+      - ./:/app:rw
+      - ./.docker/local/tests/output:/opt/phpstorm-coverage:rw
+      - $HOME/.config:/home/app/.config:rw
       - caddy_data:/data
       - caddy_config:/config
     tty: true
-    command: [ "php", "artisan", "octane:frankenphp", "--watch", "--caddyfile=/app/.docker/local/Caddyfile" ]
-    profiles:
-      - dev
-      - prod
+    command:
+      - php
+      - artisan
+      - octane:frankenphp
+      - --watch
+      - --caddyfile=/app/.docker/local/Caddyfile
 
   mailpit:
+    <<: *base
     container_name: ${APP_NAME}-mailpit
     image: axllent/mailpit:latest
-    env_file:
-      - path: .env
-        required: true
+    command: []
     ports:
       - "${MAILPIT_PORT:-1025}:1025"
       - "${MAILPIT_INTERFACE_PORT:-8025}:8025"
-    profiles:
-      - dev
-      - prod
-
-  minecraft:
-    container_name: ${APP_NAME}-minecraft
-    image: openjdk:22-slim
-    ports:
-      - '25565:25565'
-      - '25575:25575'
-    user: 1000:1000
-    volumes:
-      - .docker/local/minecraft:/minecraft
-    working_dir: /minecraft
-    restart: on-failure
-    command:
-      - java
-      - -Xmx1G
-      - -Xms1G
-      - -jar
-      - server.jar
-      - nogui
-    profiles:
-      - dev
-      - prod
-
-  ftp:
-    container_name: ${APP_NAME}-ftp
-    image: delfer/alpine-ftp-server:latest
-    ports:
-      - '21:21'
-      - '21000-21010:21000-21010'
-    environment:
-      - 'USERS=mcm-test|mcm-test|/minecraft|1000'
-    volumes:
-      - .docker/local/minecraft:/minecraft
-    profiles:
-      - dev
-      - prod
-
-  sftp:
-    container_name: ${APP_NAME}-sftp
-    image: atmoz/sftp:alpine
-    ports:
-      - '23:22'
-    environment:
-      - 'SFTP_USERS=mcm-test:mcm-test:::/minecraft'
-    volumes:
-      - .docker/local/minecraft:/minecraft
-    profiles:
-      - dev
-      - prod
-
-  ssh:
-    container_name: ${APP_NAME}-ssh
-    build:
-      dockerfile: .docker/local/ssh/Dockerfile
-      context: .
-    ports:
-      - '2222:2222'
-    environment:
-      - 'PUID=1000'
-      - 'PGID=1000'
-      - 'TZ=Etc/UTC'
-      - 'USER_NAME=mcm-test'
-      - 'PUBLIC_KEY_FILE=/public_key'
-      - 'LOG_STDOUT=true'
-    volumes:
-      - .docker/local/minecraft:/minecraft
-      - .docker/local/public_key:/public_key
-    profiles:
-      - dev
-      - prod
-
 
 volumes:
-  mc-manager-mysql:
-  npm-cache:
+  mysql:
   caddy_data:
   caddy_config:
