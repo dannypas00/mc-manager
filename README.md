@@ -116,15 +116,6 @@ To run the project locally, after installation simply run `docker compose up -d`
 
 To change ports of services, change the [.env](.env) file, ports are imported from there.
 
-### Install
-
-1. Due to EULA reasons, for local development please download the minecraft server jar manually
-   from https://www.minecraft.net/en-us/download/server and save it to .docker/local/minecraft/server.jar
-2. Don't forget to accept the [EULA](.docker/local/minecraft/eula.txt) and restart the Minecraft server after the first
-   run
-3. Ensure you run `php artisan storage:link` from inside the php docker container
-4. Run the seeders to seed a default user (test@test.com : test1234) and the local development Minecraft server
-
 ### Infrastructure
 
 A couple services are run from the Docker Compose configuration:

@@ -2,19 +2,6 @@ SHELL := bash
 
 ENV ?= local
 
-# Replace these values with your own, escape spaces with backslashes (in fullname for example)
-GITHUB_URL ?= github\.com\/dannypas00\/mc-manager
-PROJECT_NAMESPACE ?= dannypas00
-PROJECT_NAME ?= mc-manager
-DEVELOPER_FULLNAME ?= Danny\ Pas
-DEVELOPER_USERNAME ?= dannypas00
-DEVELOPER_EMAIL ?= mc-manager@dannypas00.com
-
-# DO NOT CHANGE THESE BEFORE RUNNING TEMPLATE TARGET
-# Replacement map using sed (see $(TEMPLATES) target below)
-TEMPLATE_GITHUB_URL = github\.com\/dannypas00\/laravel-template
-TEMPLATES = $(TEMPLATE_GITHUB_URL)/$(GITHUB_URL) laravel-template-namespace/$(PROJECT_NAMESPACE) laravel-template-project/$(PROJECT_NAME) laravel-template-fullname/$(DEVELOPER_FULLNAME) laravel-template-username/$(DEVELOPER_USERNAME) laravel-template@example.com/$(DEVELOPER_EMAIL)
-
 NO_DOCKER ?= false
 
 DOCKER ?= docker
@@ -41,18 +28,13 @@ PHP ?= $(PHP_CONTAINER) php
 COMPOSER ?= $(PHP_CONTAINER) composer
 NPM ?= $(NODE_CONTAINER) npm
 
+MINECRAFT_DOWNLOAD_LINK = https://piston-data.mojang.com/v1/objects/4707d00eb834b446575d89a61a11b5d548d8c001/server.jar
+
 # First target not starting with "." is default target
 all: project-setup
 
-.PHONY: template $(TEMPLATES)
-template: $(TEMPLATES)
-$(TEMPLATES):
-	@# Get all files containing the TEMPLATE_PATTERN and replace it with PROJECT_NAME.
-	@# This fails if no files are found (script has already run), hence the || true.
-	@grep -rl "laravel-template" . --exclude-dir=public/build --exclude-dir=vendor --exclude-dir=node_modules --exclude-dir=.idea --exclude=Makefile --exclude-dir=.git | xargs sed -i 's/$(@)/g' || true
-
 .PHONY: prod clean install deploy project-setup clear-cache dependencies
-install: $(TEMPLATES) dependencies .env docker-build composer.lock package-lock.json vendor node_modules up app-key
+install: $(TEMPLATES) dependencies .env docker-build composer.lock vendor/ node_modules up app-key storage/app/profile-images/
 project-setup: install init-db test-integration vendor/autoload.php
 
 dependencies:
@@ -76,8 +58,8 @@ clear-cache: up
 	@# Copy env.example file if env file doesn't exist yet
 	[[ -f .env ]] || cp .env.example .env
 
-vendor: composer.lock
-composer.lock:
+vendor/: composer.lock
+composer.lock: composer.json
 ifeq ($(ENV), local)
 	$(COMPOSER) install --prefer-dist
 else
@@ -85,21 +67,21 @@ else
 endif
 	$(COMPOSER) clear-cache --gc
 
-vendor/autoload.php:
+vendor/autoload.php: vendor/
 ifeq ($(ENV), local)
 	$(COMPOSER) dump-autoload
 else
 	$(COMPOSER) dump-autoload --classmap-authoritative --apcu
 endif
 
-node_modules:
+node_modules: package-lock.json
 ifeq ($(NODE_LOCAL), true)
 	npm ci $(NPM_INSTALL_ARGS)
 else
 	$(NPM) ci $(NPM_INSTALL_ARGS)
 endif
 
-package-lock.json:
+package-lock.json: package.json
 ifeq ($(NODE_LOCAL), true)
 	npm install $(NPM_INSTALL_ARGS)
 else
@@ -123,7 +105,7 @@ else
 	$(PHP) artisan migrate
 endif
 
-database/seeders/: drop-db database/migrations/ database/factories/ up
+database/seeders/: up
 ifeq ($(ENV), local)
 	$(PHP) artisan db:seed
 endif
@@ -134,7 +116,7 @@ ifneq ($(NO_DOCKER), true)
 	$(DOCKER_COMPOSE) $(COMPOSE_PROFILE) build --pull
 endif
 
-up:
+up: .docker/local/minecraft/server.jar
 ifneq ($(NO_DOCKER), true)
 	$(DOCKER_COMPOSE) $(COMPOSE_PROFILE) up -d --remove-orphans --wait
 endif
@@ -157,8 +139,19 @@ app-key: .env up
 	@# Only generate an app key if the .env doesn't have one yet
 	(grep "^APP_KEY=$$" .env && $(PHP) artisan key:generate && $(DOCKER_COMPOSE) $(COMPOSE_PROFILE) restart frank) || true
 
-resources/js/: package-lock.json
+resources/js/: node_modules
 	@# If public/hot is present, laravel will try to serve from vite server
 	@rm public/hot || true
 	$(NPM) run build
 
+.docker/local/minecraft/server.jar: .docker/local/minecraft/eula.txt .docker/local/minecraft/server.properties
+	curl -fsSL $(MINECRAFT_DOWNLOAD_LINK) -o .docker/local/minecraft/server.jar
+
+.docker/local/minecraft/eula.txt:
+	echo "eula=true" > .docker/local/minecraft/eula.txt
+
+.docker/local/minecraft/server.properties:
+	cp .docker/local/minecraft/server.properties.example .docker/local/minecraft/server.properties
+
+storage/app/profile-images/: up
+	$(PHP) artisan storage:link
