@@ -153,5 +153,5 @@ resources/js/: node_modules
 .docker/local/minecraft/server.properties:
 	cp .docker/local/minecraft/server.properties.example .docker/local/minecraft/server.properties
 
-storage/app/profile-images/: up
+public/profile-images: up
 	$(PHP) artisan storage:link
