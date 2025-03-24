@@ -164,6 +164,8 @@ services:
     ports:
       - '25565:25565'
     user: 1000:1000
+    volumes:
+      - .docker/local/minecraft:/data
     restart: on-failure
     environment:
       EULA: "TRUE"

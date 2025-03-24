@@ -75,8 +75,9 @@ class Rcon
 
     public function disconnect()
     {
-        if ($this->socket) {
+        if (isset($this->socket)) {
             fclose($this->socket);
+            unset($this->socket);
         }
     }
 
