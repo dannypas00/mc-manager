@@ -4,15 +4,67 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Rcon\Rcon;
 use Database\Factories\ServerFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $name
+ * @property bool $enabled
+ * @property string|null $minecraft_host
+ * @property int|null $minecraft_port
+ * @property int|null $rcon_port
+ * @property mixed|null $rcon_password
+ * @property string|null $ftp_host
+ * @property int|null $ftp_port
+ * @property string|null $ftp_username
+ * @property mixed|null $ftp_password
+ * @property string|null $ssh_host
+ * @property int|null $ssh_port
+ * @property mixed|null $ssh_key
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Rcon $rcon
+ * @property-read User $user
+ *
+ * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereEnabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpHost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpPassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpPort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereMinecraftHost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereMinecraftPort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereRconPassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereRconPort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshHost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshPort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereUserId($value)
+ *
+ * @mixin \Eloquent
+ *
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ */
 class Server extends Model
 {
     /** @use HasFactory<ServerFactory> */
     use HasFactory;
+
+    private Rcon $rcon;
 
     protected $fillable = [
         'name',
@@ -58,5 +110,19 @@ class Server extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getRconAttribute(): Rcon
+    {
+        if (!$this->rcon) {
+            $this->rcon = new Rcon(
+                $this->minecraft_host,
+                $this->rcon_port,
+                $this->rcon_password,
+                30,
+            );
+        }
+
+        return $this->rcon;
     }
 }
