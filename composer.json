@@ -28,10 +28,11 @@
         "laravel/telescope": "^5.1",
         "laravel/tinker": "^2.9",
         "spatie/laravel-data": "^4.4",
+        "spatie/laravel-query-builder": "^6.3",
         "spatie/laravel-typescript-transformer": "^2.4",
         "spatie/laravel-webhook-client": "^3.3",
-        "tightenco/ziggy": "^2.0",
-        "spatie/laravel-query-builder": "^6.3"
+        "spatie/ssh": "^1.13",
+        "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
         "brianium/paratest": "^7",

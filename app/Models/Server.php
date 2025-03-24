@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Rcon\Rcon;
 use Database\Factories\ServerFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -100,10 +101,10 @@ class Server extends Model
     protected function casts(): array
     {
         return [
-            'enabled'       => 'boolean',
+            'enabled' => 'boolean',
             'rcon_password' => 'encrypted',
-            'ftp_password'  => 'encrypted',
-            'ssh_key'       => 'encrypted',
+            'ftp_password' => 'encrypted',
+            'ssh_key' => 'encrypted',
         ];
     }
 
@@ -112,17 +113,13 @@ class Server extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getRconAttribute(): Rcon
+    public function rcon(): Attribute
     {
-        if (!$this->rcon) {
-            $this->rcon = new Rcon(
-                $this->minecraft_host,
-                $this->rcon_port,
-                $this->rcon_password,
-                30,
-            );
-        }
-
-        return $this->rcon;
+        return Attribute::get(fn () => new Rcon(
+            $this->minecraft_host,
+            $this->rcon_port,
+            $this->rcon_password,
+            30,
+        ))->shouldCache();
     }
 }

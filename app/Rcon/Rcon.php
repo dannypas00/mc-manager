@@ -60,10 +60,10 @@ class Rcon
             return false;
         }
 
-        //set timeout
+        // set timeout
         stream_set_timeout($this->socket, 3, 0);
 
-        //authorize
+        // authorize
         $auth = $this->authorize();
 
         if ($auth) {
@@ -73,7 +73,7 @@ class Rcon
         return false;
     }
 
-    public function disconnect()
+    public function disconnect(): void
     {
         if (isset($this->socket)) {
             fclose($this->socket);
@@ -114,8 +114,8 @@ class Rcon
         $this->write_packet(self::PACKET_AUTHORIZE, self::SERVERDATA_AUTH, $this->password);
         $response_packet = $this->read_packet();
 
-        if ($response_packet['type'] == self::SERVERDATA_AUTH_RESPONSE) {
-            if ($response_packet['id'] == self::PACKET_AUTHORIZE) {
+        if ($response_packet['type'] === self::SERVERDATA_AUTH_RESPONSE) {
+            if ($response_packet['id'] === self::PACKET_AUTHORIZE) {
                 $this->authorized = true;
 
                 return true;
@@ -130,7 +130,7 @@ class Rcon
     /**
      * Writes a packet to the socket stream..
      */
-    private function write_packet($packet_id, $packet_type, $packet_body)
+    private function write_packet($packet_id, $packet_type, $packet_body): void
     {
         /*
         Size      32-bit little-endian Signed Integer     Varies, see below.
@@ -140,7 +140,7 @@ class Rcon
         Empty String  Null-terminated ASCII String      0x00
         */
 
-        //create packet
+        // create packet
         $packet = pack('VV', $packet_id, $packet_type);
         $packet = $packet . $packet_body . "\x00";
         $packet = $packet . "\x00";
@@ -158,7 +158,7 @@ class Rcon
 
     private function read_packet()
     {
-        //get packet size.
+        // get packet size.
         $size_data = fread($this->socket, 4);
         $size_pack = unpack('V1size', $size_data);
         $size = $size_pack['size'];
