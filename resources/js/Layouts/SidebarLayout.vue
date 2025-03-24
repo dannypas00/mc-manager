@@ -113,10 +113,12 @@
       <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-brand px-6">
         <div class="flex h-16 shrink-0 items-center">
           <img
-            class="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=white"
-            alt="Your Company"
+            class="h-10 w-auto"
+            :src="appLogo"
+            :alt="appName"
           />
+
+          <span class="ml-4 font-bold text-white text-xl" v-text="appName"/>
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -255,7 +257,7 @@ const teams: {
   current: boolean;
 }[] = [];
 
-const sidebarOpen = ref(false);
+const sidebarOpen = ref(true);
 
 const userStore = useAuthenticatedUserStore();
 

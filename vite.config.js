@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [
     vueDevTools({
       launchEditor: 'phpstorm',
+      appendTo: 'resources/js/app.ts'
     }),
     laravel({
       input: ['resources/js/app.ts', 'resources/css/app.css'],
