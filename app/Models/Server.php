@@ -69,6 +69,7 @@ class Server extends Model
 
     protected $fillable = [
         'name',
+        'user_id',
         'enabled',
         // Minecraft
         'minecraft_host',
