@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Server;
+use App\Models\User;
 use App\Rcon\Rcon;
 
 it('returns a new rcon object', function (): void {
@@ -19,4 +20,15 @@ it('doesn\'t recreate the rcon object', function (): void {
 
     expect($server->rcon)
         ->toBe($rcon);
+});
+
+it('belongs to a user', function (): void {
+    $user = User::factory()->create();
+    $server = Server::factory()->create([
+        'user_id' => $user->id,
+    ]);
+
+    expect($server->user)
+        ->toBeInstanceOf(User::class)
+        ->id->toEqual($user->id);
 });
