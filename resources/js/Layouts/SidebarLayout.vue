@@ -53,7 +53,7 @@
               </TransitionChild>
               <!-- Sidebar component, swap this element with another sidebar if you like -->
               <div
-                class="flex grow flex-col gap-y-5 overflow-y-auto bg-brand-hover px-6 pb-2"
+                class="flex grow flex-col gap-y-5 overflow-y-auto bg-emerald-600 px-6 pb-2"
               >
                 <div class="flex h-16 shrink-0 items-center">
                   <img class="h-8 w-auto" :src="appLogo" :alt="appName" />
@@ -71,7 +71,7 @@
                     </li>
                     <li v-if="teams.length">
                       <div
-                        class="text-xs font-semibold leading-6 text-brand-light"
+                        class="text-xs font-semibold leading-6 text-emerald-300"
                       >
                         Your teams
                       </div>
@@ -81,13 +81,13 @@
                             :href="team.href"
                             :class="[
                               team.current
-                                ? 'bg-brand text-white'
-                                : 'text-brand-light hover:bg-brand hover:text-white',
+                                ? 'bg-emerald-900 text-white'
+                                : 'text-emerald-300 hover:bg-emerald-900 hover:text-white',
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
                             ]"
                           >
                             <span
-                              class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-brand-light bg-brand text-[0.625rem] font-medium text-white"
+                              class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-300 bg-emerald-900 text-[0.625rem] font-medium text-white"
                             >
                               {{ team.initial }}
                             </span>
@@ -110,7 +110,7 @@
       class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col"
     >
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-brand px-6">
+      <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-emerald-900 px-6">
         <div class="flex h-16 shrink-0 items-center">
           <img
             class="h-10 w-auto"
@@ -142,13 +142,13 @@
                     :href="team.href"
                     :class="[
                       team.current
-                        ? 'bg-brand-dark text-white'
-                        : 'text-brand-light hover:bg-brand-dark hover:text-white',
+                        ? 'bg-emerald-800 text-white'
+                        : 'text-emerald-300 hover:bg-emerald-800 hover:text-white',
                       'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
                     ]"
                   >
                     <span
-                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-brand-light bg-brand-hover text-[0.625rem] font-medium text-white"
+                      class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-emerald-300 bg-emerald-600 text-[0.625rem] font-medium text-white"
                     >
                       {{ team.initial }}
                     </span>
@@ -160,10 +160,10 @@
             <li class="-mx-6 mt-auto">
               <Menu as="div" class="w-100">
                 <MenuButton
-                  class="w-full flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-brand-dark"
+                  class="w-full flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-emerald-800"
                 >
                   <img
-                    class="h-8 w-8 rounded-full bg-brand-dark"
+                    class="h-8 w-8 rounded-full bg-emerald-800"
                     :src="user.profile_photo_url"
                     alt=""
                   />

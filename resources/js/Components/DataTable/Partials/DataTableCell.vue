@@ -2,7 +2,7 @@
   <td
     :class="[
       'whitespace-nowrap py-4 pr-3 text-sm font-medium',
-      selected ? 'text-brand-dark' : 'text-gray-900',
+      selected ? 'text-emerald-800' : 'text-gray-900',
     ]"
   >
     <slot>

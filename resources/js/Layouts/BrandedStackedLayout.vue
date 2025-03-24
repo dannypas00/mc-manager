@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-full">
-    <Disclosure v-slot="{ open }" as="nav" class="bg-brand">
+    <Disclosure v-slot="{ open }" as="nav" class="bg-emerald-500">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
@@ -25,7 +25,7 @@
             <div class="ml-4 flex items-center md:ml-6">
               <button
                 type="button"
-                class="relative rounded-full bg-brand p-1 text-brand-light hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+                class="relative rounded-full bg-emerald-500 p-1 text-emerald-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-500"
               >
                 <span class="absolute -inset-1.5" />
                 <span
@@ -39,7 +39,7 @@
               <Menu as="div" class="relative ml-3">
                 <div>
                   <MenuButton
-                    class="relative flex max-w-xs items-center rounded-full bg-brand text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+                    class="relative flex max-w-xs items-center rounded-full bg-emerald-500 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-500"
                   >
                     <span class="absolute -inset-1.5" />
                     <span
@@ -87,7 +87,7 @@
           <div class="-mr-2 flex md:hidden">
             <!-- Mobile menu button -->
             <DisclosureButton
-              class="relative inline-flex items-center justify-center rounded-md bg-brand p-2 text-brand-light hover:bg-brand-hover hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+              class="relative inline-flex items-center justify-center rounded-md bg-emerald-500 p-2 text-emerald-300 hover:bg-emerald-600 hover:bg-opacity-75 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-500"
             >
               <span class="absolute -inset-0.5" />
               <span v-t="'components.layout.open_main_menu'" class="sr-only" />
@@ -111,7 +111,7 @@
             @select="open = false"
           />
         </div>
-        <div class="border-t border-brand-dark pb-3 pt-4">
+        <div class="border-t border-emerald-800 pb-3 pt-4">
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
               <img
@@ -124,13 +124,13 @@
               <div class="text-base font-medium text-white">
                 {{ user.name }}
               </div>
-              <div class="text-sm font-medium text-brand-light">
+              <div class="text-sm font-medium text-emerald-300">
                 {{ user.email }}
               </div>
             </div>
             <button
               type="button"
-              class="relative ml-auto flex-shrink-0 rounded-full bg-brand p-1 text-brand-light hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+              class="relative ml-auto flex-shrink-0 rounded-full bg-emerald-500 p-1 text-emerald-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-emerald-500"
             >
               <span class="absolute -inset-1.5" />
               <span

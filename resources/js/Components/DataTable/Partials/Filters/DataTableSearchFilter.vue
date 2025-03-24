@@ -1,6 +1,6 @@
 <template>
   <div
-    class="mx-1 mt-2 flex items-center rounded-md border-0 bg-white px-1 text-center text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 *:focus:ring-2 *:focus:ring-brand-light"
+    class="mx-1 mt-2 flex items-center rounded-md border-0 bg-white px-1 text-center text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 *:focus:ring-2 *:focus:ring-emerald-300"
   >
     <FontAwesomeIcon
       :icon="{ prefix: 'fas', iconName: 'search' }"

@@ -13,7 +13,7 @@
         }"
         :rotation="sortDirection === SortDirection.Desc ? 180 : undefined"
         class="cursor-pointer"
-        :class="{ 'text-brand-light': sortDirection !== SortDirection.None }"
+        :class="{ 'text-emerald-300': sortDirection !== SortDirection.None }"
         @click="() => (sortDirection = nextSortDirection(sortDirection))"
       />
       <div class="group relative h-full grow py-3.5 pr-3">

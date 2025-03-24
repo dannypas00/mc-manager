@@ -3,8 +3,8 @@
     :href="$route(item.route)"
     :class="[
       isCurrent
-        ? 'bg-brand-dark text-white'
-        : 'text-white hover:bg-brand-hover hover:bg-opacity-75',
+        ? 'bg-emerald-800 text-white'
+        : 'text-white hover:bg-emerald-600 hover:bg-opacity-75',
       'select-none rounded-md px-3 py-2 text-sm font-medium',
     ]"
     :aria-current="isCurrent ? 'page' : undefined"

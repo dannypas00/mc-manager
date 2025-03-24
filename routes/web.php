@@ -11,7 +11,7 @@ Route::middleware([
     'verified',
 ])->group(static function (): void {
     Route::name('api')->as('web.api.')->group(base_path('routes/web/webapi.php'));
-    Route::name('pages')->group(base_path('routes/web/pages.php'));
+    Route::name('pages')->as('pages.')->group(base_path('routes/web/pages.php'));
 
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy']);
 });

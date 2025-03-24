@@ -11,7 +11,7 @@
         class="cursor-pointer select-none"
         :class="[
           selectedMode === mode
-            ? 'border-brand-hover text-brand'
+            ? 'border-emerald-600 text-emerald-500'
             : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
           'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium',
         ]"
@@ -71,7 +71,7 @@
           v-model="form.rememberMe"
           name="remember-me"
           type="checkbox"
-          class="h-4 w-4 rounded border-gray-300 text-brand focus:ring-brand"
+          class="h-4 w-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
         />
         <label
           v-t="'pages.login.remember_me.label'"
@@ -82,7 +82,7 @@
 
       <div class="text-sm leading-6">
         <Link
-          class="text font-semibold text-brand hover:text-brand-hover"
+          class="text font-semibold text-emerald-500 hover:text-emerald-600"
           as="a"
           :href="route('password.request')"
         >
@@ -94,7 +94,7 @@
     <div v-if="selectedMode === 'login'">
       <button
         type="submit"
-        class="flex w-full justify-center rounded-md bg-brand px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        class="flex w-full justify-center rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
       >
         {{ $t('pages.login.submit_button') }}
       </button>
@@ -103,7 +103,7 @@
     <div v-else>
       <button
         type="submit"
-        class="flex w-full justify-center rounded-md bg-brand px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-brand-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        class="flex w-full justify-center rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
       >
         {{ $t('pages.login.register_button') }}
       </button>

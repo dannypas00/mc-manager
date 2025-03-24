@@ -4,15 +4,15 @@
       :href="$route(item.route)"
       :class="[
         isCurrent
-          ? 'bg-brand text-white'
-          : 'text-brand-light hover:bg-brand hover:text-white',
+          ? 'bg-emerald-500 text-white'
+          : 'text-emerald-300 hover:bg-emerald-500 hover:text-white',
         'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
       ]"
     >
       <component
         :is="item.icon"
         :class="[
-          isCurrent ? 'text-white' : 'text-brand-light group-hover:text-white',
+          isCurrent ? 'text-white' : 'text-emerald-300 group-hover:text-white',
           'h-6 w-6 shrink-0',
         ]"
         aria-hidden="true"
