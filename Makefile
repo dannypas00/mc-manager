@@ -116,7 +116,7 @@ ifneq ($(NO_DOCKER), true)
 	$(DOCKER_COMPOSE) $(COMPOSE_PROFILE) build --pull
 endif
 
-up: .docker/local/minecraft/server.jar
+up:
 ifneq ($(NO_DOCKER), true)
 	$(DOCKER_COMPOSE) $(COMPOSE_PROFILE) up -d --remove-orphans --wait
 endif
@@ -143,15 +143,6 @@ resources/js/: node_modules
 	@# If public/hot is present, laravel will try to serve from vite server
 	@rm public/hot || true
 	$(NPM) run build
-
-.docker/local/minecraft/server.jar: .docker/local/minecraft/eula.txt .docker/local/minecraft/server.properties
-	curl -fsSL $(MINECRAFT_DOWNLOAD_LINK) -o .docker/local/minecraft/server.jar
-
-.docker/local/minecraft/eula.txt:
-	echo "eula=true" > .docker/local/minecraft/eula.txt
-
-.docker/local/minecraft/server.properties:
-	cp .docker/local/minecraft/server.properties.example .docker/local/minecraft/server.properties
 
 public/profile-images: up
 	$(PHP) artisan storage:link

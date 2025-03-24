@@ -164,14 +164,13 @@ services:
     ports:
       - '25565:25565'
     user: 1000:1000
-    volumes:
-      - .docker/local/minecraft:/data
     restart: on-failure
     environment:
       EULA: "TRUE"
       GID: 1000
       UID: 1000
       ENABLE_ROLLING_LOGS: "true"
+      RCON_PASSWORD: "test1234"
     profiles:
       - dev
 
