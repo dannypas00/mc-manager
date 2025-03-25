@@ -5,6 +5,8 @@ import {
 } from '@heroicons/vue/24/outline';
 import logo from '../images/icons/MCM-logo.webp';
 import { FunctionalComponent } from 'vue';
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-vue-next"
+
 
 interface NavigationItem {
   name: string;
