@@ -1,0 +1,97 @@
+name: "Test on push"
+on:
+  pull_request:
+
+jobs:
+  test-php:
+    runs-on: ubuntu-latest
+    env:
+      extensions: iconv, ftp
+      php: 8.4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node.js needs to have been set up because the tests require a manifest.json
+      - name: Setup Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Install npm
+        run: npm ci --omit=dev
+
+      - name: Build NPM
+        run: npm run build
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.php }}
+          extensions: ${{ env.extensions }}
+          key: 'cache-1'
+
+      - name: Cache extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.php }}
+          extensions: ${{ env.extensions }}
+          tools: composer, rector
+          coverage: pcov
+        env:
+          fail-fast: true
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Validate composer
+        run: composer validate
+
+      - name: Install dependencies
+        run: composer install --prefer-dist
+
+      - name: Run composer test
+        run: composer run test
+
+  test-js:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Install npm
+        run: npm ci --omit=dev
+
+      - name: Build NPM
+        run: npm run build
+
+      - name: Install with dev
+        run: npm ci
+
+      - name: Test NPM
+        run: npm run test

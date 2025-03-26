@@ -17,7 +17,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import SidebarLayout from './Layouts/SidebarLayout.vue';
+import ShadCnSidebarLayout from './Layouts/ShadCnSidebarLayout.vue';
+// import SidebarLayout from './Layouts/SidebarLayout.vue';
 // import BrandedStackedLayout from './Layouts/BrandedStackedLayout.vue';
 
 library.add(fas, fab, far);
@@ -37,7 +38,7 @@ createInertiaApp({
       import.meta.glob('./Pages/**/*.vue')
     );
     page.then(module => {
-      module.default.layout = module.default.layout ?? SidebarLayout;
+      module.default.layout = module.default.layout ?? ShadCnSidebarLayout;
     });
     return page;
   },

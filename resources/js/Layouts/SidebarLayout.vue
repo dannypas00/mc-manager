@@ -110,15 +110,13 @@
       class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col"
     >
       <!-- Sidebar component, swap this element with another sidebar if you like -->
-      <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-emerald-900 px-6">
+      <div
+        class="flex grow flex-col gap-y-5 overflow-y-auto bg-emerald-900 px-6"
+      >
         <div class="flex h-16 shrink-0 items-center">
-          <img
-            class="h-10 w-auto"
-            :src="appLogo"
-            :alt="appName"
-          />
+          <img class="h-10 w-auto" :src="appLogo" :alt="appName" />
 
-          <span class="ml-4 font-bold text-white text-xl" v-text="appName"/>
+          <span class="ml-4 text-xl font-bold text-white" v-text="appName" />
         </div>
         <nav class="flex flex-1 flex-col">
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -156,52 +154,6 @@
                   </a>
                 </li>
               </ul>
-            </li>
-            <li class="-mx-6 mt-auto">
-              <Menu as="div" class="w-100">
-                <MenuButton
-                  class="w-full flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-emerald-800"
-                >
-                  <img
-                    class="h-8 w-8 rounded-full bg-emerald-800"
-                    :src="user.profile_photo_url"
-                    alt=""
-                  />
-                  <span
-                    v-t="'components.layout.your_profile'"
-                    class="sr-only"
-                  />
-                  <span aria-hidden="true">{{ user.name }}</span>
-                </MenuButton>
-                <transition
-                  enter-active-class="transition ease-out duration-100"
-                  enter-from-class="transform opacity-0 scale-95"
-                  enter-to-class="transform opacity-100 scale-100"
-                  leave-active-class="transition ease-in duration-75"
-                  leave-from-class="transform opacity-100 scale-100"
-                  leave-to-class="transform opacity-0 scale-95"
-                >
-                  <MenuItems
-                    class="absolute right-0 z-10 -mt-2.5 w-32 origin-bottom-right -translate-y-full rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
-                  >
-                    <MenuItem
-                      v-for="item in userNavigation"
-                      :key="item.name"
-                      v-slot="{ active }"
-                    >
-                      <Link
-                        :href="$route(item.route)"
-                        :class="[
-                          active ? 'bg-gray-50' : '',
-                          'block px-3 py-1 text-sm leading-6 text-gray-900',
-                        ]"
-                      >
-                        {{ item.name }}
-                      </Link>
-                    </MenuItem>
-                  </MenuItems>
-                </transition>
-              </Menu>
             </li>
           </ul>
         </nav>
