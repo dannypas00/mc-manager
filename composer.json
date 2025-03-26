@@ -84,9 +84,9 @@
             "@php artisan ide-helper:meta"
         ],
         "models": [
-            "@php artisan ide-helper:models -WRMp",
-            "@php vendor/bin/pint app/Models",
-            "@php vendor/bin/rector app/Models"
+            "@php artisan ide-helper:models -WM",
+            "@php vendor/bin/pint ./app/Models",
+            "@php vendor/bin/rector process ./app/Models"
         ],
         "pint": "pint .",
         "rector": "rector",

@@ -6,6 +6,8 @@ namespace App\Models;
 
 use App\Rcon\Rcon;
 use Database\Factories\ServerFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,32 +37,32 @@ use Storage;
  * @property-read Rcon $rcon
  * @property-read User $user
  *
- * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpHost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpPassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpUsername($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereMinecraftHost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereMinecraftPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereRconPassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereRconPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshHost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereUserId($value)
+ * @method static ServerFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Server newModelQuery()
+ * @method static Builder<static>|Server newQuery()
+ * @method static Builder<static>|Server query()
+ * @method static Builder<static>|Server whereCreatedAt($value)
+ * @method static Builder<static>|Server whereEnabled($value)
+ * @method static Builder<static>|Server whereFtpHost($value)
+ * @method static Builder<static>|Server whereFtpPassword($value)
+ * @method static Builder<static>|Server whereFtpPort($value)
+ * @method static Builder<static>|Server whereFtpUsername($value)
+ * @method static Builder<static>|Server whereId($value)
+ * @method static Builder<static>|Server whereMinecraftHost($value)
+ * @method static Builder<static>|Server whereMinecraftPort($value)
+ * @method static Builder<static>|Server whereName($value)
+ * @method static Builder<static>|Server whereRconPassword($value)
+ * @method static Builder<static>|Server whereRconPort($value)
+ * @method static Builder<static>|Server whereSshHost($value)
+ * @method static Builder<static>|Server whereSshKey($value)
+ * @method static Builder<static>|Server whereSshPort($value)
+ * @method static Builder<static>|Server whereUpdatedAt($value)
+ * @method static Builder<static>|Server whereUserId($value)
  *
- * @mixin \Eloquent
+ * @property-read mixed $filesystem
  *
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin Eloquent
+ * @mixin IdeHelperServer
  */
 class Server extends Model
 {
