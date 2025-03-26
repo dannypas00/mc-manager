@@ -1,5 +1,5 @@
 <template>
-  <SidebarProvider>
+  <SidebarProvider :default-open>
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
@@ -117,6 +117,11 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { useLocalStorage } from '@vueuse/core';
+import { useCookies } from '@vueuse/integrations';
+import { SIDEBAR_COOKIE_NAME } from '@/components/ui/sidebar/utils';
 
 const userDropupOpen = ref(false);
+const cookies = useCookies([SIDEBAR_COOKIE_NAME]);
+const defaultOpen = cookies.get(SIDEBAR_COOKIE_NAME);
 </script>
