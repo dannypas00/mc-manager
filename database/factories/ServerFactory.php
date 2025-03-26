@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class ServerFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id'        => fn () => User::factory(),
             'name'           => $this->faker->name,
             'enabled'        => true,
             'minecraft_host' => $this->faker->ipv4(),
