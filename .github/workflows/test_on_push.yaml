@@ -6,21 +6,35 @@ on:
 jobs:
   Run-composer-test:
     runs-on: ubuntu-latest
-    container:
-      image: "dannypas00/php-cli"
-      options: --user root
     steps:
       - uses: actions/checkout@v4
         name: Checkout
 
-      - name: Copy over xdebug ini
-        run: cp .docker/local/xdebug.ini /usr/local/etc/php/conf.d/zz_xdebug.ini
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: iconv
+          tools: composer rector
+          coverage: pcov
+        env:
+          fail-fast: true
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
 
       - name: Install npm
-        run: npm install
+        run: npm ci
 
       - name: Build NPM
         run: npm run build
+
+      - name: Test NPM
+        run: npm run test
 
       - name: Install
         run: composer install

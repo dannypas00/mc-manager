@@ -6,7 +6,10 @@
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint --fix resources/js --exit-on-fatal-error --max-warnings=0",
-        "format": "prettier resources/js --write"
+        "format": "prettier resources/js --write",
+        "test": "run-p test:*",
+        "test:lint": "eslint resources/js --max-warnings=0",
+        "test:format": "prettier resources/js --check"
     },
     "dependencies": {
         "@formkit/auto-animate": "^0.8.1",
@@ -42,6 +45,7 @@
         "lodash": "^4.17.21",
         "lucide-vue-next": "^0.483.0",
         "moment": "^2.30.1",
+        "npm-run-all2": "^7.0.2",
         "nprogress": "^0.2.0",
         "pinia": "^2.1.7",
         "portal-vue": "^3.0.0",
