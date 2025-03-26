@@ -6,7 +6,10 @@
           <SidebarMenuItem>
             <div class="flex items-center gap-2">
               <img :src="appLogo" class="size-8" />
-              <span class="tracking-wider text-lg text-sidebar-primary font-bold truncate">{{ appName }}</span>
+              <span
+                class="truncate text-lg font-bold tracking-wider text-sidebar-primary"
+                >{{ appName }}</span
+              >
             </div>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -19,7 +22,12 @@
                 v-for="item in layoutNavigationItems"
                 :key="item.name"
               >
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton
+                  asChild
+                  :class="{
+                    'bg-emerald-100 text-slate-800 hover:bg-emerald-200 active:bg-emerald-100': $route().current(item.route),
+                  }"
+                >
                   <Link as="a" :href="$route(item.route)">
                     <FontAwesomeIcon :icon="item.icon" />
                     <span>{{ item.name }}</span>
@@ -44,7 +52,9 @@
                     v-t="'components.layout.your_profile'"
                     class="sr-only"
                   />
-                  <span aria-hidden="true" class="truncate">{{ $page.props.user.name }}</span>
+                  <span aria-hidden="true" class="truncate">{{
+                    $page.props.user.name
+                  }}</span>
                   <FontAwesomeIcon
                     icon="chevron-right"
                     class="ml-auto text-slate-500 transition-all"
