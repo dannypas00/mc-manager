@@ -1,15 +1,18 @@
 <template>
   <SidebarProvider>
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div class="flex items-center gap-2">
-          <img :src="appLogo" class="size-8" />
-          <span class="tracking-xl text-lg font-bold">{{ appName }}</span>
-        </div>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div class="flex items-center gap-2">
+              <img :src="appLogo" class="size-8" />
+              <span class="tracking-wider text-lg text-sidebar-primary font-bold truncate">{{ appName }}</span>
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>User</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem
@@ -17,10 +20,10 @@
                 :key="item.name"
               >
                 <SidebarMenuButton asChild>
-                  <a :href="$route(item.route)">
+                  <Link as="a" :href="$route(item.route)">
                     <FontAwesomeIcon :icon="item.icon" />
                     <span>{{ item.name }}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -41,7 +44,7 @@
                     v-t="'components.layout.your_profile'"
                     class="sr-only"
                   />
-                  <span aria-hidden="true">{{ $page.props.user.name }}</span>
+                  <span aria-hidden="true" class="truncate">{{ $page.props.user.name }}</span>
                   <FontAwesomeIcon
                     icon="chevron-right"
                     class="ml-auto text-slate-500 transition-all"
@@ -74,8 +77,10 @@
     </Sidebar>
 
     <main>
-      <SidebarTrigger />
-      <slot />
+      <SidebarInset>
+        <SidebarTrigger />
+        <slot />
+      </SidebarInset>
     </main>
   </SidebarProvider>
 </template>
@@ -89,6 +94,7 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuButton,
