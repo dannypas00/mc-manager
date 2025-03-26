@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
+use Storage;
 
 /**
  * @property int $id
@@ -102,10 +104,10 @@ class Server extends Model
     protected function casts(): array
     {
         return [
-            'enabled' => 'boolean',
+            'enabled'       => 'boolean',
             'rcon_password' => 'encrypted',
-            'ftp_password' => 'encrypted',
-            'ssh_key' => 'encrypted',
+            'ftp_password'  => 'encrypted',
+            'ssh_key'       => 'encrypted',
         ];
     }
 
@@ -114,6 +116,9 @@ class Server extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return Attribute<Rcon>
+     */
     public function rcon(): Attribute
     {
         return Attribute::get(fn () => new Rcon(
@@ -122,5 +127,22 @@ class Server extends Model
             $this->rcon_password,
             30,
         ))->shouldCache();
+    }
+
+    /**
+     * @return Attribute<FilesystemAdapter>
+     */
+    public function filesystem(): Attribute
+    {
+        return Attribute::get(
+            fn () => Storage::createFtpDriver(
+                [
+                    'host'     => $this->ftp_host,
+                    'port'     => $this->ftp_port,
+                    'username' => $this->ftp_username,
+                    'password' => $this->ftp_password,
+                ]
+            )
+        );
     }
 }
