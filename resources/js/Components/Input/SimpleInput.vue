@@ -61,7 +61,7 @@ defineProps({
     type: String,
     required: false,
     default: undefined,
-  }
+  },
 });
 
 const modelValue = defineModel({ required: true });

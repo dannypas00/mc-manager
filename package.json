@@ -5,8 +5,9 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "lint": "eslint --fix resources/js --exit-on-fatal-error --max-warnings=0",
-        "format": "prettier resources/js --write",
+        "fix": "run-p fix:*",
+        "fix:lint": "eslint --fix resources/js --exit-on-fatal-error --max-warnings=0",
+        "fix:format": "prettier resources/js --write",
         "test": "run-p test:*",
         "test:lint": "eslint resources/js --max-warnings=0",
         "test:format": "prettier resources/js --check"

@@ -25,7 +25,8 @@
                 <SidebarMenuButton
                   asChild
                   :class="{
-                    'bg-emerald-100 text-slate-800 hover:bg-emerald-200 active:bg-emerald-100': $route().current(item.route),
+                    'bg-emerald-100 text-slate-800 hover:bg-emerald-200 active:bg-emerald-100':
+                      $route().current(item.route),
                   }"
                 >
                   <Link as="a" :href="$route(item.route)">
