@@ -116,4 +116,5 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    'auto_login' => env('AUTH_AUTO_LOGIN', env('APP_ENV') === 'local'),
 ];
