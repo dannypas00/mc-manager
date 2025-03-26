@@ -3,7 +3,6 @@
         "target": "es6",
         "module": "es2020",
         "moduleResolution": "node",
-        "baseUrl": "./resources/js",
         "strict": true,
         // Enable strict type-checking options
         "skipLibCheck": true,
