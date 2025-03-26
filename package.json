@@ -64,7 +64,8 @@
         "vue": "^3.3.13",
         "vue-i18n": "^9.10.2",
         "vue-toastification": "^2.0.0-rc.5",
-        "ziggy-js": "^2.0.4"
+        "ziggy-js": "^2.0.4",
+        "vite-plugin-vue-devtools": "^7.7.1"
     },
     "devDependencies": {
         "@eslint/js": "^9.6.0",
@@ -75,7 +76,6 @@
         "eslint-config-prettier": "^9.1.0",
         "prettier": "^3.2.5",
         "prettier-plugin-tailwindcss": "^0.5.13",
-        "typescript-eslint": "^7.15.0",
-        "vite-plugin-vue-devtools": "^7.7.1"
+        "typescript-eslint": "^7.15.0"
     }
 }
