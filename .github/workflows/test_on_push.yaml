@@ -12,6 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node.js needs to have been set up because the tests require a manifest.json
+      - name: Setup Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Install npm
+        run: npm ci --omit=dev
+
+      - name: Build NPM
+        run: npm run build
+
       - name: Setup cache environment
         id: extcache
         uses: shivammathur/cache-extensions@v1
