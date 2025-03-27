@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Exceptions\SshException;
 use App\Models\Server;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use JetBrains\PhpStorm\ArrayShape;
@@ -53,7 +54,7 @@ interface ServerStorageServiceInterface
     public function size(Server $server, string $path): int;
 
     /**
-     * @param  int  $offset Amount of bytes to skip from start of file
+     * @param  int  $offset  Amount of bytes to skip from start of file
      *
      * @throws FilesystemException
      */

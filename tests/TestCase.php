@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Carbon\Carbon;
 use Http;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
