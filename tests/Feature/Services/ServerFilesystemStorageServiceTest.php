@@ -7,6 +7,9 @@ namespace Tests\Feature\Services;
 use App\Models\Server;
 use App\Services\ServerFilesystemStorageService;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\StorageAttributes;
+use Mockery;
 use Mockery\MockInterface;
 use Storage;
 
@@ -29,21 +32,28 @@ it('can getContents', function (): void {
     expect($this->service->getContents($this->server, 'test.txt'))->toEqual('test');
 });
 
-it('can delete', function (): void {
-    expect($this->filesystem->exists('test.txt'))->toBeTrue()
-        ->and($this->filesystem->exists('test-dir'))->toBeTrue()
-        ->and($this->service->delete($this->server, 'test.txt'))->toBeTrue()
-        ->and($this->service->delete($this->server, 'test-dir'))->toBeTrue()
-        ->and($this->filesystem->exists('test.txt'))->toBeFalse()
-        ->and($this->filesystem->exists('test-dir'))->toBeFalse();
+it('can delete', function (string $path): void {
+    expect($this->filesystem->exists($path))->toBeTrue()
+        ->and($this->service->delete($this->server, $path))->toBeTrue()
+        ->and($this->filesystem->exists($path))->toBeFalse();
+})->with([
+    'directory' => 'test-dir',
+    'file'      => 'test.txt',
+]);
+
+it('can list a file', function (): void {
+    expect($this->service->listContents($this->server, 'test.txt'))->toMatchArray(['file' => 'test.txt']);
 });
 
-it('can listContents', function (): void {
-
-})->with([
-    'file'      => ['path' => 'test.txt'],
-    'directory' => ['path' => 'test-dir'],
-]);
+it('can list a directory', function (): void {
+    expect($this->service->listContents($this->server, 'test-dir')['directories'][0])
+        ->toBeInstanceOf(FileAttributes::class)
+        ->type()->toBe('file')
+        ->path()->toBe('test-dir/test.txt')
+        ->fileSize()->toBe(4)
+        ->visibility()->toBe('public')
+        ->lastModified()->toBeNumeric();
+});
 
 it('throws exception when file not found when listing', function (): void {
     expect(fn () => $this->service->listContents($this->server, 'not-found.txt'))->toThrow(FileNotFoundException::class, 'path_not_found');

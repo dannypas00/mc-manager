@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Models\Server;
@@ -37,7 +39,8 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
 
     #[ArrayShape([
         'directories' => StorageAttributes::class . '[]|null',
-        'files'       => 'string|null'
+        'files'       => 'string|null',
+        'file'        => 'string|null',
     ])]
     public function listContents(Server $server, string $path): array
     {
