@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Tests\IntegrationTestCase;
 use Tests\TestCase;
 
 /*
@@ -19,4 +20,8 @@ use Tests\TestCase;
 pest()
     ->use(LazilyRefreshDatabase::class)
     ->extend(TestCase::class)
-    ->in('Feature', 'Integration');
+    ->in('Feature');
+
+pest()
+    ->extend(IntegrationTestCase::class)
+    ->in('Integration');

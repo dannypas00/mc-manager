@@ -64,6 +64,11 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @method static Builder<static>|User whereUpdatedAt($value)
  *
  * @mixin Eloquent
+ *
+ * @noinspection PhpFullyQualifiedNameUsageInspection
+ * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ *
+ * @mixin IdeHelperUser
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

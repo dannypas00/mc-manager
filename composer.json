@@ -27,6 +27,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.1",
         "laravel/tinker": "^2.9",
+        "league/flysystem-ftp": "^3.0",
         "spatie/laravel-data": "^4.4",
         "spatie/laravel-query-builder": "^6.3",
         "spatie/laravel-typescript-transformer": "^2.4",
@@ -83,9 +84,9 @@
             "@php artisan ide-helper:meta"
         ],
         "models": [
-            "@php artisan ide-helper:models -WRMp",
-            "@php vendor/bin/pint app/Models",
-            "@php vendor/bin/rector app/Models"
+            "@php artisan ide-helper:models -WM",
+            "@php vendor/bin/pint ./app/Models",
+            "@php vendor/bin/rector process ./app/Models"
         ],
         "pint": "pint .",
         "rector": "rector",

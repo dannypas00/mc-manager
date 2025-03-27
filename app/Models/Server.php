@@ -6,11 +6,15 @@ namespace App\Models;
 
 use App\Rcon\Rcon;
 use Database\Factories\ServerFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Carbon;
+use Storage;
 
 /**
  * @property int $id
@@ -33,32 +37,32 @@ use Illuminate\Support\Carbon;
  * @property-read Rcon $rcon
  * @property-read User $user
  *
- * @method static \Database\Factories\ServerFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpHost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpPassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereFtpUsername($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereMinecraftHost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereMinecraftPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereRconPassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereRconPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshHost($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshKey($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereSshPort($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Server whereUserId($value)
+ * @method static ServerFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Server newModelQuery()
+ * @method static Builder<static>|Server newQuery()
+ * @method static Builder<static>|Server query()
+ * @method static Builder<static>|Server whereCreatedAt($value)
+ * @method static Builder<static>|Server whereEnabled($value)
+ * @method static Builder<static>|Server whereFtpHost($value)
+ * @method static Builder<static>|Server whereFtpPassword($value)
+ * @method static Builder<static>|Server whereFtpPort($value)
+ * @method static Builder<static>|Server whereFtpUsername($value)
+ * @method static Builder<static>|Server whereId($value)
+ * @method static Builder<static>|Server whereMinecraftHost($value)
+ * @method static Builder<static>|Server whereMinecraftPort($value)
+ * @method static Builder<static>|Server whereName($value)
+ * @method static Builder<static>|Server whereRconPassword($value)
+ * @method static Builder<static>|Server whereRconPort($value)
+ * @method static Builder<static>|Server whereSshHost($value)
+ * @method static Builder<static>|Server whereSshKey($value)
+ * @method static Builder<static>|Server whereSshPort($value)
+ * @method static Builder<static>|Server whereUpdatedAt($value)
+ * @method static Builder<static>|Server whereUserId($value)
  *
- * @mixin \Eloquent
+ * @property-read mixed $filesystem
  *
- * @noinspection PhpFullyQualifiedNameUsageInspection
- * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
+ * @mixin Eloquent
+ * @mixin IdeHelperServer
  */
 class Server extends Model
 {
@@ -102,10 +106,10 @@ class Server extends Model
     protected function casts(): array
     {
         return [
-            'enabled' => 'boolean',
+            'enabled'       => 'boolean',
             'rcon_password' => 'encrypted',
-            'ftp_password' => 'encrypted',
-            'ssh_key' => 'encrypted',
+            'ftp_password'  => 'encrypted',
+            'ssh_key'       => 'encrypted',
         ];
     }
 
@@ -114,6 +118,9 @@ class Server extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return Attribute<Rcon>
+     */
     public function rcon(): Attribute
     {
         return Attribute::get(fn () => new Rcon(
@@ -122,5 +129,22 @@ class Server extends Model
             $this->rcon_password,
             30,
         ))->shouldCache();
+    }
+
+    /**
+     * @return Attribute<FilesystemAdapter>
+     */
+    public function filesystem(): Attribute
+    {
+        return Attribute::get(
+            fn () => Storage::createFtpDriver(
+                [
+                    'host'     => $this->ftp_host,
+                    'port'     => $this->ftp_port,
+                    'username' => $this->ftp_username,
+                    'password' => $this->ftp_password,
+                ]
+            )
+        );
     }
 }
