@@ -71,7 +71,7 @@ class ServerFilesystemStorageService implements ServerStorageServiceInterface
         } catch (FilesystemException $e) {
             Log::error(
                 'Filesystem error while retrieving directory listing',
-                ['path' => request()?->route(), 'exception' => $e->getTrace()]
+                ['path' => $storagePath, 'exception' => $e->getTrace()]
             );
             throw $e;
         }

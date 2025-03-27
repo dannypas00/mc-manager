@@ -8,8 +8,6 @@ use App\Models\Server;
 use App\Services\ServerFilesystemStorageService;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use League\Flysystem\FileAttributes;
-use League\Flysystem\StorageAttributes;
-use Mockery;
 use Mockery\MockInterface;
 use Storage;
 
@@ -28,9 +26,13 @@ beforeEach(function (): void {
     $this->server->setAttribute('filesystem', $this->filesystem);
 });
 
-it('can getContents', function (): void {
-    expect($this->service->getContents($this->server, 'test.txt'))->toEqual('test');
-});
+it('can getContents', function (string $path, ?string $result): void {
+    expect($this->service->getContents($this->server, $path))->toEqual($result);
+})->with([
+    'file'       => ['path' =>'test.txt', 'result' => 'test'],
+    'nonesitent' => ['path' =>'not-found.txt', 'result' => null],
+    'nested'     => ['path' =>'test-dir/test.txt', 'result' => 'test'],
+]);
 
 it('can delete', function (string $path): void {
     expect($this->filesystem->exists($path))->toBeTrue()
@@ -41,20 +43,64 @@ it('can delete', function (string $path): void {
     'file'      => 'test.txt',
 ]);
 
-it('can list a file', function (): void {
-    expect($this->service->listContents($this->server, 'test.txt'))->toMatchArray(['file' => 'test.txt']);
+describe('listContents', function (): void {
+    it('can list a file', function (): void {
+        expect($this->service->listContents($this->server, 'test.txt'))->toMatchArray(['file' => 'test.txt']);
+    });
+
+    it('can list a directory', function (): void {
+        expect($this->service->listContents($this->server, 'test-dir')['directories'][0])
+            ->toBeInstanceOf(FileAttributes::class)
+            ->type()->toBe('file')
+            ->path()->toBe('test-dir/test.txt')
+            ->fileSize()->toBe(4)
+            ->visibility()->toBe('public')
+            ->lastModified()->toBeNumeric();
+    });
+
+    it('throws exception when file not found when listing', function (): void {
+        expect(fn () => $this->service->listContents($this->server, 'not-found.txt'))->toThrow(FileNotFoundException::class, 'path_not_found');
+    });
 });
 
-it('can list a directory', function (): void {
-    expect($this->service->listContents($this->server, 'test-dir')['directories'][0])
-        ->toBeInstanceOf(FileAttributes::class)
-        ->type()->toBe('file')
-        ->path()->toBe('test-dir/test.txt')
-        ->fileSize()->toBe(4)
-        ->visibility()->toBe('public')
-        ->lastModified()->toBeNumeric();
+describe('getDirectory', function (): void {
+    it('can get a directory', function (): void {
+        expect($this->service->getDirectory($this->server, 'test-dir')[0])
+            ->toBeInstanceOf(FileAttributes::class)
+            ->type()->toBe('file')
+            ->path()->toBe('test-dir/test.txt')
+            ->fileSize()->toBe(4)
+            ->visibility()->toBe('public')
+            ->lastModified()->toBeNumeric();
+    });
+
+    it('returns empty array on file not found', function (): void {
+        expect($this->service->getDirectory($this->server, 'not-found'))->toBeArray()->toBeEmpty();
+    });
 });
 
-it('throws exception when file not found when listing', function (): void {
-    expect(fn () => $this->service->listContents($this->server, 'not-found.txt'))->toThrow(FileNotFoundException::class, 'path_not_found');
+describe('put', function (): void {
+    it('can put file', function (): void {
+        $this->service->put($this->server, 'test.txt', 'test');
+        expect($this->filesystem->get('test.txt'))->toBe('test');
+    });
+
+    it('can overwrite with put', function (): void {
+        $this->service->put($this->server, 'test.txt', 'test');
+        $this->service->put($this->server, 'test.txt', 'test2');
+        expect($this->filesystem->get('test.txt'))->toBe('test2');
+    });
+});
+
+it('can get size', function (): void {
+    expect($this->service->size($this->server, 'test.txt'))->toBe(4);
+});
+
+it('can tail a file', function (): void {
+    expect($this->service->tail($this->server, 'test.txt', 2))->toBe('st');
+});
+
+it('can append to a file', function (): void {
+    $this->service->append($this->server, 'test.txt', '2');
+    expect($this->filesystem->get('test.txt'))->toBe('test2');
 });
